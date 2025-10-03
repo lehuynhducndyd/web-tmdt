@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="Hỏi Dân IT" />
+    <title>Manage Category</title>
+    <link href="/admin/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+    <%- include('../layout/header'); -%>
+        <div id="layoutSidenav">
+            <%- include('../layout/sidenav'); -%>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+                            <h1 class="mt-4">Manage Category</h1>
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                                <li class="breadcrumb-item active">Category</li>
+                            </ol>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5>Table Category</h5>
+                                <div>
+                                    <a href="/admin/create-category" class="btn btn-warning">Create a new category</a>
+                                </div>
+                            </div>
+                            <hr>
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (categories && categories.length> 0) { %>
+                                        <% categories.forEach(function(category){ %>
+                                            <tr>
+                                                <td>
+                                                    <%= category.name %>
+                                                </td>
+                                                <td>
+                                                    <%= category.description %>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex gap-2">
+                                                        <form action="/admin/delete-category/<%= category.id %>"
+                                                            method="post">
+                                                            <button class="btn btn-danger btn-sm" type="submit"
+                                                                onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục <%= category.name %> không?')">
+                                                                Delete
+                                                            </button>
+                                                        </form>
+                                                        <form action="/admin/view-category/<%= category.id %>"
+                                                            method="get">
+                                                            <button class="btn btn-warning btn-sm" type="submit">View &
+                                                                Edit</button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="7" class="text-center text-muted">No categories
+                                                            found
+                                                        </td>
+                                                    </tr>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </main>
+                    <%- include('../layout/footer'); -%>
+                </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
+        <script src="/admin/js/scripts.js"></script>
+
+</body>
+
+</html>

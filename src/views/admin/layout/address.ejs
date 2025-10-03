@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col-6 mb-3">
+        <label for="provinceSelect" class="form-label">Tỉnh / Thành phố</label>
+        <select id="provinceSelect" class="form-select" name="province">
+            <option value="">-- Chọn tỉnh/thành --</option>
+        </select>
+    </div>
+    <div class="col-6 mb-3">
+        <label for="communeSelect" class="form-label">Xã / Phường</label>
+        <select id="communeSelect" class="form-select" name="commune">
+            <option value="">-- Chọn xã/phường --</option>
+        </select>
+    </div>
+</div>
+
+<script type="module">
+    const data = await fetch("/data/vn_admin_2025.all.json").then(res => res.json());
+
+    const provinceSelect = document.getElementById("provinceSelect");
+    const communeSelect = document.getElementById("communeSelect");
+
+    // 1. Load danh sách tỉnh
+    data.provinces.forEach(prov => {
+        const option = document.createElement("option");
+        option.value = prov.name_vi;       // value = tên
+        option.textContent = prov.name_vi;
+        provinceSelect.appendChild(option);
+    });
+
+    // 2. Khi chọn tỉnh -> load xã
+    provinceSelect.addEventListener("change", e => {
+        const provinceName = e.target.value;
+        communeSelect.innerHTML = '<option value="">-- Chọn xã/phường --</option>';
+
+        // tìm province theo name_vi
+        const province = data.provinces.find(p => p.name_vi === provinceName);
+        if (province && data.communes_by_province[province.code]) {
+            data.communes_by_province[province.code].forEach(commune => {
+                const option = document.createElement("option");
+                option.value = commune.name_vi;   // value = tên xã
+                option.textContent = commune.name_vi;
+                communeSelect.appendChild(option);
+            });
+        }
+    });
+</script>

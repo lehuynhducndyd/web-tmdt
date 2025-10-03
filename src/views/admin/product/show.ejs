@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Manage Products - Hỏi Dân IT</title>
+    <link href="/admin/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="sb-nav-fixed">
+    <%- include('../layout/header'); -%>
+        <div id="layoutSidenav">
+            <%- include('../layout/sidenav'); -%>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+                            <h1 class="mt-4">Manage Products</h1>
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                                <li class="breadcrumb-item active">Products</li>
+                            </ol>
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5>Table Products</h5>
+                                <div class="d-flex gap-2">
+                                    <a href="/admin/create-phone" class="btn btn-warning">Create a new phone</a>
+                                    <a href="/admin/create-accessory" class="btn btn-warning">Create a new accessory</a>
+                                </div>
+                            </div>
+
+                            <!-- Nav Tabs -->
+                            <ul class="nav nav-tabs" id="productTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="phones-tab" data-bs-toggle="tab"
+                                        data-bs-target="#phones" type="button" role="tab">Điện thoại</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="accessories-tab" data-bs-toggle="tab"
+                                        data-bs-target="#accessories" type="button" role="tab">Phụ kiện</button>
+                                </li>
+                            </ul>
+
+                            <!-- Tab Content -->
+                            <div class="tab-content mt-3" id="productTabsContent">
+
+                                <!-- Phones -->
+                                <div class="tab-pane fade show active" id="phones" role="tabpanel">
+                                    <table class="table table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Brand</th>
+                                                <th>Variants (Stock)</th>
+                                                <th>Discount (%)</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% if (phones && phones.length> 0) { %>
+                                                <% phones.forEach(function(phone){ %>
+                                                    <tr>
+                                                        <td>
+                                                            <%= phone.name %>
+                                                        </td>
+                                                        <td>
+                                                            <%= phone.brand %>
+                                                        </td>
+                                                        <td>
+                                                            <% if (phone.variants && phone.variants.length> 0) { %>
+                                                                <% phone.variants.forEach(function(v){ %>
+                                                                    <div>
+                                                                        <%= v.color %> - <%= v.storage %> : <%= v.stock
+                                                                                    %>
+                                                                    </div>
+                                                                    <% }) %>
+                                                                        <% } else { %>
+                                                                            <span class="text-muted">No variants</span>
+                                                                            <% } %>
+                                                        </td>
+                                                        <td>
+                                                            <%= phone.discount %>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex gap-2">
+                                                                <form action="/admin/delete-phone/<%= phone.id %>"
+                                                                    method="post">
+                                                                    <button class="btn btn-danger btn-sm" type="submit"
+                                                                        onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục <%= phone.name %> không?')">
+                                                                        Delete
+                                                                    </button>
+                                                                </form>
+                                                                <form action="/admin/view-phone/<%= phone.id %>"
+                                                                    method="get">
+                                                                    <button class="btn btn-warning btn-sm"
+                                                                        type="submit">View &
+                                                                        Edit</button>
+                                                                </form>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
+                                                        <% } else { %>
+                                                            <tr>
+                                                                <td colspan="4" class="text-center text-muted">No phones
+                                                                    found</td>
+                                                            </tr>
+                                                            <% } %>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Accessories -->
+                                <div class="tab-pane fade" id="accessories" role="tabpanel">
+                                    <table class="table table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Brand</th>
+                                                <th>Stock</th>
+                                                <th>Discount (%)</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% if (accessories && accessories.length> 0) { %>
+                                                <% accessories.forEach(function(acc){ %>
+                                                    <tr>
+                                                        <td>
+                                                            <%= acc.name %>
+                                                        </td>
+                                                        <td>
+                                                            <%= acc.brand %>
+                                                        </td>
+                                                        <td>
+                                                            <%= acc.stock %>
+                                                        </td>
+                                                        <td>
+                                                            <%= acc.discount %>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex gap-2">
+                                                                <form action="/admin/delete-acc/<%= acc.id %>"
+                                                                    method="post">
+                                                                    <button class="btn btn-danger btn-sm" type="submit"
+                                                                        onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục <%= acc.name %> không?')">
+                                                                        Delete
+                                                                    </button>
+                                                                </form>
+                                                                <form action="/admin/view-acc/<%= acc.id %>"
+                                                                    method="get">
+                                                                    <button class="btn btn-warning btn-sm"
+                                                                        type="submit">View &
+                                                                        Edit</button>
+                                                                </form>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
+                                                        <% } else { %>
+                                                            <tr>
+                                                                <td colspan="4" class="text-center text-muted">No
+                                                                    accessories found</td>
+                                                            </tr>
+                                                            <% } %>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </main>
+                    <%- include('../layout/footer'); -%>
+                </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
+        <script src="/admin/js/scripts.js"></script>
+</body>
+
+</html>

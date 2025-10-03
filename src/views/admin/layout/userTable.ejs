@@ -1,0 +1,55 @@
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Active</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (users && users.length> 0) { %>
+            <% users.forEach(function(user){ %>
+                <tr>
+                    <td style="color: <%= user.isActive ? 'green' : 'red' %>;">
+                        <%= user.name %>
+                    </td>
+                    <td>
+                        <%= user.email %>
+                    </td>
+                    <td>
+                        <%= user.role %>
+                    </td>
+                    <td>
+                        <%= user.phone %>
+                    </td>
+                    <td>
+                        <%= user.street %>, <%= user.commune %>, <%= user.province %>
+                    </td>
+                    <td>
+                        <%= user.isActive ? 'Yes' : 'No' %>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <form action="/admin/delete-user/<%= user.id %>" method="post">
+                                <button class="btn btn-danger btn-sm" type="submit"
+                                    onclick="return confirm('Bạn có chắc chắn muốn xóa user <%= user.name %> không?')">
+                                    Delete
+                                </button>
+                            </form>
+                            <form action="/admin/view-user/<%= user.id %>" method="get">
+                                <button class="btn btn-warning btn-sm" type="submit">View & Edit</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">No users found</td>
+                        </tr>
+                        <% } %>
+    </tbody>
+</table>
