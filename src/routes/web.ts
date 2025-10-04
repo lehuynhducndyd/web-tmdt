@@ -1,11 +1,11 @@
 import { getCategoryPage, getCreateCategoryPage, getViewCategoryPage, postCreateCategory, postDeleteCategory, postUpdateCategory } from 'controllers/admin.category.controller';
 import { getAdminPage } from 'controllers/admin.dashboard.controller';
-import { getProductPage } from 'controllers/admin.product.controller';
+import { getCreatePhonePage, getProductPage, getViewPhonePage, postCreatePhone, postDeletePhone } from 'controllers/admin.product.controller';
 import { getUserPage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUserPage, postUpdateUser } from 'controllers/admin.user.controller';
 import { getHomePage } from 'controllers/user.controller';
 import express, { Express } from 'express';
 import { get } from 'http';
-import fileUploadMiddleware from 'src/middleware/multer';
+import { fileUploadMiddleware } from 'src/middleware/multer';
 const router = express.Router();
 
 
@@ -32,7 +32,13 @@ const webRoutes = (app: Express) => {
     router.post('/admin/update-category', postUpdateCategory);
 
     router.get('/admin/product', getProductPage);
-
+    router.get('/admin/create-phone', getCreatePhonePage);
+    router.post("/admin/create-phone", fileUploadMiddleware.fields([
+        { name: "thumbnail", maxCount: 1 },
+        { name: "images", maxCount: 10 }
+    ]), postCreatePhone);
+    router.post('/admin/delete-phone/:id', postDeletePhone);
+    router.get("/admin/view-phone/:id", getViewPhonePage);
 
     // other
     // router.get("/create-user", getCreateUserPage);

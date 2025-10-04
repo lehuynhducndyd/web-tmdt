@@ -73,8 +73,8 @@
                                                             <% if (phone.variants && phone.variants.length> 0) { %>
                                                                 <% phone.variants.forEach(function(v){ %>
                                                                     <div>
-                                                                        <%= v.color %> - <%= v.storage %> : <%= v.stock
-                                                                                    %>
+                                                                        <%= v.color %> - <%= v.ram %>/<%= v.storage %> :
+                                                                                    <%= v.stock %>
                                                                     </div>
                                                                     <% }) %>
                                                                         <% } else { %>
@@ -98,6 +98,11 @@
                                                                     <button class="btn btn-warning btn-sm"
                                                                         type="submit">View &
                                                                         Edit</button>
+                                                                </form>
+                                                                <form action="/admin/preview-phone/<%= phone.id %>"
+                                                                    method="get">
+                                                                    <button class="btn btn-warning btn-sm"
+                                                                        type="submit">Preview (Dev)</button>
                                                                 </form>
                                                             </div>
                                                         </td>
@@ -143,14 +148,14 @@
                                                         </td>
                                                         <td>
                                                             <div class="d-flex gap-2">
-                                                                <form action="/admin/delete-acc/<%= acc.id %>"
+                                                                <form action="/admin/delete-accessory/<%= acc.id %>"
                                                                     method="post">
                                                                     <button class="btn btn-danger btn-sm" type="submit"
                                                                         onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục <%= acc.name %> không?')">
                                                                         Delete
                                                                     </button>
                                                                 </form>
-                                                                <form action="/admin/view-acc/<%= acc.id %>"
+                                                                <form action="/admin/view-accessory/<%= acc.id %>"
                                                                     method="get">
                                                                     <button class="btn btn-warning btn-sm"
                                                                         type="submit">View &

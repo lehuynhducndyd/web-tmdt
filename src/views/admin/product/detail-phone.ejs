@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Edit Phone</title>
+    <link href="/admin/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+    <%- include('../layout/header'); -%>
+        <div id="layoutSidenav">
+            <%- include('../layout/sidenav'); -%>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+                            <h1 class="mt-4">Edit Phone</h1>
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/product">Phones</a></li>
+                                <li class="breadcrumb-item active">
+                                    <%= phone.name %>
+                                </li>
+                            </ol>
+                            <div class="row">
+                                <div class="col-8 mx-auto">
+                                    <h5>View detail phone</h5>
+                                    <form action="/admin/phone/<%= phone._id %>?_method=PUT" method="POST"
+                                        enctype="multipart/form-data">
+                                        <!-- Basic info -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Name</label>
+                                            <input type="text" class="form-control" name="name"
+                                                value="<%= phone.name %>" required>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label">Brand</label>
+                                                <input type="text" class="form-control" name="brand"
+                                                    value="<%= phone.brand %>">
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label">Category</label>
+                                                <select name="category" class="form-select">
+                                                    <% categories.forEach(cat=> { %>
+                                                        <option value="<%= cat._id %>"
+                                                            <%=phone.category?.toString()===cat._id.toString()
+                                                            ? 'selected' : '' %>><%= cat.name %>
+                                                        </option>
+                                                        <% }) %>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control" rows="3"
+                                                name="description"><%= phone.description %></textarea>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Discount (%)</label>
+                                            <input type="number" class="form-control" name="discount" min="0" max="100"
+                                                value="<%= phone.discount %>">
+                                        </div>
+
+                                        <!-- Thumbnail -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Thumbnail</label>
+                                            <input type="file" class="form-control" name="thumbnail" accept="image/*"
+                                                onchange="previewImage(event, 'thumbnail-preview')">
+                                            <div class="mt-2">
+                                                <img id="thumbnail-preview"
+                                                    src="data:<%= phone.thumbnail?.contentType %>;base64,<%= phone.thumbnail?.data?.toString('base64') %>"
+                                                    class="img-fluid rounded"
+                                                    style="max-height:150px; <%= phone.thumbnail ? '' : 'display:none;' %>">
+                                            </div>
+                                        </div>
+
+                                        <!-- Images -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Images</label>
+                                            <input type="file" class="form-control" name="images" accept="image/*"
+                                                multiple onchange="previewMultipleImages(event, 'images-preview')">
+                                            <div id="images-preview" class="d-flex flex-wrap gap-2 mt-2">
+                                                <% if (phone.images && phone.images.length) { %>
+                                                    <% phone.images.forEach(img=> { %>
+                                                        <img src="data:<%= img.contentType %>;base64,<%= img.data.toString('base64') %>"
+                                                            class="img-fluid rounded"
+                                                            style="max-height:100px;object-fit:cover;">
+                                                        <% }) %>
+                                                            <% } %>
+                                            </div>
+                                        </div>
+
+                                        <!-- Specs -->
+                                        <h5>Specifications</h5>
+                                        <div class="row">
+                                            <div class="col-4 mb-3">
+                                                <label class="form-label">Screen</label>
+                                                <input type="text" class="form-control" name="specs[screen]"
+                                                    value="<%= phone.specs?.screen %>">
+                                            </div>
+                                            <div class="col-4 mb-3">
+                                                <label class="form-label">CPU</label>
+                                                <input type="text" class="form-control" name="specs[cpu]"
+                                                    value="<%= phone.specs?.cpu %>">
+                                            </div>
+                                            <div class="col-4 mb-3">
+                                                <label class="form-label">Battery</label>
+                                                <input type="text" class="form-control" name="specs[battery]"
+                                                    value="<%= phone.specs?.battery %>">
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label">Camera</label>
+                                                <input type="text" class="form-control" name="specs[camera]"
+                                                    value="<%= phone.specs?.camera %>">
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label">OS</label>
+                                                <input type="text" class="form-control" name="specs[os]"
+                                                    value="<%= phone.specs?.os %>">
+                                            </div>
+                                        </div>
+
+                                        <!-- Variants -->
+                                        <h5>Variants</h5>
+                                        <div id="variants-wrapper">
+                                            <% phone.variants.forEach((v, i)=> { %>
+                                                <div class="variant-item border p-3 mb-3 rounded position-relative">
+                                                    <button type="button"
+                                                        class="btn-close position-absolute top-0 end-0 m-2 remove-variant"></button>
+                                                    <div class="row">
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">Color</label>
+                                                            <input type="text" class="form-control"
+                                                                name="variants[<%= i %>][color]" value="<%= v.color %>">
+                                                        </div>
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">RAM</label>
+                                                            <input type="text" class="form-control"
+                                                                name="variants[<%= i %>][ram]" value="<%= v.ram %>">
+                                                        </div>
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">Storage</label>
+                                                            <input type="text" class="form-control"
+                                                                name="variants[<%= i %>][storage]"
+                                                                value="<%= v.storage %>">
+                                                        </div>
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">Price</label>
+                                                            <input type="number" class="form-control"
+                                                                name="variants[<%= i %>][price]" value="<%= v.price %>">
+                                                        </div>
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">Stock</label>
+                                                            <input type="number" class="form-control"
+                                                                name="variants[<%= i %>][stock]" value="<%= v.stock %>">
+                                                        </div>
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">Model 3D Link</label>
+                                                            <input type="text" class="form-control"
+                                                                name="variants[<%= i %>][model3d]"
+                                                                value="<%= v.model3d %>" oninput="preview3DModel(this)">
+                                                            <div class="model3d-preview mt-2">
+                                                                <% if (v.model3d) { %>
+                                                                    <iframe width="200" height="200"
+                                                                        src="<%= v.model3d %>" frameborder="0"
+                                                                        allowfullscreen></iframe>
+                                                                    <% } %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% }) %>
+                                        </div>
+                                        <button type="button" class="btn btn-secondary mb-3" id="addVariantBtn">+ Add
+                                            Variant</button>
+
+                                        <div class="mb-3">
+                                            <button type="submit" class="btn btn-primary">update Phone</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </main>
+                    <%- include('../layout/footer'); -%>
+                </div>
+        </div>
+
+        <!-- JS -->
+        <script>
+            // Thêm variant
+            let variantCount = <%= phone.variants.length %> || 0;
+            document.getElementById("addVariantBtn").addEventListener("click", () => {
+                const wrapper = document.getElementById("variants-wrapper");
+                const div = document.createElement("div");
+                div.classList.add("variant-item", "border", "p-3", "mb-3", "rounded", "position-relative");
+                div.innerHTML = `
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-2 remove-variant"></button>
+                <div class="row">
+                    <div class="col-4 mb-3">
+                        <label class="form-label">Color</label>
+                        <input type="text" class="form-control" name="variants[${variantCount}][color]">
+                    </div>
+                    <div class="col-4 mb-3">
+                        <label class="form-label">RAM</label>
+                        <input type="text" class="form-control" name="variants[${variantCount}][ram]">
+                    </div>
+                    <div class="col-4 mb-3">
+                        <label class="form-label">Storage</label>
+                        <input type="text" class="form-control" name="variants[${variantCount}][storage]">
+                    </div>
+                    <div class="col-4 mb-3">
+                        <label class="form-label">Price</label>
+                        <input type="number" class="form-control" name="variants[${variantCount}][price]" step="0.01">
+                    </div>
+                    <div class="col-4 mb-3">
+                        <label class="form-label">Stock</label>
+                        <input type="number" class="form-control" name="variants[${variantCount}][stock]">
+                    </div>
+                    <div class="col-4 mb-3">
+                        <label class="form-label">Model 3D Link</label>
+                        <input type="text" class="form-control" name="variants[${variantCount}][model3d]" oninput="preview3DModel(this)">
+                        <div class="model3d-preview mt-2"></div>
+                    </div>
+                </div>`;
+                wrapper.appendChild(div);
+                variantCount++;
+            });
+
+            // Xóa variant
+            document.addEventListener("click", e => {
+                if (e.target.classList.contains("remove-variant")) e.target.closest(".variant-item").remove();
+            });
+
+            // Preview ảnh 1 file
+            function previewImage(event, previewId) {
+                const input = event.target;
+                const preview = document.getElementById(previewId);
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        preview.src = e.target.result;
+                        preview.style.display = "block";
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            // Preview nhiều ảnh
+            function previewMultipleImages(event, containerId) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = "";
+                Array.from(event.target.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        const img = document.createElement("img");
+                        img.src = e.target.result;
+                        img.classList.add("img-fluid", "rounded");
+                        img.style.maxHeight = "100px";
+                        img.style.marginRight = "8px";
+                        container.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            // Preview model 3D
+            function preview3DModel(input) {
+                const container = input.parentElement.querySelector(".model3d-preview");
+                container.innerHTML = "";
+                if (input.value.trim()) {
+                    const iframe = document.createElement("iframe");
+                    iframe.width = "200";
+                    iframe.height = "200";
+                    iframe.src = input.value;
+                    iframe.frameBorder = "0";
+                    iframe.allowFullscreen = true;
+                    container.appendChild(iframe);
+                }
+            }
+        </script>
+</body>
+
+</html>

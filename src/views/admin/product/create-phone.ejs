@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Create Phone</title>
+    <link href="/admin/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+    <%- include('../layout/header'); -%>
+        <div id="layoutSidenav">
+            <%- include('../layout/sidenav'); -%>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+                            <h1 class="mt-4">Manage Phones</h1>
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                                <li class="breadcrumb-item active"><a href="/admin/product">Phones</a></li>
+                            </ol>
+                            <div class="row">
+                                <div class="col-8 mx-auto">
+                                    <div>
+                                        <h5 style="padding: 10px 0;">Create a new Phone</h5>
+                                        <form action="/admin/create-phone" method="post" enctype="multipart/form-data">
+                                            <!-- Basic info -->
+                                            <div class="mb-3">
+                                                <label class="form-label">Name</label>
+                                                <input type="text" class="form-control" name="name" required>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6 mb-3">
+                                                    <label class="form-label">Brand</label>
+                                                    <input type="text" class="form-control" name="brand">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label class="form-label">Category</label>
+                                                    <select name="category" class="form-select">
+                                                        <% categories.forEach(cat=> { %>
+                                                            <option value="<%= cat._id %>">
+                                                                <%= cat.name %>
+                                                            </option>
+                                                            <% }) %>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Description</label>
+                                                <textarea class="form-control" rows="3" name="description"></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Discount (%)</label>
+                                                <input type="number" class="form-control" name="discount" min="0"
+                                                    max="100" value="0">
+                                            </div>
+
+                                            <!-- Images -->
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Thumbnail</label>
+                                                <input type="file" class="form-control" name="thumbnail"
+                                                    accept="image/*"
+                                                    onchange="previewImage(event, 'thumbnail-preview')">
+                                                <div class="mt-2">
+                                                    <img id="thumbnail-preview" src="" alt="Preview Thumbnail"
+                                                        class="img-fluid rounded"
+                                                        style="max-height:150px; display:none;">
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Images</label>
+                                                <input type="file" class="form-control" name="images" accept="image/*"
+                                                    multiple onchange="previewMultipleImages(event, 'images-preview')">
+                                                <div id="images-preview" class="d-flex flex-wrap gap-2 mt-2"></div>
+                                            </div>
+
+
+
+                                            <!-- Specs -->
+                                            <h5>Specifications</h5>
+                                            <div class="row">
+                                                <div class="col-4 mb-3">
+                                                    <label class="form-label">Screen</label>
+                                                    <input type="text" class="form-control" name="specs[screen]">
+                                                </div>
+                                                <div class="col-4 mb-3">
+                                                    <label class="form-label">CPU</label>
+                                                    <input type="text" class="form-control" name="specs[cpu]">
+                                                </div>
+
+                                                <div class="col-4 mb-3">
+                                                    <label class="form-label">Battery</label>
+                                                    <input type="text" class="form-control" name="specs[battery]">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label class="form-label">Camera</label>
+                                                    <input type="text" class="form-control" name="specs[camera]">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label class="form-label">OS</label>
+                                                    <input type="text" class="form-control" name="specs[os]">
+                                                </div>
+                                            </div>
+
+                                            <!-- Variants -->
+                                            <!-- <h5>Variants</h5>
+                                            <div id="variants-wrapper">
+                                                <div class="variant-item border p-3 mb-3 rounded">
+                                                    <div class="row">
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">Color</label>
+                                                            <input type="text" class="form-control"
+                                                                name="variants[0][color]">
+                                                        </div>
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">RAM</label>
+                                                            <input type="text" class="form-control"
+                                                                name="variants[0][ram]">
+                                                        </div>
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">Storage</label>
+                                                            <input type="text" class="form-control"
+                                                                name="variants[0][storage]">
+                                                        </div>
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">Price</label>
+                                                            <input type="number" class="form-control"
+                                                                name="variants[0][price]" step="0.01">
+                                                        </div>
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">Stock</label>
+                                                            <input type="number" class="form-control"
+                                                                name="variants[0][stock]">
+                                                        </div>
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">Model 3D Link</label>
+                                                            <input type="text" class="form-control"
+                                                                name="variants[0][model3d]">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-secondary mb-3" id="addVariantBtn">+
+                                                Add Variant</button> -->
+                                            <h5>Variants</h5>
+                                            <div id="variants-wrapper">
+                                                <div class="variant-item border p-3 mb-3 rounded position-relative">
+                                                    <button type="button"
+                                                        class="btn-close position-absolute top-0 end-0 m-2 remove-variant"></button>
+                                                    <div class="row">
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">Color</label>
+                                                            <input type="text" class="form-control"
+                                                                name="variants[0][color]">
+                                                        </div>
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">RAM</label>
+                                                            <input type="text" class="form-control"
+                                                                name="variants[0][ram]">
+                                                        </div>
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">Storage</label>
+                                                            <input type="text" class="form-control"
+                                                                name="variants[0][storage]">
+                                                        </div>
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">Price</label>
+                                                            <input type="number" class="form-control"
+                                                                name="variants[0][price]" step="0.01">
+                                                        </div>
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">Stock</label>
+                                                            <input type="number" class="form-control"
+                                                                name="variants[0][stock]">
+                                                        </div>
+                                                        <div class="col-4 mb-3">
+                                                            <label class="form-label">Model 3D Link</label>
+                                                            <input type="text" class="form-control"
+                                                                name="variants[0][model3d]">
+                                                        </div>
+
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-secondary mb-3" id="addVariantBtn">+
+                                                Add Variant</button>
+
+                                            <!-- Submit -->
+                                            <div class="mb-3">
+                                                <button type="submit" class="btn btn-primary">Create Phone</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                    <%- include('../layout/footer'); -%>
+                </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
+        <script src="/admin/js/scripts.js"></script>
+        let variantCount = 1;
+        document.getElementById("addVariantBtn").addEventListener("click", function () {
+        const wrapper = document.getElementById("variants-wrapper");
+        const newVariant = document.createElement("div");
+        newVariant.classList.add("variant-item", "border", "p-3", "mb-3", "rounded");
+        newVariant.innerHTML = `
+        <div class="row">
+            <div class="col-4 mb-3">
+                <label class="form-label">Color</label>
+                <input type="text" class="form-control" name="variants[${variantCount}][color]">
+            </div>
+            <div class="col-4 mb-3">
+                <label class="form-label">Ram</label>
+                <input type="text" class="form-control" name="variants[${variantCount}][ram]">
+            </div>
+            <div class="col-4 mb-3">
+                <label class="form-label">Storage</label>
+                <input type="text" class="form-control" name="variants[${variantCount}][storage]">
+            </div>
+            <div class="col-4 mb-3">
+                <label class="form-label">Price</label>
+                <input type="number" class="form-control" name="variants[${variantCount}][price]" step="0.01">
+            </div>
+            <div class="col-4 mb-3">
+                <label class="form-label">Stock</label>
+                <input type="number" class="form-control" name="variants[${variantCount}][stock]">
+            </div>
+            <div class="col-4 mb-3">
+                <label class="form-label">Model 3D Link</label>
+                <input type="text" class="form-control" name="variants[${variantCount}][model3d]">
+            </div>
+        </div>
+        `;
+        wrapper.appendChild(newVariant);
+        variantCount++;
+        });
+        </script> -->
+        <script>
+            let variantCount = 1;
+
+            function addVariant() {
+                const wrapper = document.getElementById("variants-wrapper");
+                const newVariant = document.createElement("div");
+                newVariant.classList.add("variant-item", "border", "p-3", "mb-3", "rounded", "position-relative");
+                newVariant.innerHTML = `
+            <button type="button" class="btn-close position-absolute top-0 end-0 m-2 remove-variant"></button>
+            <div class="row">
+                <div class="col-4 mb-3">
+                    <label class="form-label">Color</label>
+                    <input type="text" class="form-control" name="variants[${variantCount}][color]">
+                </div>
+                <div class="col-4 mb-3">
+                    <label class="form-label">RAM</label>
+                    <input type="text" class="form-control" name="variants[${variantCount}][ram]">
+                </div>
+                <div class="col-4 mb-3">
+                    <label class="form-label">Storage</label>
+                    <input type="text" class="form-control" name="variants[${variantCount}][storage]">
+                </div>
+                <div class="col-4 mb-3">
+                    <label class="form-label">Price</label>
+                    <input type="number" class="form-control" name="variants[${variantCount}][price]" step="0.01">
+                </div>
+                <div class="col-4 mb-3">
+                    <label class="form-label">Stock</label>
+                    <input type="number" class="form-control" name="variants[${variantCount}][stock]">
+                </div>
+                <div class="col-4 mb-3">
+                    <label class="form-label">Model 3D Link</label>
+                    <input type="text" class="form-control" name="variants[${variantCount}][model3d] ">
+                </div>
+            </div>
+        `;
+                wrapper.appendChild(newVariant);
+                variantCount++;
+            }
+
+            // Thêm variant
+            document.getElementById("addVariantBtn").addEventListener("click", addVariant);
+
+            // Xoá variant
+            document.addEventListener("click", function (e) {
+                if (e.target && e.target.classList.contains("remove-variant")) {
+                    e.target.closest(".variant-item").remove();
+                }
+            });
+        </script>
+        <script>
+            // Preview 1 ảnh (thumbnail)
+            function previewImage(event, previewId) {
+                const input = event.target;
+                const preview = document.getElementById(previewId);
+
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        preview.src = e.target.result;
+                        preview.style.display = "block";
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    preview.src = "";
+                    preview.style.display = "none";
+                }
+            }
+
+            // Preview nhiều ảnh
+            function previewMultipleImages(event, previewContainerId) {
+                const input = event.target;
+                const container = document.getElementById(previewContainerId);
+                container.innerHTML = ""; // clear cũ
+
+                if (input.files) {
+                    Array.from(input.files).forEach(file => {
+                        if (!file.type.startsWith("image/")) return;
+                        const reader = new FileReader();
+                        reader.onload = e => {
+                            const img = document.createElement("img");
+                            img.src = e.target.result;
+                            img.classList.add("img-fluid", "rounded");
+                            img.style.maxHeight = "100px";
+                            img.style.objectFit = "cover";
+                            img.style.marginRight = "8px";
+                            container.appendChild(img);
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                }
+            }
+        </script>
+
+</body>
+
+</html>

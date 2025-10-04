@@ -10,4 +10,8 @@ const getAllAccessories = async () => {
     return accessories;
 }
 
-export { getAllPhones, getAllAccessories }
+const getPhoneById = async (id: string) => {
+    const phone = await Phone.findById(id);
+    return phone;
+}
+export { getAllPhones, getAllAccessories, getPhoneById }

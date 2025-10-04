@@ -73,14 +73,13 @@ const initDatabase = async () => {
                     specs: {
                         screen: "6.7 inch OLED 120Hz",
                         cpu: "Apple A17 Pro",
-                        ram: "8GB",
                         battery: "4500mAh",
                         camera: "48MP + 12MP",
                         os: "iOS 17"
                     },
                     variants: [
-                        { color: "Black Titanium", storage: "256GB", price: 34990000, stock: 20 },
-                        { color: "Natural Titanium", storage: "512GB", price: 39990000, stock: 10 }
+                        { color: "Black Titanium", storage: "256GB", ram: "8GB", price: 34990000, stock: 20 },
+                        { color: "Natural Titanium", storage: "512GB", ram: "8GB", price: 39990000, stock: 10 }
                     ],
                     discount: 5
                 },
@@ -92,14 +91,13 @@ const initDatabase = async () => {
                     specs: {
                         screen: "6.8 inch AMOLED 120Hz",
                         cpu: "Snapdragon 8 Gen 3",
-                        ram: "12GB",
                         battery: "5000mAh",
                         camera: "200MP + 12MP",
                         os: "Android 14"
                     },
                     variants: [
-                        { color: "Gray", storage: "256GB", price: 32990000, stock: 15 },
-                        { color: "Violet", storage: "512GB", price: 37990000, stock: 8 }
+                        { color: "Gray", storage: "256GB", ram: "12GB", price: 32990000, stock: 15 },
+                        { color: "Violet", storage: "512GB", ram: "12GB", price: 37990000, stock: 8 }
                     ],
                     discount: 0
                 }

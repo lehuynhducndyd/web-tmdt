@@ -10,7 +10,9 @@ const imageSchema = new mongoose.Schema({
 /** Schema cho variant (dành cho điện thoại) */
 const variantSchema = new mongoose.Schema({
   color: String,
+  model3d: String,
   storage: String,
+  ram: String,
   price: Number,
   stock: Number
 }, { _id: false });
@@ -19,7 +21,6 @@ const variantSchema = new mongoose.Schema({
 const phoneSpecSchema = new mongoose.Schema({
   screen: String,
   cpu: String,
-  ram: String,
   battery: String,
   camera: String,
   os: String
@@ -33,8 +34,6 @@ const phoneSchema = new mongoose.Schema({
 
   thumbnail: imageSchema,
   images: [imageSchema],
-  model3d: String,
-
   description: String,
   specs: phoneSpecSchema,
   variants: [variantSchema],
