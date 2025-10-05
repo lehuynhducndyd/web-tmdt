@@ -76,4 +76,83 @@ const postDeletePhone = async (req: Request, res: Response) => {
         res.status(500).send("Error deleting phone");
     }
 };
-export { getProductPage, getCreatePhonePage, postCreatePhone, postDeletePhone, getViewPhonePage };
+const postUpdatePhone = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const phone = await Phone.findById(id);
+        if (!phone) return res.status(404).send("Phone not found");
+
+        // ---Lấy dữ liệu text từ form ---
+        const { name, brand, category, description, discount, specs, variants } = req.body;
+
+        phone.name = name;
+        phone.brand = brand;
+        phone.category = category;
+        phone.description = description;
+        phone.discount = Number(discount) || 0;
+
+        // --- Specs ---
+        if (specs) {
+            phone.specs = {
+                screen: specs.screen || "",
+                cpu: specs.cpu || "",
+                battery: specs.battery || "",
+                camera: specs.camera || "",
+                os: specs.os || ""
+            };
+        }
+
+        // --- Variants ---
+        if (variants) {
+            const variantArr = Array.isArray(variants)
+                ? variants
+                : Object.values(variants);
+
+            phone.variants.splice(
+                0,
+                phone.variants.length,
+                ...variantArr.map((v: any) => ({
+                    color: v.color,
+                    model3d: v.model3d,
+                    storage: v.storage,
+                    ram: v.ram,
+                    price: Number(v.price) || 0,
+                    stock: Number(v.stock) || 0
+                }))
+            );
+
+        }
+
+
+        // ---Thumbnail ---
+        const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+        if (files?.thumbnail?.[0]) {
+            const thumb = files.thumbnail[0];
+            phone.thumbnail = {
+                data: thumb.buffer,
+                contentType: thumb.mimetype
+            };
+        }
+
+        // --- Ảnh mô tả ---
+        if (files?.images?.length) {
+            // Giữ lại ảnh cũ + thêm ảnh mới
+            files.images.forEach(file => {
+                phone.images.push({
+                    data: file.buffer,
+                    contentType: file.mimetype
+                });
+            });
+        }
+
+        // ---Lưu ---
+        await phone.save();
+
+        res.redirect("/admin/product");
+    } catch (error) {
+        console.error("Update phone error:", error);
+        res.status(500).send("Error updating phone");
+    }
+};
+
+export { getProductPage, getCreatePhonePage, postCreatePhone, postDeletePhone, getViewPhonePage, postUpdatePhone };

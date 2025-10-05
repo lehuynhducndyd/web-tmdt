@@ -1,6 +1,6 @@
 import { getCategoryPage, getCreateCategoryPage, getViewCategoryPage, postCreateCategory, postDeleteCategory, postUpdateCategory } from 'controllers/admin.category.controller';
 import { getAdminPage } from 'controllers/admin.dashboard.controller';
-import { getCreatePhonePage, getProductPage, getViewPhonePage, postCreatePhone, postDeletePhone } from 'controllers/admin.product.controller';
+import { getCreatePhonePage, getProductPage, getViewPhonePage, postCreatePhone, postDeletePhone, postUpdatePhone } from 'controllers/admin.product.controller';
 import { getUserPage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUserPage, postUpdateUser } from 'controllers/admin.user.controller';
 import { getHomePage } from 'controllers/user.controller';
 import express, { Express } from 'express';
@@ -39,6 +39,10 @@ const webRoutes = (app: Express) => {
     ]), postCreatePhone);
     router.post('/admin/delete-phone/:id', postDeletePhone);
     router.get("/admin/view-phone/:id", getViewPhonePage);
+    router.post("/admin/update-phone/:id", fileUploadMiddleware.fields([
+        { name: "thumbnail", maxCount: 1 },
+        { name: "images", maxCount: 10 }
+    ]), postUpdatePhone);
 
     // other
     // router.get("/create-user", getCreateUserPage);

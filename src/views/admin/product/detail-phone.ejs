@@ -27,7 +27,7 @@
                             <div class="row">
                                 <div class="col-8 mx-auto">
                                     <h5>View detail phone</h5>
-                                    <form action="/admin/phone/<%= phone._id %>?_method=PUT" method="POST"
+                                    <form action="/admin/update-phone/<%= phone._id %>" method="POST"
                                         enctype="multipart/form-data">
                                         <!-- Basic info -->
                                         <div class="mb-3">
@@ -163,25 +163,20 @@
                                                             <label class="form-label">Model 3D Link</label>
                                                             <input type="text" class="form-control"
                                                                 name="variants[<%= i %>][model3d]"
-                                                                value="<%= v.model3d %>" oninput="preview3DModel(this)">
-                                                            <div class="model3d-preview mt-2">
-                                                                <% if (v.model3d) { %>
-                                                                    <iframe width="200" height="200"
-                                                                        src="<%= v.model3d %>" frameborder="0"
-                                                                        allowfullscreen></iframe>
-                                                                    <% } %>
-                                                            </div>
+                                                                value="<%= v.model3d %>"">
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <% }) %>
                                         </div>
-                                        <button type="button" class="btn btn-secondary mb-3" id="addVariantBtn">+ Add
-                                            Variant</button>
+                                        <button type=" button" class="btn btn-secondary mb-3" id="addVariantBtn">+ Add
+                                                            Variant</button>
 
-                                        <div class="mb-3">
-                                            <button type="submit" class="btn btn-primary">update Phone</button>
-                                        </div>
+                                                            <div class="mb-3">
+                                                                <button type="submit" class="btn btn-primary">update
+                                                                    Phone</button>
+                                                            </div>
                                     </form>
                                 </div>
                             </div>
@@ -225,8 +220,7 @@
                     </div>
                     <div class="col-4 mb-3">
                         <label class="form-label">Model 3D Link</label>
-                        <input type="text" class="form-control" name="variants[${variantCount}][model3d]" oninput="preview3DModel(this)">
-                        <div class="model3d-preview mt-2"></div>
+                        <input type="text" class="form-control" name="variants[${variantCount}][model3d]">
                     </div>
                 </div>`;
                 wrapper.appendChild(div);
@@ -268,21 +262,6 @@
                     };
                     reader.readAsDataURL(file);
                 });
-            }
-
-            // Preview model 3D
-            function preview3DModel(input) {
-                const container = input.parentElement.querySelector(".model3d-preview");
-                container.innerHTML = "";
-                if (input.value.trim()) {
-                    const iframe = document.createElement("iframe");
-                    iframe.width = "200";
-                    iframe.height = "200";
-                    iframe.src = input.value;
-                    iframe.frameBorder = "0";
-                    iframe.allowFullscreen = true;
-                    container.appendChild(iframe);
-                }
             }
         </script>
 </body>
