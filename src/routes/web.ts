@@ -1,10 +1,9 @@
 import { getCategoryPage, getCreateCategoryPage, getViewCategoryPage, postCreateCategory, postDeleteCategory, postUpdateCategory } from 'controllers/admin.category.controller';
 import { getAdminPage } from 'controllers/admin.dashboard.controller';
-import { getCreatePhonePage, getProductPage, getViewPhonePage, postCreatePhone, postDeletePhone, postUpdatePhone } from 'controllers/admin.product.controller';
+import { getCreatePhonePage, getCreateVariantPage, getProductPage, getViewPhonePage, getViewVariantPage, postCreatePhone, postCreateVariant, postDeletePhone, postDeleteVariant, postUpdatePhone, postUpdateVariant } from 'controllers/admin.phone.controller';
 import { getUserPage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUserPage, postUpdateUser } from 'controllers/admin.user.controller';
 import { getHomePage } from 'controllers/user.controller';
 import express, { Express } from 'express';
-import { get } from 'http';
 import { fileUploadMiddleware } from 'src/middleware/multer';
 const router = express.Router();
 
@@ -43,6 +42,11 @@ const webRoutes = (app: Express) => {
         { name: "thumbnail", maxCount: 1 },
         { name: "images", maxCount: 10 }
     ]), postUpdatePhone);
+    router.get("/admin/create-variant/:pid", getCreateVariantPage);
+    router.post("/admin/create-variant", postCreateVariant);
+    router.post("/admin/delete-variant/:id/:pid", postDeleteVariant);
+    router.get("/admin/view-variant/:id", getViewVariantPage);
+    router.post("/admin/update-variant/:id/:pid", postUpdateVariant)
 
     // other
     // router.get("/create-user", getCreateUserPage);
@@ -63,7 +67,11 @@ const webRoutes = (app: Express) => {
     // });
 
     app.use('/', router);
+
+    // Handle 404 Not Found
+    app.use((req, res, next) => {
+        res.status(404).render('404.ejs');
+    });
 }
 
 export default webRoutes;
-

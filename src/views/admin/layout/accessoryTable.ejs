@@ -1,0 +1,50 @@
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Stock</th>
+            <th>Discount (%)</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (accessories && accessories.length> 0) { %>
+            <% accessories.forEach(function(acc){ %>
+                <tr>
+                    <td>
+                        <%= acc.name %>
+                    </td>
+                    <td>
+                        <%= acc.brand %>
+                    </td>
+                    <td>
+                        <%= acc.stock %>
+                    </td>
+                    <td>
+                        <%= acc.discount %>
+                    </td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <form action="/admin/delete-accessory/<%= acc.id %>" method="post">
+                                <button class="btn btn-danger btn-sm" type="submit"
+                                    onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục <%= acc.name %> không?')">
+                                    Delete
+                                </button>
+                            </form>
+                            <form action="/admin/view-accessory/<%= acc.id %>" method="get">
+                                <button class="btn btn-warning btn-sm" type="submit">View &
+                                    Edit</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">No
+                                accessories found</td>
+                        </tr>
+                        <% } %>
+    </tbody>
+</table>

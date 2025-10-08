@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Create Accessory</title>
+    <link href="/admin/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+    <%- include('../layout/header'); -%>
+        <div id="layoutSidenav">
+            <%- include('../layout/sidenav'); -%>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+                            <h1 class="mt-4">Manage Products</h1>
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/product">Products</a></li>
+                                <li class="breadcrumb-item active">Create Accessory</li>
+                            </ol>
+
+                            <div class="row">
+                                <div class="col-8 mx-auto">
+                                    <div>
+                                        <h5 style="padding: 10px 0;">Create a new Accessory</h5>
+                                        <form action="/admin/create-accessory" method="post"
+                                            enctype="multipart/form-data">
+                                            <!-- Basic info -->
+                                            <div class="mb-3">
+                                                <label class="form-label">Name</label>
+                                                <input type="text" class="form-control" name="name" required>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6 mb-3">
+                                                    <label class="form-label">Brand</label>
+                                                    <input type="text" class="form-control" name="brand">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label class="form-label">Category</label>
+                                                    <select name="category" class="form-select">
+                                                        <% categories.forEach(cat=> { %>
+                                                            <option value="<%= cat._id %>">
+                                                                <%= cat.name %>
+                                                            </option>
+                                                            <% }) %>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Description</label>
+                                                <textarea class="form-control" rows="3" name="description"></textarea>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="mb-3 col-4">
+                                                    <label class="form-label">Price (VNĐ)</label>
+                                                    <input type="number" class="form-control" name="price"
+                                                        placeholder="Enter price" required>
+                                                </div>
+                                                <div class="mb-3 col-4">
+                                                    <label class="form-label">Stock Quantity</label>
+                                                    <input type="number" class="form-control" name="stock"
+                                                        placeholder="Enter stock" required>
+                                                </div>
+                                                <div class="mb-3 col-4">
+                                                    <label class="form-label">Discount (%)</label>
+                                                    <input type="number" class="form-control" name="discount" min="0"
+                                                        max="100" value="0">
+                                                </div>
+                                            </div>
+
+                                            <!-- Images -->
+                                            <div class="mb-3">
+                                                <label class="form-label">Thumbnail</label>
+                                                <input type="file" class="form-control" name="thumbnail"
+                                                    accept="image/*"
+                                                    onchange="previewImage(event, 'thumbnail-preview')">
+                                                <div class="mt-2">
+                                                    <img id="thumbnail-preview" src="" alt="Preview Thumbnail"
+                                                        class="img-fluid rounded"
+                                                        style="max-height:150px; display:none;">
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Images</label>
+                                                <input type="file" class="form-control" name="images" accept="image/*"
+                                                    multiple onchange="previewMultipleImages(event, 'images-preview')">
+                                                <div id="images-preview" class="d-flex flex-wrap gap-2 mt-2"></div>
+                                            </div>
+
+                                            <!-- Submit -->
+                                            <div class="mb-3">
+                                                <button type="submit" class="btn btn-primary">Create Accessory</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                    <%- include('../layout/footer'); -%>
+                </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
+        <script src="/admin/js/scripts.js"></script>
+        <script>
+            function previewImage(event, previewId) {
+                const [file] = event.target.files;
+                const preview = document.getElementById(previewId);
+                if (file) {
+                    preview.src = URL.createObjectURL(file);
+                    preview.style.display = 'block';
+                }
+            }
+            function previewMultipleImages(event, previewContainerId) {
+                const container = document.getElementById(previewContainerId);
+                container.innerHTML = "";
+                for (const file of event.target.files) {
+                    const img = document.createElement("img");
+                    img.src = URL.createObjectURL(file);
+                    img.classList.add("img-fluid", "rounded");
+                    img.style.maxHeight = "100px";
+                    img.style.marginRight = "8px";
+                    container.appendChild(img);
+                }
+            }
+        </script>
+</body>
+
+</html>

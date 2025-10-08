@@ -1,0 +1,47 @@
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (categories && categories.length> 0) { %>
+            <% categories.forEach(function(category){ %>
+                <tr>
+                    <td>
+                        <%= category.name %>
+                    </td>
+                    <td>
+                        <%= category.type %>
+                    </td>
+                    <td>
+                        <%= category.description %>
+                    </td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <form action="/admin/delete-category/<%= category.id %>" method="post">
+                                <button class="btn btn-danger btn-sm" type="submit"
+                                    onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục <%= category.name %> không?')">
+                                    Delete
+                                </button>
+                            </form>
+                            <form action="/admin/view-category/<%= category.id %>" method="get">
+                                <button class="btn btn-warning btn-sm" type="submit">View &
+                                    Edit</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">No categories
+                                found
+                            </td>
+                        </tr>
+                        <% } %>
+    </tbody>
+</table>

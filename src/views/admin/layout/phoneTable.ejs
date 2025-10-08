@@ -1,0 +1,43 @@
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (phones && phones.length> 0) { %>
+            <% phones.forEach(function(phone){ %>
+                <tr>
+                    <td>
+                        <%= phone.name %>
+                    </td>
+                    <td>
+                        <%= phone.brand %>
+                    </td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <form action="/admin/delete-phone/<%= phone.id %>" method="post">
+                                <button class="btn btn-danger btn-sm" type="submit"
+                                    onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục <%= phone.name %> không?')">
+                                    Delete
+                                </button>
+                            </form>
+                            <form action="/admin/view-phone/<%= phone.id %>" method="get">
+                                <button class="btn btn-warning btn-sm" type="submit">View & Edit</button>
+                            </form>
+                            <form action="/admin/preview-phone/<%= phone.id %>" method="get">
+                                <button class="btn btn-primary btn-sm" type="submit">Preview (Dev)</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">Không có thiết bị nào</td>
+                        </tr>
+                        <% } %>
+    </tbody>
+</table>

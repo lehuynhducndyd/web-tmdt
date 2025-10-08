@@ -27,7 +27,7 @@
                             <div class="row">
                                 <div class="col-6 mx-auto">
                                     <div>
-                                        <h5 style="padding: 10px 0;">Create a new user</h5>
+                                        <h5 style="padding: 10px 0;">Create a new category</h5>
                                         <form action="/admin/create-category" method="post">
                                             <div class="mb-3">
                                                 <label class="form-label">Name</label>
@@ -35,9 +35,18 @@
                                                     placeholder="Enter name of category" name="name" required>
                                             </div>
                                             <div class="mb-3">
+                                                <label class="form-label">Type</label>
+                                                <select name="type" class="form-select">
+                                                    <% CATEGORY_TYPES.forEach(type=> { %>
+                                                        <option value="<%= type %>">
+                                                            <%= type %>
+                                                        </option>
+                                                        <% }) %>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
                                                 <label class="form-label">Description</label>
-                                                <input type="text" class="form-control" placeholder="Enter description"
-                                                    name="description" required>
+                                                <textarea class="form-control" rows="3" name="description"></textarea>
                                             </div>
                                             <div class="mb-3">
                                                 <button type="submit" class="btn btn-primary">Submit</button>

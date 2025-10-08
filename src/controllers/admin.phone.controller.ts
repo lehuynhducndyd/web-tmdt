@@ -1,12 +1,19 @@
 import { Request, Response } from 'express';
-import { Phone } from 'models/product';
-import { getAllCategories } from 'services/category.service';
-import { getAllAccessories, getAllPhones, getPhoneById } from 'services/product.service';
+import { Phone, Variant } from 'models/product';
+import { getAllCategories, getTypeDevices } from 'services/category.service';
+import { getAllAccessories, getAllPhones, getPhoneById, getVariantByPhoneId } from 'services/product.service';
 
 const getProductPage = async (req: Request, res: Response) => {
-    const phones = await getAllPhones();
+    const categoryFilter = req.query.category as string;
+    let phones;
+    if (categoryFilter) {
+        phones = await Phone.find({ category: categoryFilter }).populate('category').exec();
+    } else {
+        phones = await getAllPhones();
+    }
     const accessories = await getAllAccessories();
-    res.render("admin/product/show.ejs", { phones, accessories });
+    const deviceCategories = await getTypeDevices()
+    res.render("admin/product/show.ejs", { phones, accessories, deviceCategories, selectedCategory: categoryFilter });
 }
 
 const getCreatePhonePage = async (req: Request, res: Response) => {
@@ -16,12 +23,14 @@ const getCreatePhonePage = async (req: Request, res: Response) => {
     });
 }
 
+
 const getViewPhonePage = async (req: Request, res: Response) => {
     const categories = await getAllCategories();
     const id = req.params.id;
     const phone = await getPhoneById(id);
+    const variants = await getVariantByPhoneId(id);
     res.render("admin/product/detail-phone.ejs", {
-        phone, categories
+        phone, categories, variants
     });
 };
 
@@ -44,16 +53,14 @@ const postCreatePhone = async (req: Request, res: Response) => {
             }));
         }
 
-        const { name, brand, category, description, discount, specs, variants } = req.body;
+        const { name, brand, category, description, specs } = req.body;
 
         const phone = new Phone({
             name,
             brand,
             category,
             description,
-            discount: discount ? Number(discount) : 0,
             specs,
-            variants,
             thumbnail,
             images
         });
@@ -70,6 +77,7 @@ const postCreatePhone = async (req: Request, res: Response) => {
 const postDeletePhone = async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
+        await Variant.deleteMany({ id });
         await Phone.deleteOne({ _id: id });
         res.redirect('/admin/product');
     } catch (error) {
@@ -89,7 +97,6 @@ const postUpdatePhone = async (req: Request, res: Response) => {
         phone.brand = brand;
         phone.category = category;
         phone.description = description;
-        phone.discount = Number(discount) || 0;
 
         // --- Specs ---
         if (specs) {
@@ -101,28 +108,6 @@ const postUpdatePhone = async (req: Request, res: Response) => {
                 os: specs.os || ""
             };
         }
-
-        // --- Variants ---
-        if (variants) {
-            const variantArr = Array.isArray(variants)
-                ? variants
-                : Object.values(variants);
-
-            phone.variants.splice(
-                0,
-                phone.variants.length,
-                ...variantArr.map((v: any) => ({
-                    color: v.color,
-                    model3d: v.model3d,
-                    storage: v.storage,
-                    ram: v.ram,
-                    price: Number(v.price) || 0,
-                    stock: Number(v.stock) || 0
-                }))
-            );
-
-        }
-
 
         // ---Thumbnail ---
         const files = req.files as { [fieldname: string]: Express.Multer.File[] };
@@ -155,4 +140,70 @@ const postUpdatePhone = async (req: Request, res: Response) => {
     }
 };
 
-export { getProductPage, getCreatePhonePage, postCreatePhone, postDeletePhone, getViewPhonePage, postUpdatePhone };
+const getCreateVariantPage = async (req: Request, res: Response) => {
+    const phoneId = req.params.pid;
+    const phone = await getPhoneById(phoneId);
+    res.render("admin/product/create-variant.ejs", {
+        phone
+    });
+}
+
+const postDeleteVariant = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const phoneId = req.params.pid;
+    await Variant.deleteOne({ _id: id });
+    res.redirect(`/admin/view-phone/${phoneId}`);
+};
+
+const postCreateVariant = async (req: Request, res: Response) => {
+    const { color, discount, storage, ram, price, stock, model3d, phoneId } = req.body;
+
+    // Tạo variant mới
+    const newVariant = new Variant({
+        phoneId,
+        color,
+        discount: discount ? Number(discount) : 0,
+        storage,
+        ram,
+        price,
+        stock,
+        model3d,
+    });
+
+    await newVariant.save();
+
+    res.redirect(`/admin/view-phone/${phoneId}`);
+}
+
+const getViewVariantPage = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const variant = await Variant.findById(id);
+    const phone = await getPhoneById(variant.phoneId.toString());
+    res.render("admin/product/detail-variant.ejs", {
+        variant, phone
+    });
+}
+
+const postUpdateVariant = async (req: Request, res: Response) => {
+    const { id, pid } = req.params;
+    const variant = await Variant.findById(id);
+    if (!variant) return res.status(404).send("Variant not found");
+    const { color, discount, storage, ram, price, stock, model3d } = req.body;
+    await Variant.updateOne({ _id: id }, { color, discount, storage, ram, price, stock, model3d });
+    res.redirect(`/admin/view-phone/${pid}`);
+}
+
+export {
+    getProductPage,
+    getCreatePhonePage,
+    postCreatePhone,
+    postDeletePhone,
+    getViewPhonePage,
+    postUpdatePhone,
+    getCreateVariantPage,
+    postDeleteVariant,
+    postCreateVariant,
+    getViewVariantPage,
+    postUpdateVariant
+
+};

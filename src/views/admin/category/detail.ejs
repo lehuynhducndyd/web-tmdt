@@ -37,9 +37,20 @@
                                                     value="<%= category.name %>">
                                             </div>
                                             <div class="mb-3">
+                                                <label class="form-label">Type</label>
+                                                <select name="type" class="form-select">
+                                                    <% CATEGORY_TYPES.forEach(type=> { %>
+                                                        <option value="<%= type %>" <%=category.type===type ? 'selected'
+                                                            : '' %>>
+                                                            <%= type %>
+                                                        </option>
+                                                        <% }) %>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
                                                 <label class="form-label">Description</label>
-                                                <input type="text" class="form-control" placeholder="Enter description"
-                                                    name="description" required value="<%= category.description %>">
+                                                <textarea class="form-control" rows="3"
+                                                    name="description"><%= category.description %></textarea>
                                             </div>
                                             <div class="mb-3">
                                                 <button type="submit" class="btn btn-primary">Submit</button>

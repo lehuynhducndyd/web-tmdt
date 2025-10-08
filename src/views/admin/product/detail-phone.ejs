@@ -25,7 +25,7 @@
                                 </li>
                             </ol>
                             <div class="row">
-                                <div class="col-8 mx-auto">
+                                <div class="col-6 mx-auto">
                                     <h5>View detail phone</h5>
                                     <form action="/admin/update-phone/<%= phone._id %>" method="POST"
                                         enctype="multipart/form-data">
@@ -60,11 +60,6 @@
                                                 name="description"><%= phone.description %></textarea>
                                         </div>
 
-                                        <div class="mb-3">
-                                            <label class="form-label">Discount (%)</label>
-                                            <input type="number" class="form-control" name="discount" min="0" max="100"
-                                                value="<%= phone.discount %>">
-                                        </div>
 
                                         <!-- Thumbnail -->
                                         <div class="mb-3">
@@ -125,59 +120,19 @@
                                             </div>
                                         </div>
 
-                                        <!-- Variants -->
-                                        <h5>Variants</h5>
-                                        <div id="variants-wrapper">
-                                            <% phone.variants.forEach((v, i)=> { %>
-                                                <div class="variant-item border p-3 mb-3 rounded position-relative">
-                                                    <button type="button"
-                                                        class="btn-close position-absolute top-0 end-0 m-2 remove-variant"></button>
-                                                    <div class="row">
-                                                        <div class="col-4 mb-3">
-                                                            <label class="form-label">Color</label>
-                                                            <input type="text" class="form-control"
-                                                                name="variants[<%= i %>][color]" value="<%= v.color %>">
-                                                        </div>
-                                                        <div class="col-4 mb-3">
-                                                            <label class="form-label">RAM</label>
-                                                            <input type="text" class="form-control"
-                                                                name="variants[<%= i %>][ram]" value="<%= v.ram %>">
-                                                        </div>
-                                                        <div class="col-4 mb-3">
-                                                            <label class="form-label">Storage</label>
-                                                            <input type="text" class="form-control"
-                                                                name="variants[<%= i %>][storage]"
-                                                                value="<%= v.storage %>">
-                                                        </div>
-                                                        <div class="col-4 mb-3">
-                                                            <label class="form-label">Price</label>
-                                                            <input type="number" class="form-control"
-                                                                name="variants[<%= i %>][price]" value="<%= v.price %>">
-                                                        </div>
-                                                        <div class="col-4 mb-3">
-                                                            <label class="form-label">Stock</label>
-                                                            <input type="number" class="form-control"
-                                                                name="variants[<%= i %>][stock]" value="<%= v.stock %>">
-                                                        </div>
-                                                        <div class="col-4 mb-3">
-                                                            <label class="form-label">Model 3D Link</label>
-                                                            <input type="text" class="form-control"
-                                                                name="variants[<%= i %>][model3d]"
-                                                                value="<%= v.model3d %>"">
-                                                            
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <% }) %>
-                                        </div>
-                                        <button type=" button" class="btn btn-secondary mb-3" id="addVariantBtn">+ Add
-                                                            Variant</button>
 
-                                                            <div class="mb-3">
-                                                                <button type="submit" class="btn btn-primary">update
-                                                                    Phone</button>
-                                                            </div>
+
+                                        <div class="mb-3">
+                                            <button type="submit" class="btn btn-primary">update
+                                                Phone</button>
+                                        </div>
                                     </form>
+                                </div>
+                                <div class="col-6 mx-auto">
+                                    <h5>Tất cả biến thể</h5>
+                                    <a href="/admin/create-variant/<%=phone.id%>"
+                                        class="btn btn-warning mb-3">Create</a>
+                                    <%- include('../layout/variantTable'); -%>
                                 </div>
                             </div>
 
@@ -189,48 +144,7 @@
 
         <!-- JS -->
         <script>
-            // Thêm variant
-            let variantCount = <%= phone.variants.length %> || 0;
-            document.getElementById("addVariantBtn").addEventListener("click", () => {
-                const wrapper = document.getElementById("variants-wrapper");
-                const div = document.createElement("div");
-                div.classList.add("variant-item", "border", "p-3", "mb-3", "rounded", "position-relative");
-                div.innerHTML = `
-                <button type="button" class="btn-close position-absolute top-0 end-0 m-2 remove-variant"></button>
-                <div class="row">
-                    <div class="col-4 mb-3">
-                        <label class="form-label">Color</label>
-                        <input type="text" class="form-control" name="variants[${variantCount}][color]">
-                    </div>
-                    <div class="col-4 mb-3">
-                        <label class="form-label">RAM</label>
-                        <input type="text" class="form-control" name="variants[${variantCount}][ram]">
-                    </div>
-                    <div class="col-4 mb-3">
-                        <label class="form-label">Storage</label>
-                        <input type="text" class="form-control" name="variants[${variantCount}][storage]">
-                    </div>
-                    <div class="col-4 mb-3">
-                        <label class="form-label">Price</label>
-                        <input type="number" class="form-control" name="variants[${variantCount}][price]" step="0.01">
-                    </div>
-                    <div class="col-4 mb-3">
-                        <label class="form-label">Stock</label>
-                        <input type="number" class="form-control" name="variants[${variantCount}][stock]">
-                    </div>
-                    <div class="col-4 mb-3">
-                        <label class="form-label">Model 3D Link</label>
-                        <input type="text" class="form-control" name="variants[${variantCount}][model3d]">
-                    </div>
-                </div>`;
-                wrapper.appendChild(div);
-                variantCount++;
-            });
 
-            // Xóa variant
-            document.addEventListener("click", e => {
-                if (e.target.classList.contains("remove-variant")) e.target.closest(".variant-item").remove();
-            });
 
             // Preview ảnh 1 file
             function previewImage(event, previewId) {

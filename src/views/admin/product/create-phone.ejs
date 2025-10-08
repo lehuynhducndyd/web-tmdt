@@ -53,11 +53,7 @@
                                                 <label class="form-label">Description</label>
                                                 <textarea class="form-control" rows="3" name="description"></textarea>
                                             </div>
-                                            <div class="mb-3">
-                                                <label class="form-label">Discount (%)</label>
-                                                <input type="number" class="form-control" name="discount" min="0"
-                                                    max="100" value="0">
-                                            </div>
+
 
                                             <!-- Images -->
 
@@ -149,49 +145,7 @@
                                             <button type="button" class="btn btn-secondary mb-3" id="addVariantBtn">+
                                                 Add Variant</button> -->
                                             <h5>Variants</h5>
-                                            <div id="variants-wrapper">
-                                                <div class="variant-item border p-3 mb-3 rounded position-relative">
-                                                    <button type="button"
-                                                        class="btn-close position-absolute top-0 end-0 m-2 remove-variant"></button>
-                                                    <div class="row">
-                                                        <div class="col-4 mb-3">
-                                                            <label class="form-label">Color</label>
-                                                            <input type="text" class="form-control"
-                                                                name="variants[0][color]">
-                                                        </div>
-                                                        <div class="col-4 mb-3">
-                                                            <label class="form-label">RAM</label>
-                                                            <input type="text" class="form-control"
-                                                                name="variants[0][ram]">
-                                                        </div>
-                                                        <div class="col-4 mb-3">
-                                                            <label class="form-label">Storage</label>
-                                                            <input type="text" class="form-control"
-                                                                name="variants[0][storage]">
-                                                        </div>
-                                                        <div class="col-4 mb-3">
-                                                            <label class="form-label">Price</label>
-                                                            <input type="number" class="form-control"
-                                                                name="variants[0][price]" step="0.01">
-                                                        </div>
-                                                        <div class="col-4 mb-3">
-                                                            <label class="form-label">Stock</label>
-                                                            <input type="number" class="form-control"
-                                                                name="variants[0][stock]">
-                                                        </div>
-                                                        <div class="col-4 mb-3">
-                                                            <label class="form-label">Model 3D Link</label>
-                                                            <input type="text" class="form-control"
-                                                                name="variants[0][model3d]">
-                                                        </div>
 
-
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <button type="button" class="btn btn-secondary mb-3" id="addVariantBtn">+
-                                                Add Variant</button>
 
                                             <!-- Submit -->
                                             <div class="mb-3">
@@ -209,93 +163,6 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
             crossorigin="anonymous"></script>
         <script src="/admin/js/scripts.js"></script>
-        let variantCount = 1;
-        document.getElementById("addVariantBtn").addEventListener("click", function () {
-        const wrapper = document.getElementById("variants-wrapper");
-        const newVariant = document.createElement("div");
-        newVariant.classList.add("variant-item", "border", "p-3", "mb-3", "rounded");
-        newVariant.innerHTML = `
-        <div class="row">
-            <div class="col-4 mb-3">
-                <label class="form-label">Color</label>
-                <input type="text" class="form-control" name="variants[${variantCount}][color]">
-            </div>
-            <div class="col-4 mb-3">
-                <label class="form-label">Ram</label>
-                <input type="text" class="form-control" name="variants[${variantCount}][ram]">
-            </div>
-            <div class="col-4 mb-3">
-                <label class="form-label">Storage</label>
-                <input type="text" class="form-control" name="variants[${variantCount}][storage]">
-            </div>
-            <div class="col-4 mb-3">
-                <label class="form-label">Price</label>
-                <input type="number" class="form-control" name="variants[${variantCount}][price]" step="0.01">
-            </div>
-            <div class="col-4 mb-3">
-                <label class="form-label">Stock</label>
-                <input type="number" class="form-control" name="variants[${variantCount}][stock]">
-            </div>
-            <div class="col-4 mb-3">
-                <label class="form-label">Model 3D Link</label>
-                <input type="text" class="form-control" name="variants[${variantCount}][model3d]">
-            </div>
-        </div>
-        `;
-        wrapper.appendChild(newVariant);
-        variantCount++;
-        });
-        </script> -->
-        <script>
-            let variantCount = 1;
-
-            function addVariant() {
-                const wrapper = document.getElementById("variants-wrapper");
-                const newVariant = document.createElement("div");
-                newVariant.classList.add("variant-item", "border", "p-3", "mb-3", "rounded", "position-relative");
-                newVariant.innerHTML = `
-            <button type="button" class="btn-close position-absolute top-0 end-0 m-2 remove-variant"></button>
-            <div class="row">
-                <div class="col-4 mb-3">
-                    <label class="form-label">Color</label>
-                    <input type="text" class="form-control" name="variants[${variantCount}][color]">
-                </div>
-                <div class="col-4 mb-3">
-                    <label class="form-label">RAM</label>
-                    <input type="text" class="form-control" name="variants[${variantCount}][ram]">
-                </div>
-                <div class="col-4 mb-3">
-                    <label class="form-label">Storage</label>
-                    <input type="text" class="form-control" name="variants[${variantCount}][storage]">
-                </div>
-                <div class="col-4 mb-3">
-                    <label class="form-label">Price</label>
-                    <input type="number" class="form-control" name="variants[${variantCount}][price]" step="0.01">
-                </div>
-                <div class="col-4 mb-3">
-                    <label class="form-label">Stock</label>
-                    <input type="number" class="form-control" name="variants[${variantCount}][stock]">
-                </div>
-                <div class="col-4 mb-3">
-                    <label class="form-label">Model 3D Link</label>
-                    <input type="text" class="form-control" name="variants[${variantCount}][model3d] ">
-                </div>
-            </div>
-        `;
-                wrapper.appendChild(newVariant);
-                variantCount++;
-            }
-
-            // Thêm variant
-            document.getElementById("addVariantBtn").addEventListener("click", addVariant);
-
-            // Xoá variant
-            document.addEventListener("click", function (e) {
-                if (e.target && e.target.classList.contains("remove-variant")) {
-                    e.target.closest(".variant-item").remove();
-                }
-            });
-        </script>
         <script>
             // Preview 1 ảnh (thumbnail)
             function previewImage(event, previewId) {
