@@ -1,6 +1,7 @@
+import { getCreateAccessoryPage, getViewAccessoryPage, postCreateAccessory, postDeleteAccessory, postUpdateAccessory } from 'controllers/admin.accessory.controller';
 import { getCategoryPage, getCreateCategoryPage, getViewCategoryPage, postCreateCategory, postDeleteCategory, postUpdateCategory } from 'controllers/admin.category.controller';
 import { getAdminPage } from 'controllers/admin.dashboard.controller';
-import { getCreatePhonePage, getCreateVariantPage, getProductPage, getViewPhonePage, getViewVariantPage, postCreatePhone, postCreateVariant, postDeletePhone, postDeleteVariant, postUpdatePhone, postUpdateVariant } from 'controllers/admin.phone.controller';
+import { getCreateDevicePage, getCreateVariantPage, getProductPage, getViewDevicePage, getViewVariantPage, postCreateDevice, postCreateVariant, postDeleteDevice, postDeleteVariant, postUpdateDevice, postUpdateVariant } from 'controllers/admin.device.controller';
 import { getUserPage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUserPage, postUpdateUser } from 'controllers/admin.user.controller';
 import { getHomePage } from 'controllers/user.controller';
 import express, { Express } from 'express';
@@ -31,22 +32,33 @@ const webRoutes = (app: Express) => {
     router.post('/admin/update-category', postUpdateCategory);
 
     router.get('/admin/product', getProductPage);
-    router.get('/admin/create-phone', getCreatePhonePage);
-    router.post("/admin/create-phone", fileUploadMiddleware.fields([
+    router.get('/admin/create-device', getCreateDevicePage);
+    router.post("/admin/create-device", fileUploadMiddleware.fields([
         { name: "thumbnail", maxCount: 1 },
         { name: "images", maxCount: 10 }
-    ]), postCreatePhone);
-    router.post('/admin/delete-phone/:id', postDeletePhone);
-    router.get("/admin/view-phone/:id", getViewPhonePage);
-    router.post("/admin/update-phone/:id", fileUploadMiddleware.fields([
+    ]), postCreateDevice);
+    router.post('/admin/delete-device/:id', postDeleteDevice);
+    router.get("/admin/view-device/:id", getViewDevicePage);
+    router.post("/admin/update-device/:id", fileUploadMiddleware.fields([
         { name: "thumbnail", maxCount: 1 },
         { name: "images", maxCount: 10 }
-    ]), postUpdatePhone);
-    router.get("/admin/create-variant/:pid", getCreateVariantPage);
+    ]), postUpdateDevice);
+    router.get('/admin/create-accessory', getCreateAccessoryPage);
+    router.post("/admin/create-accessory", fileUploadMiddleware.fields([
+        { name: "thumbnail", maxCount: 1 },
+        { name: "images", maxCount: 10 }
+    ]), postCreateAccessory);
+    router.get('/admin/view-accessory/:id', getViewAccessoryPage);
+    router.post('/admin/update-accessory/:id', fileUploadMiddleware.fields([
+        { name: "thumbnail", maxCount: 1 },
+        { name: "images", maxCount: 10 }
+    ]), postUpdateAccessory);
+    router.post('/admin/delete-accessory/:id', postDeleteAccessory);
+    router.get("/admin/create-variant/:deviceId", getCreateVariantPage);
     router.post("/admin/create-variant", postCreateVariant);
-    router.post("/admin/delete-variant/:id/:pid", postDeleteVariant);
+    router.post("/admin/delete-variant/:id/:deviceId", postDeleteVariant);
     router.get("/admin/view-variant/:id", getViewVariantPage);
-    router.post("/admin/update-variant/:id/:pid", postUpdateVariant)
+    router.post("/admin/update-variant/:id/:deviceId", postUpdateVariant)
 
     // other
     // router.get("/create-user", getCreateUserPage);

@@ -1,40 +1,40 @@
 import { Request, Response } from 'express';
-import { Phone, Variant } from 'models/product';
+import { Device, Variant } from 'models/product';
 import { getAllCategories, getTypeDevices } from 'services/category.service';
-import { getAllAccessories, getAllPhones, getPhoneById, getVariantByPhoneId } from 'services/product.service';
+import { getAllAccessories, getAllDevices, getDeviceById, getVariantByDeviceId } from 'services/product.service';
 
 const getProductPage = async (req: Request, res: Response) => {
     const categoryFilter = req.query.category as string;
-    let phones;
+    let devices;
     if (categoryFilter) {
-        phones = await Phone.find({ category: categoryFilter }).populate('category').exec();
+        devices = await Device.find({ category: categoryFilter }).populate('category').exec();
     } else {
-        phones = await getAllPhones();
+        devices = await getAllDevices();
     }
     const accessories = await getAllAccessories();
     const deviceCategories = await getTypeDevices()
-    res.render("admin/product/show.ejs", { phones, accessories, deviceCategories, selectedCategory: categoryFilter });
+    res.render("admin/product/show.ejs", { devices, accessories, deviceCategories, selectedCategory: categoryFilter });
 }
 
-const getCreatePhonePage = async (req: Request, res: Response) => {
+const getCreateDevicePage = async (req: Request, res: Response) => {
     const categories = await getAllCategories()
-    res.render("admin/product/create-phone.ejs", {
+    res.render("admin/product/create-device.ejs", {
         categories
     });
 }
 
 
-const getViewPhonePage = async (req: Request, res: Response) => {
+const getViewDevicePage = async (req: Request, res: Response) => {
     const categories = await getAllCategories();
     const id = req.params.id;
-    const phone = await getPhoneById(id);
-    const variants = await getVariantByPhoneId(id);
-    res.render("admin/product/detail-phone.ejs", {
-        phone, categories, variants
+    const device = await getDeviceById(id);
+    const variants = await getVariantByDeviceId(id);
+    res.render("admin/product/detail-device.ejs", {
+        device, categories, variants
     });
 };
 
-const postCreatePhone = async (req: Request, res: Response) => {
+const postCreateDevice = async (req: Request, res: Response) => {
     try {
         let thumbnail: any = null;
         if (req.files && (req.files as any).thumbnail) {
@@ -55,7 +55,7 @@ const postCreatePhone = async (req: Request, res: Response) => {
 
         const { name, brand, category, description, specs } = req.body;
 
-        const phone = new Phone({
+        const device = new Device({
             name,
             brand,
             category,
@@ -65,42 +65,42 @@ const postCreatePhone = async (req: Request, res: Response) => {
             images
         });
 
-        await phone.save();
+        await device.save();
 
         res.redirect("/admin/product");
     } catch (error: any) {
         console.error(error);
-        res.status(500).send("Error creating phone: " + error.message);
+        res.status(500).send("Error creating device: " + error.message);
     }
 };
 
-const postDeletePhone = async (req: Request, res: Response) => {
+const postDeleteDevice = async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
-        await Variant.deleteMany({ id });
-        await Phone.deleteOne({ _id: id });
+        await Variant.deleteMany({ deviceId: id });
+        await Device.deleteOne({ _id: id });
         res.redirect('/admin/product');
     } catch (error) {
-        res.status(500).send("Error deleting phone");
+        res.status(500).send("Error deleting device");
     }
 };
-const postUpdatePhone = async (req: Request, res: Response) => {
+const postUpdateDevice = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const phone = await Phone.findById(id);
-        if (!phone) return res.status(404).send("Phone not found");
+        const device = await Device.findById(id);
+        if (!device) return res.status(404).send("Device not found");
 
         // ---Lấy dữ liệu text từ form ---
         const { name, brand, category, description, discount, specs, variants } = req.body;
 
-        phone.name = name;
-        phone.brand = brand;
-        phone.category = category;
-        phone.description = description;
+        device.name = name;
+        device.brand = brand;
+        device.category = category;
+        device.description = description;
 
         // --- Specs ---
         if (specs) {
-            phone.specs = {
+            device.specs = {
                 screen: specs.screen || "",
                 cpu: specs.cpu || "",
                 battery: specs.battery || "",
@@ -113,7 +113,7 @@ const postUpdatePhone = async (req: Request, res: Response) => {
         const files = req.files as { [fieldname: string]: Express.Multer.File[] };
         if (files?.thumbnail?.[0]) {
             const thumb = files.thumbnail[0];
-            phone.thumbnail = {
+            device.thumbnail = {
                 data: thumb.buffer,
                 contentType: thumb.mimetype
             };
@@ -123,7 +123,7 @@ const postUpdatePhone = async (req: Request, res: Response) => {
         if (files?.images?.length) {
             // Giữ lại ảnh cũ + thêm ảnh mới
             files.images.forEach(file => {
-                phone.images.push({
+                device.images.push({
                     data: file.buffer,
                     contentType: file.mimetype
                 });
@@ -131,36 +131,36 @@ const postUpdatePhone = async (req: Request, res: Response) => {
         }
 
         // ---Lưu ---
-        await phone.save();
+        await device.save();
 
         res.redirect("/admin/product");
     } catch (error) {
-        console.error("Update phone error:", error);
-        res.status(500).send("Error updating phone");
+        console.error("Update device error:", error);
+        res.status(500).send("Error updating device");
     }
 };
 
 const getCreateVariantPage = async (req: Request, res: Response) => {
-    const phoneId = req.params.pid;
-    const phone = await getPhoneById(phoneId);
+    const deviceId = req.params.deviceId;
+    const device = await getDeviceById(deviceId);
     res.render("admin/product/create-variant.ejs", {
-        phone
+        device
     });
 }
 
 const postDeleteVariant = async (req: Request, res: Response) => {
     const id = req.params.id;
-    const phoneId = req.params.pid;
+    const deviceId = req.params.deviceId;
     await Variant.deleteOne({ _id: id });
-    res.redirect(`/admin/view-phone/${phoneId}`);
+    res.redirect(`/admin/view-device/${deviceId}`);
 };
 
 const postCreateVariant = async (req: Request, res: Response) => {
-    const { color, discount, storage, ram, price, stock, model3d, phoneId } = req.body;
+    const { color, discount, storage, ram, price, stock, model3d, deviceId } = req.body;
 
     // Tạo variant mới
     const newVariant = new Variant({
-        phoneId,
+        deviceId,
         color,
         discount: discount ? Number(discount) : 0,
         storage,
@@ -172,34 +172,34 @@ const postCreateVariant = async (req: Request, res: Response) => {
 
     await newVariant.save();
 
-    res.redirect(`/admin/view-phone/${phoneId}`);
+    res.redirect(`/admin/view-device/${deviceId}`);
 }
 
 const getViewVariantPage = async (req: Request, res: Response) => {
     const id = req.params.id;
     const variant = await Variant.findById(id);
-    const phone = await getPhoneById(variant.phoneId.toString());
+    const device = await getDeviceById(variant.deviceId.toString());
     res.render("admin/product/detail-variant.ejs", {
-        variant, phone
+        variant, device
     });
 }
 
 const postUpdateVariant = async (req: Request, res: Response) => {
-    const { id, pid } = req.params;
+    const { id, deviceId } = req.params;
     const variant = await Variant.findById(id);
     if (!variant) return res.status(404).send("Variant not found");
     const { color, discount, storage, ram, price, stock, model3d } = req.body;
     await Variant.updateOne({ _id: id }, { color, discount, storage, ram, price, stock, model3d });
-    res.redirect(`/admin/view-phone/${pid}`);
+    res.redirect(`/admin/view-device/${deviceId}`);
 }
 
 export {
     getProductPage,
-    getCreatePhonePage,
-    postCreatePhone,
-    postDeletePhone,
-    getViewPhonePage,
-    postUpdatePhone,
+    getCreateDevicePage,
+    postCreateDevice,
+    postDeleteDevice,
+    getViewDevicePage,
+    postUpdateDevice,
     getCreateVariantPage,
     postDeleteVariant,
     postCreateVariant,

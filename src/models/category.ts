@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 const categorySchema = new mongoose.Schema({
   name: { type: String, required: true },
-  type: { type: String, enum: CATEGORY_TYPES, default: CATEGORY_TYPES[0] },
+  type: { type: String },
   description: String
 }, { timestamps: true });
 

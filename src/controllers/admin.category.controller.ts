@@ -4,7 +4,6 @@ import { createCategory, deleteCategory, getAllCategories, getCategoryById, getT
 
 const getCategoryPage = async (req: Request, res: Response) => {
     const categoriesDevices = await getTypeDevices();
-    console.log(categoriesDevices);
     const categoriesAccessories = await getTypeAccessories();
     res.render("admin/category/show.ejs", { categoriesDevices, categoriesAccessories });
 }

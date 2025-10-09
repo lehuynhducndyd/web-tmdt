@@ -3,47 +3,40 @@
         <tr>
             <th>Name</th>
             <th>Brand</th>
+            <th>Price</th>
             <th>Stock</th>
-            <th>Discount (%)</th>
             <th>Action</th>
         </tr>
     </thead>
     <tbody>
         <% if (accessories && accessories.length> 0) { %>
-            <% accessories.forEach(function(acc){ %>
+            <% accessories.forEach(function(accessory){ %>
                 <tr>
                     <td>
-                        <%= acc.name %>
+                        <%= accessory.name %>
                     </td>
                     <td>
-                        <%= acc.brand %>
+                        <%= accessory.brand %>
                     </td>
                     <td>
-                        <%= acc.stock %>
+                        <%= accessory.price.toLocaleString('vi-VN') %> VNĐ
                     </td>
                     <td>
-                        <%= acc.discount %>
+                        <%= accessory.stock %>
                     </td>
-                    <td>
-                        <div class="d-flex gap-2">
-                            <form action="/admin/delete-accessory/<%= acc.id %>" method="post">
-                                <button class="btn btn-danger btn-sm" type="submit"
-                                    onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục <%= acc.name %> không?')">
-                                    Delete
-                                </button>
-                            </form>
-                            <form action="/admin/view-accessory/<%= acc.id %>" method="get">
-                                <button class="btn btn-warning btn-sm" type="submit">View &
-                                    Edit</button>
-                            </form>
-                        </div>
+                    <td class="d-flex gap-2">
+                        <a href="/admin/view-accessory/<%= accessory.id %>" class="btn btn-warning btn-sm">View &
+                            Edit</a>
+                        <form action="/admin/delete-accessory/<%= accessory.id %>" method="post">
+                            <button class="btn btn-danger btn-sm" type="submit"
+                                onclick="return confirm('Bạn có chắc chắn muốn xóa phụ kiện <%= accessory.name %> không?')">Delete</button>
+                        </form>
                     </td>
                 </tr>
                 <% }) %>
                     <% } else { %>
                         <tr>
-                            <td colspan="4" class="text-center text-muted">No
-                                accessories found</td>
+                            <td colspan="5" class="text-center text-muted">Không có phụ kiện nào</td>
                         </tr>
                         <% } %>
     </tbody>

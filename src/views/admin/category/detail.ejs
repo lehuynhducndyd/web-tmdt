@@ -39,10 +39,10 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Type</label>
                                                 <select name="type" class="form-select">
-                                                    <% CATEGORY_TYPES.forEach(type=> { %>
-                                                        <option value="<%= type %>" <%=category.type===type ? 'selected'
-                                                            : '' %>>
-                                                            <%= type %>
+                                                    <% Object.values(CATEGORY_TYPES).forEach(typeInfo=> { %>
+                                                        <option value="<%= typeInfo.value %>"
+                                                            <%=category.type===typeInfo.value ? 'selected' : '' %>>
+                                                            <%= typeInfo.label %>
                                                         </option>
                                                         <% }) %>
                                                 </select>

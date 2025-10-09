@@ -4,4 +4,7 @@ export const ACCOUNT_TYPE = {
     GITHUB: 'GITHUB',
 }
 
-export const CATEGORY_TYPES = ['device', 'accessory'];
+export const CATEGORY_TYPES = {
+    DEVICE: { value: 'device', label: 'Thiết bị' },
+    ACCESSORY: { value: 'accessory', label: 'Phụ kiện' },
+};

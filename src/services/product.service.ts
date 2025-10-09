@@ -1,12 +1,12 @@
-import { Accessory, Phone, Variant } from "models/product"
+import { Accessory, Device, Variant } from "models/product"
 
-const getAllPhones = async () => {
-    const phones = Phone.find();
-    return phones;
+const getAllDevices = async () => {
+    const devices = Device.find();
+    return devices;
 }
 
-const getVariantByPhoneId = async (phoneId: string) => {
-    const variants = await Variant.find({ phoneId }).lean();
+const getVariantByDeviceId = async (deviceId: string) => {
+    const variants = await Variant.find({ deviceId }).lean();
     return variants;
 };
 
@@ -15,8 +15,12 @@ const getAllAccessories = async () => {
     return accessories;
 }
 
-const getPhoneById = async (id: string) => {
-    const phone = await Phone.findById(id);
-    return phone;
+const getDeviceById = async (id: string) => {
+    const device = await Device.findById(id);
+    return device;
 }
-export { getAllPhones, getAllAccessories, getPhoneById, getVariantByPhoneId }
+const getAccessoryById = async (id: string) => {
+    const accessory = await Accessory.findById(id);
+    return accessory;
+}
+export { getAllDevices, getAllAccessories, getDeviceById, getVariantByDeviceId, getAccessoryById }

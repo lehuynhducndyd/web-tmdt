@@ -7,27 +7,27 @@
         </tr>
     </thead>
     <tbody>
-        <% if (phones && phones.length> 0) { %>
-            <% phones.forEach(function(phone){ %>
+        <% if (devices && devices.length> 0) { %>
+            <% devices.forEach(function(device){ %>
                 <tr>
                     <td>
-                        <%= phone.name %>
+                        <%= device.name %>
                     </td>
                     <td>
-                        <%= phone.brand %>
+                        <%= device.brand %>
                     </td>
                     <td>
                         <div class="d-flex gap-2">
-                            <form action="/admin/delete-phone/<%= phone.id %>" method="post">
+                            <form action="/admin/delete-device/<%= device.id %>" method="post">
                                 <button class="btn btn-danger btn-sm" type="submit"
-                                    onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục <%= phone.name %> không?')">
+                                    onclick="return confirm('Bạn có chắc chắn muốn xóa thiết bị <%= device.name %> không?')">
                                     Delete
                                 </button>
                             </form>
-                            <form action="/admin/view-phone/<%= phone.id %>" method="get">
+                            <form action="/admin/view-device/<%= device.id %>" method="get">
                                 <button class="btn btn-warning btn-sm" type="submit">View & Edit</button>
                             </form>
-                            <form action="/admin/preview-phone/<%= phone.id %>" method="get">
+                            <form action="/admin/preview-device/<%= device.id %>" method="get">
                                 <button class="btn btn-primary btn-sm" type="submit">Preview (Dev)</button>
                             </form>
                         </div>

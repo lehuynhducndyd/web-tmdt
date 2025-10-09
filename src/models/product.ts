@@ -6,8 +6,8 @@ const imageSchema = new mongoose.Schema({
   contentType: String,
 }, { _id: false });
 
-/** Specs cho điện thoại */
-const phoneSpecSchema = new mongoose.Schema({
+/** Specs cho thiết bị */
+const deviceSpecSchema = new mongoose.Schema({
   screen: String,
   cpu: String,
   battery: String,
@@ -15,8 +15,8 @@ const phoneSpecSchema = new mongoose.Schema({
   os: String,
 }, { _id: false });
 
-/** Schema điện thoại */
-const phoneSchema = new mongoose.Schema({
+/** Schema thiết bị */
+const deviceSchema = new mongoose.Schema({
   name: { type: String, required: true },
   brand: String,
   category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
@@ -24,12 +24,12 @@ const phoneSchema = new mongoose.Schema({
   thumbnail: imageSchema,
   images: [imageSchema],
   description: String,
-  specs: phoneSpecSchema,
+  specs: deviceSpecSchema,
 }, { timestamps: true });
 
-/** Schema Variant (đối tượng riêng, có phoneId) */
+/** Schema Variant (đối tượng riêng, có deviceId) */
 const variantSchema = new mongoose.Schema({
-  phoneId: { type: mongoose.Schema.Types.ObjectId, ref: "Phone", required: true },
+  deviceId: { type: mongoose.Schema.Types.ObjectId, ref: "Device", required: true },
   color: String,
   discount: { type: Number, default: 0 },
   model3d: String,
@@ -54,8 +54,8 @@ const accessorySchema = new mongoose.Schema({
 }, { timestamps: true });
 
 /** Models */
-const Phone = mongoose.model("Phone", phoneSchema);
+const Device = mongoose.model("Device", deviceSchema);
 const Variant = mongoose.model("Variant", variantSchema);
 const Accessory = mongoose.model("Accessory", accessorySchema);
 
-export { Phone, Variant, Accessory };
+export { Device, Variant, Accessory };
