@@ -36,9 +36,16 @@
                                                 <input type="text" class="form-control" name="name" required>
                                             </div>
                                             <div class="row">
+
                                                 <div class="col-6 mb-3">
                                                     <label class="form-label">Brand</label>
-                                                    <input type="text" class="form-control" name="brand">
+                                                    <select name="brand" class="form-select">
+                                                        <% brands.forEach(brand=> { %>
+                                                            <option value="<%= brand._id %>">
+                                                                <%= brand.name %>
+                                                            </option>
+                                                            <% }) %>
+                                                    </select>
                                                 </div>
                                                 <div class="col-6 mb-3">
                                                     <label class="form-label">Category</label>

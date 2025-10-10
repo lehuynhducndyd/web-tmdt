@@ -1,7 +1,8 @@
-import { getCreateAccessoryPage, getViewAccessoryPage, postCreateAccessory, postDeleteAccessory, postUpdateAccessory } from 'controllers/admin.accessory.controller';
+import { getAccessoryPage, getCreateAccessoryPage, getViewAccessoryPage, postCreateAccessory, postDeleteAccessory, postUpdateAccessory } from 'controllers/admin.accessory.controller';
+import { getBrandPage, getCreateBrandPage, getViewBrandPage, postCreateBrand, postDeleteBrand, postUpdateBrand } from 'controllers/admin.brand.controller';
 import { getCategoryPage, getCreateCategoryPage, getViewCategoryPage, postCreateCategory, postDeleteCategory, postUpdateCategory } from 'controllers/admin.category.controller';
 import { getAdminPage } from 'controllers/admin.dashboard.controller';
-import { getCreateDevicePage, getCreateVariantPage, getProductPage, getViewDevicePage, getViewVariantPage, postCreateDevice, postCreateVariant, postDeleteDevice, postDeleteVariant, postUpdateDevice, postUpdateVariant } from 'controllers/admin.device.controller';
+import { getCreateDevicePage, getCreateVariantPage, getDevicePage, getViewDevicePage, getViewVariantPage, postCreateDevice, postCreateVariant, postDeleteDevice, postDeleteVariant, postUpdateDevice, postUpdateVariant } from 'controllers/admin.device.controller';
 import { getUserPage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUserPage, postUpdateUser } from 'controllers/admin.user.controller';
 import { getHomePage } from 'controllers/user.controller';
 import express, { Express } from 'express';
@@ -31,7 +32,9 @@ const webRoutes = (app: Express) => {
     router.get('/admin/view-category/:id', getViewCategoryPage);
     router.post('/admin/update-category', postUpdateCategory);
 
-    router.get('/admin/product', getProductPage);
+    router.get('/admin/device', getDevicePage);
+    router.get('/admin/accessory', getAccessoryPage);
+
     router.get('/admin/create-device', getCreateDevicePage);
     router.post("/admin/create-device", fileUploadMiddleware.fields([
         { name: "thumbnail", maxCount: 1 },
@@ -59,6 +62,17 @@ const webRoutes = (app: Express) => {
     router.post("/admin/delete-variant/:id/:deviceId", postDeleteVariant);
     router.get("/admin/view-variant/:id", getViewVariantPage);
     router.post("/admin/update-variant/:id/:deviceId", postUpdateVariant)
+
+    router.get('/admin/brand', getBrandPage);
+    router.get('/admin/create-brand', getCreateBrandPage);
+    router.post('/admin/create-brand', fileUploadMiddleware.single("logo"), postCreateBrand);
+    router.get('/admin/view-brand/:id', getViewBrandPage);
+    router.post('/admin/update-brand', fileUploadMiddleware.single("logo"), postUpdateBrand);
+    router.post('/admin/delete-brand/:id', postDeleteBrand);
+
+
+
+
 
     // other
     // router.get("/create-user", getCreateUserPage);

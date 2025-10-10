@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="Hỏi Dân IT" />
+    <title>Detail Brand</title>
+    <link href="/admin/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+    <%- include('../layout/header'); -%>
+        <div id="layoutSidenav">
+            <%- include('../layout/sidenav'); -%>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+                            <h1 class="mt-4">Brand Details</h1>
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/brand">Brand</a></li>
+                                <li class="breadcrumb-item active">View & Edit Brand</li>
+                            </ol>
+
+                            <div class="row">
+
+                                <div class="col-6 mx-auto">
+                                    <h5>Edit Brand</h5>
+                                    <form action="/admin/update-brand" method="POST" enctype="multipart/form-data">
+                                        <input type="hidden" name="id" value="<%= brand.id %>">
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Brand Name</label>
+                                            <input type="text" class="form-control" id="name" name="name"
+                                                value="<%= brand.name %>" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="description" class="form-label">Description</label>
+                                            <textarea class="form-control" id="description" name="description"
+                                                rows="3"><%= brand.description %></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="logo" class="form-label">Brand Logo</label>
+                                            <input class="form-control" type="file" id="logo" name="logo"
+                                                accept="image/*" onchange="previewLogo(event)">
+                                            <div class="mt-2">
+                                                <% if (brand.logo && brand.logo.data) { %>
+                                                    <img id="logo-current"
+                                                        src="data:<%= brand.logo.contentType %>;base64,<%= brand.logo.data.toString('base64') %>"
+                                                        alt="Current Logo" style="max-width: 200px; max-height: 200px;">
+                                                    <% } else { %>
+                                                        <p>No logo available.</p>
+                                                        <% } %>
+                                            </div>
+                                            <img id="logo-preview" src="#" alt="New Logo Preview" class="mt-2"
+                                                style="display: none; max-width: 200px; max-height: 200px;" />
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Update Brand</button>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                    <%- include('../layout/footer'); -%>
+                </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
+        <script src="/admin/js/scripts.js"></script>
+        <script>
+            function previewLogo(event) {
+                const reader = new FileReader();
+                reader.onload = function () {
+                    const preview = document.getElementById('logo-preview');
+                    preview.src = reader.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        </script>
+</body>
+
+</html>

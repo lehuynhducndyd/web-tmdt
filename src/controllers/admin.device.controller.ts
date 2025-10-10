@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
+import { Brand } from 'models/brand';
 import { Device, Variant } from 'models/product';
 import { getAllCategories, getTypeDevices } from 'services/category.service';
 import { getAllAccessories, getAllDevices, getDeviceById, getVariantByDeviceId } from 'services/product.service';
 
-const getProductPage = async (req: Request, res: Response) => {
+const getDevicePage = async (req: Request, res: Response) => {
     const categoryFilter = req.query.category as string;
     let devices;
     if (categoryFilter) {
@@ -11,26 +12,27 @@ const getProductPage = async (req: Request, res: Response) => {
     } else {
         devices = await getAllDevices();
     }
-    const accessories = await getAllAccessories();
     const deviceCategories = await getTypeDevices()
-    res.render("admin/product/show.ejs", { devices, accessories, deviceCategories, selectedCategory: categoryFilter });
+    res.render("admin/product/show-device.ejs", { devices, deviceCategories, selectedCategory: categoryFilter });
 }
 
 const getCreateDevicePage = async (req: Request, res: Response) => {
-    const categories = await getAllCategories()
+    const brands = await Brand.find({});
+    const categories = await getTypeDevices();
     res.render("admin/product/create-device.ejs", {
-        categories
+        categories, brands
     });
 }
 
 
 const getViewDevicePage = async (req: Request, res: Response) => {
-    const categories = await getAllCategories();
+    const brands = await Brand.find({}); // Fetch all brands
+    const categories = await getTypeDevices();
     const id = req.params.id;
     const device = await getDeviceById(id);
     const variants = await getVariantByDeviceId(id);
     res.render("admin/product/detail-device.ejs", {
-        device, categories, variants
+        device, categories, variants, brands
     });
 };
 
@@ -67,7 +69,7 @@ const postCreateDevice = async (req: Request, res: Response) => {
 
         await device.save();
 
-        res.redirect("/admin/product");
+        res.redirect("/admin/device");
     } catch (error: any) {
         console.error(error);
         res.status(500).send("Error creating device: " + error.message);
@@ -79,7 +81,7 @@ const postDeleteDevice = async (req: Request, res: Response) => {
         const id = req.params.id;
         await Variant.deleteMany({ deviceId: id });
         await Device.deleteOne({ _id: id });
-        res.redirect('/admin/product');
+        res.redirect('/admin/device');
     } catch (error) {
         res.status(500).send("Error deleting device");
     }
@@ -133,7 +135,7 @@ const postUpdateDevice = async (req: Request, res: Response) => {
         // ---Lưu ---
         await device.save();
 
-        res.redirect("/admin/product");
+        res.redirect("/admin/device");
     } catch (error) {
         console.error("Update device error:", error);
         res.status(500).send("Error updating device");
@@ -174,7 +176,6 @@ const postCreateVariant = async (req: Request, res: Response) => {
 
     res.redirect(`/admin/view-device/${deviceId}`);
 }
-
 const getViewVariantPage = async (req: Request, res: Response) => {
     const id = req.params.id;
     const variant = await Variant.findById(id);
@@ -194,7 +195,7 @@ const postUpdateVariant = async (req: Request, res: Response) => {
 }
 
 export {
-    getProductPage,
+    getDevicePage,
     getCreateDevicePage,
     postCreateDevice,
     postDeleteDevice,

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="Create new variant" />
     <meta name="author" content="" />
-    <title>Create Variant - <%= phone.name %>
+    <title>Create Variant - <%= device.name %>
     </title>
     <link href="/admin/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -21,11 +21,12 @@
                     <main>
                         <div class="container-fluid px-4">
                             <h1 class="mt-4">
-                                <%= phone.name %>
+                                <%= device.name %>
                             </h1>
                             <ol class="breadcrumb mb-4">
                                 <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                <li class="breadcrumb-item"><a href="/admin/view-phone/<%= phone._id %>">Phone</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/view-device/<%= device._id %>">device</a>
+                                </li>
                                 <li class="breadcrumb-item active">Create Variant</li>
                             </ol>
 
@@ -33,7 +34,7 @@
                                 <div class="col-6 mx-auto">
                                     <div>
                                         <h5 style="padding: 10px 0;">Create a new variant for <strong>
-                                                <%= phone.name %>
+                                                <%= device.name %>
                                             </strong></h5>
                                         <form action="/admin/create-variant" method="post">
 
@@ -85,7 +86,7 @@
                                                 </div>
                                             </div>
 
-                                            <input type="hidden" name="phoneId" value="<%= phone._id %>">
+                                            <input type="hidden" name="deviceId" value="<%= device._id %>">
 
                                             <div class="mt-4">
                                                 <button type="submit" class="btn btn-primary">Create Variant</button>

@@ -1,6 +1,7 @@
 // init databse
 // config/seed.ts
 import { Category } from "models/category";
+import { Brand } from "models/brand";
 import User from "../models/user";
 import { Accessory, Device, Variant } from "models/product";
 import { CATEGORY_TYPES } from "config/constant";
@@ -49,6 +50,23 @@ const seedCategories = async () => {
     const createdCategories = await Category.insertMany(categories);
     console.log(">>> Seeded categories successfully");
     return createdCategories;
+};
+
+const seedBrands = async () => {
+    const count = await Brand.countDocuments();
+    if (count > 0) {
+        console.log(">>> Brands already exist, skipping seed.");
+        return;
+    }
+
+    const brands = [
+        { name: "Apple", description: "Thương hiệu công nghệ hàng đầu của Mỹ." },
+        { name: "Samsung", description: "Tập đoàn đa quốc gia từ Hàn Quốc." },
+        { name: "Xiaomi", description: "Thương hiệu smartphone và đồ gia dụng thông minh từ Trung Quốc." },
+    ];
+
+    await Brand.insertMany(brands);
+    console.log(">>> Seeded brands successfully");
 };
 
 const seedProducts = async (categories: any[]) => {
@@ -100,6 +118,7 @@ const seedAccessories = async (categories: any[]) => {
 const initDatabase = async () => {
     try {
         await seedUsers();
+        await seedBrands();
         const categories = await seedCategories();
         if (categories) {
             await seedProducts(categories);

@@ -1,13 +1,27 @@
 import { Request, Response } from 'express';
+import { Brand } from 'models/brand';
 import { Accessory } from 'models/product';
 import { getTypeAccessories } from 'services/category.service';
-import { getAccessoryById } from 'services/product.service';
+import { getAccessoryById, getAllAccessories } from 'services/product.service';
+
+const getAccessoryPage = async (req: Request, res: Response) => {
+    const categoryFilter = req.query.category as string;
+    let accessories;
+    if (categoryFilter) {
+        accessories = await Accessory.find({ category: categoryFilter }).populate('category').exec();
+    } else {
+        accessories = await getAllAccessories();
+    }
+    const accessoryCategories = await getTypeAccessories()
+    res.render("admin/product/show-accessory.ejs", { accessories, accessoryCategories, selectedCategory: categoryFilter });
+}
 
 const getCreateAccessoryPage = async (req: Request, res: Response) => {
     try {
+        const brands = await Brand.find({});
         const categories = await getTypeAccessories();
         res.render("admin/product/create-accessory.ejs", {
-            categories
+            categories, brands
         });
     } catch (error) {
         console.error(error);
@@ -42,7 +56,7 @@ const postCreateAccessory = async (req: Request, res: Response) => {
 
         await accessory.save();
 
-        res.redirect("/admin/product");
+        res.redirect("/admin/accessory");
     } catch (error: any) {
         console.error(error);
         res.status(500).send("Error creating accessory: " + error.message);
@@ -51,13 +65,14 @@ const postCreateAccessory = async (req: Request, res: Response) => {
 
 const getViewAccessoryPage = async (req: Request, res: Response) => {
     try {
+        const brands = await Brand.find({});
         const { id } = req.params;
         const accessory = await getAccessoryById(id);
         const categories = await getTypeAccessories();
         if (!accessory) {
             return res.status(404).render('404.ejs');
         }
-        res.render("admin/product/detail-accessory.ejs", { accessory, categories });
+        res.render("admin/product/detail-accessory.ejs", { accessory, categories, brands });
     } catch (error) {
         console.error(error);
         res.status(500).send("Error getting accessory detail page");
@@ -93,7 +108,7 @@ const postUpdateAccessory = async (req: Request, res: Response) => {
         }
 
         await accessory.save();
-        res.redirect("/admin/product");
+        res.redirect("/admin/accessory");
     } catch (error) {
         console.error("Update accessory error:", error);
         res.status(500).send("Error updating accessory");
@@ -103,7 +118,7 @@ const postUpdateAccessory = async (req: Request, res: Response) => {
 const postDeleteAccessory = async (req: Request, res: Response) => {
     try {
         await Accessory.deleteOne({ _id: req.params.id });
-        res.redirect('/admin/product');
+        res.redirect('/admin/accessory');
     } catch (error) {
         res.status(500).send("Error deleting accessory");
     }
@@ -114,5 +129,7 @@ export {
     postCreateAccessory,
     getViewAccessoryPage,
     postUpdateAccessory,
-    postDeleteAccessory
+    postDeleteAccessory,
+    getAccessoryPage
+
 };
