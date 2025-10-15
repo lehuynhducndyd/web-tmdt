@@ -28,9 +28,9 @@ const orderSchema = new mongoose.Schema({
   shippingAddress: {
     fullName: { type: String, required: true },
     phone: { type: String, required: true },
-    addressLine: { type: String, required: true },
+    street: { type: String, required: true },
     province: String,
-    village: String
+    commune: String
   }
 }, { timestamps: true });
 

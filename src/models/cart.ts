@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 
 const cartItemSchema = new mongoose.Schema({
-  product: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
+  device: { type: mongoose.Schema.Types.ObjectId, ref: "Device" },
+  accessory: { type: mongoose.Schema.Types.ObjectId, ref: "Accessory" },
   variantId: { type: mongoose.Schema.Types.ObjectId, required: true }, // trỏ đến Product.variants._id
   quantity: { type: Number, default: 1, min: 1 },
   priceAtAdd: { type: Number, required: true } // giá tại thời điểm thêm

@@ -4,7 +4,7 @@ import { Category } from "models/category";
 import { Brand } from "models/brand";
 import User from "../models/user";
 import { Accessory, Device, Variant } from "models/product";
-import { CATEGORY_TYPES } from "config/constant";
+import { ACCOUNT_TYPE, CATEGORY_TYPES } from "config/constant";
 import bcrypt from 'bcrypt';
 
 const SALT_ROUNDS = 10;
@@ -17,9 +17,9 @@ const seedUsers = async () => {
     }
 
     const usersToCreate = [
-        { name: "Admin User", email: "admin@example.com", password: "123456", role: "admin", phone: "0123456789", street: "Đường 30/4", province: "Thành phố Cần Thơ", commune: "Ninh Kiều" },
-        { name: "Staff User", email: "staff@example.com", password: "123456", role: "staff", phone: "0987654321", street: "Đường 30/4", province: "Thành phố Cần Thơ", commune: "Ninh Kiều" },
-        { name: "Customer User", email: "customer@example.com", password: "123456", role: "customer", phone: "0911222333", street: "Đường 30/4", province: "Thành phố Cần Thơ", commune: "Ninh Kiều" },
+        { name: "Admin User", email: "admin@example.com", password: "123456", role: "admin", phone: "0123456789", street: "Đường 30/4", province: "Thành phố Cần Thơ", commune: "Ninh Kiều", accountType: ACCOUNT_TYPE.SYSTEM },
+        { name: "Staff User", email: "staff@example.com", password: "123456", role: "staff", phone: "0987654321", street: "Đường 30/4", province: "Thành phố Cần Thơ", commune: "Ninh Kiều", accountType: ACCOUNT_TYPE.SYSTEM },
+        { name: "Customer User", email: "customer@example.com", password: "123456", role: "customer", phone: "0911222333", street: "Đường 30/4", province: "Thành phố Cần Thơ", commune: "Ninh Kiều", accountType: ACCOUNT_TYPE.SYSTEM },
     ];
 
     const hashedUsers = await Promise.all(

@@ -1,9 +1,9 @@
-import { getAccessoryPage, getCreateAccessoryPage, getViewAccessoryPage, postCreateAccessory, postDeleteAccessory, postUpdateAccessory } from 'controllers/admin.accessory.controller';
-import { getBrandPage, getCreateBrandPage, getViewBrandPage, postCreateBrand, postDeleteBrand, postUpdateBrand } from 'controllers/admin.brand.controller';
-import { getCategoryPage, getCreateCategoryPage, getViewCategoryPage, postCreateCategory, postDeleteCategory, postUpdateCategory } from 'controllers/admin.category.controller';
-import { getAdminPage } from 'controllers/admin.dashboard.controller';
-import { getCreateDevicePage, getCreateVariantPage, getDevicePage, getViewDevicePage, getViewVariantPage, postCreateDevice, postCreateVariant, postDeleteDevice, postDeleteVariant, postUpdateDevice, postUpdateVariant } from 'controllers/admin.device.controller';
-import { getUserPage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUserPage, postUpdateUser } from 'controllers/admin.user.controller';
+import { getAccessoryPage, getCreateAccessoryPage, getViewAccessoryPage, postCreateAccessory, postDeleteAccessory, postUpdateAccessory } from 'controllers/admin/admin.accessory.controller';
+import { getBrandPage, getCreateBrandPage, getViewBrandPage, postCreateBrand, postDeleteBrand, postUpdateBrand } from 'controllers/admin/admin.brand.controller';
+import { getCategoryPage, getCreateCategoryPage, getViewCategoryPage, postCreateCategory, postDeleteCategory, postUpdateCategory } from 'controllers/admin/admin.category.controller';
+import { getAdminPage } from 'controllers/admin/admin.dashboard.controller';
+import { getCreateDevicePage, getCreateVariantPage, getDevicePage, getViewDevicePage, getViewVariantPage, postCreateDevice, postCreateVariant, postDeleteDevice, postDeleteVariant, postUpdateDevice, postUpdateVariant } from 'controllers/admin/admin.device.controller';
+import { getUserPage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUserPage, postUpdateUser } from 'controllers/admin/admin.user.controller';
 import { getHomePage } from 'controllers/user.controller';
 import express, { Express } from 'express';
 import { fileUploadMiddleware } from 'src/middleware/multer';
