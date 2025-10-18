@@ -44,12 +44,17 @@ const accessorySchema = new mongoose.Schema({
   name: { type: String, required: true },
   brand: String,
   category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
-
   thumbnail: imageSchema,
   images: [imageSchema],
   description: String,
-  price: Number,
+
+}, { timestamps: true });
+
+const accessoriesVariantSchema = new mongoose.Schema({
+  accessoryId: { type: mongoose.Schema.Types.ObjectId, ref: "Accessory", required: true },
+  color: String,
   stock: Number,
+  price: Number,
   discount: { type: Number, default: 0 },
 }, { timestamps: true });
 
@@ -57,5 +62,6 @@ const accessorySchema = new mongoose.Schema({
 const Device = mongoose.model("Device", deviceSchema);
 const Variant = mongoose.model("Variant", variantSchema);
 const Accessory = mongoose.model("Accessory", accessorySchema);
+const AccessoriesVariant = mongoose.model("AccessoriesVariant", accessoriesVariantSchema);
 
-export { Device, Variant, Accessory };
+export { Device, Variant, Accessory, AccessoriesVariant };

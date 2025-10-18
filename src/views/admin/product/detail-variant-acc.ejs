@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Edit accessory variant" />
+    <meta name="author" content="" />
+    <title>Edit Variant - <%= accessory.name %>
+    </title>
+    <link href="/admin/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+    <%- include('../layout/header'); -%>
+        <div id="layoutSidenav">
+            <%- include('../layout/sidenav'); -%>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+                            <h1 class="mt-4">
+                                <%= accessory.name %>
+                            </h1>
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/accessory">Accessory</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/view-accessory/<%= accessory._id %>">
+                                        <%= accessory.name %>
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item active">Edit Variant</li>
+                            </ol>
+
+                            <div class="row">
+                                <div class="col-6 mx-auto">
+                                    <div>
+                                        <h5 style="padding: 10px 0;">Edit variant for <strong>
+                                                <%= accessory.name %>
+                                            </strong></h5>
+                                        <form action="/admin/update-variant-acc/<%= variant._id %>/<%= accessory._id %>"
+                                            method="post">
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Color</label>
+                                                <input type="text" class="form-control" name="color"
+                                                    placeholder="Enter color" value="<%= variant.color %>" required>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="mb-3 col-4">
+                                                    <label class="form-label">Price (VNĐ)</label>
+                                                    <input type="number" class="form-control" name="price"
+                                                        placeholder="Enter price" value="<%= variant.price %>" required>
+                                                </div>
+
+                                                <div class="mb-3 col-4">
+                                                    <label class="form-label">Stock Quantity</label>
+                                                    <input type="number" class="form-control" name="stock"
+                                                        placeholder="Enter stock" value="<%= variant.stock %>" required>
+                                                </div>
+                                                <div class="mb-3 col-4">
+                                                    <label class="form-label">Discount (%)</label>
+                                                    <input type="number" class="form-control" name="discount" min="0"
+                                                        max="100" value="<%= variant.discount %>">
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-4">
+                                                <button type="submit" class="btn btn-primary">Update Variant</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                    <%- include('../layout/footer'); -%>
+                </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
+        <script src="/admin/js/scripts.js"></script>
+</body>
+
+</html>

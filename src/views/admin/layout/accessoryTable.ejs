@@ -2,8 +2,7 @@
     <thead>
         <tr>
             <th>Name</th>
-            <th>Price</th>
-            <th>Stock</th>
+            <th>Description</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -15,10 +14,7 @@
                         <%= accessory.name %>
                     </td>
                     <td>
-                        <%= accessory.price.toLocaleString('vi-VN') %> VNĐ
-                    </td>
-                    <td>
-                        <%= accessory.stock %>
+                        <%= accessory.description %>
                     </td>
                     <td class="d-flex gap-2">
                         <a href="/admin/view-accessory/<%= accessory.id %>" class="btn btn-warning btn-sm">View &

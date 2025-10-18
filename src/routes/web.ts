@@ -1,4 +1,4 @@
-import { getAccessoryPage, getCreateAccessoryPage, getViewAccessoryPage, postCreateAccessory, postDeleteAccessory, postUpdateAccessory } from 'controllers/admin/admin.accessory.controller';
+import { getAccessoryPage, getCreateAccessoryPage, getCreateVariantAccPage, getViewAccessoryPage, postCreateAccessory, postCreateVariantAcc, postDeleteAccessory, postUpdateAccessory, getViewVariantAccPage, postUpdateVariantAcc, postDeleteVariantAcc } from 'controllers/admin/admin.accessory.controller';
 import { getBrandPage, getCreateBrandPage, getViewBrandPage, postCreateBrand, postDeleteBrand, postUpdateBrand } from 'controllers/admin/admin.brand.controller';
 import { getCategoryPage, getCreateCategoryPage, getViewCategoryPage, postCreateCategory, postDeleteCategory, postUpdateCategory } from 'controllers/admin/admin.category.controller';
 import { getAdminPage } from 'controllers/admin/admin.dashboard.controller';
@@ -61,7 +61,13 @@ const webRoutes = (app: Express) => {
     router.post("/admin/create-variant", postCreateVariant);
     router.post("/admin/delete-variant/:id/:deviceId", postDeleteVariant);
     router.get("/admin/view-variant/:id", getViewVariantPage);
-    router.post("/admin/update-variant/:id/:deviceId", postUpdateVariant)
+    router.post("/admin/update-variant/:id/:deviceId", postUpdateVariant);
+    router.get('/admin/create-variant-acc/:accId', getCreateVariantAccPage);
+    router.post('/admin/create-variant-acc', postCreateVariantAcc);
+    router.get('/admin/view-variant-acc/:id', getViewVariantAccPage);
+    router.post('/admin/update-variant-acc/:id/:accId', postUpdateVariantAcc);
+    router.post('/admin/delete-variant-acc/:id/:accId', postDeleteVariantAcc);
+
 
     router.get('/admin/brand', getBrandPage);
     router.get('/admin/create-brand', getCreateBrandPage);

@@ -3,7 +3,7 @@
 import { Category } from "models/category";
 import { Brand } from "models/brand";
 import User from "../models/user";
-import { Accessory, Device, Variant } from "models/product";
+import { AccessoriesVariant, Accessory, Device, Variant } from "models/product";
 import { ACCOUNT_TYPE, CATEGORY_TYPES } from "config/constant";
 import bcrypt from 'bcrypt';
 
@@ -12,7 +12,6 @@ const SALT_ROUNDS = 10;
 const seedUsers = async () => {
     const count = await User.countDocuments();
     if (count > 0) {
-        console.log(">>> Users already exist, skipping seed.");
         return;
     }
 
@@ -36,8 +35,7 @@ const seedUsers = async () => {
 const seedCategories = async () => {
     const count = await Category.countDocuments();
     if (count > 0) {
-        console.log(">>> Categories already exist, skipping seed.");
-        return Category.find().lean();
+        return;
     }
 
     const categories = [
@@ -47,15 +45,13 @@ const seedCategories = async () => {
         { name: "Cáp sạc", type: CATEGORY_TYPES.ACCESSORY.value, description: "Coi chừng cháy nhà" },
     ];
 
-    const createdCategories = await Category.insertMany(categories);
+    await Category.insertMany(categories);
     console.log(">>> Seeded categories successfully");
-    return createdCategories;
 };
 
 const seedBrands = async () => {
     const count = await Brand.countDocuments();
     if (count > 0) {
-        console.log(">>> Brands already exist, skipping seed.");
         return;
     }
 
@@ -69,61 +65,90 @@ const seedBrands = async () => {
     console.log(">>> Seeded brands successfully");
 };
 
-const seedProducts = async (categories: any[]) => {
+const seedProducts = async (categories: any[], brands: any[]) => {
     const deviceCount = await Device.countDocuments();
-    if (deviceCount > 0) {
-        console.log(">>> Devices and Variants already exist, skipping seed.");
-        return;
-    }
+    if (deviceCount > 0) return;
 
     const phoneCategory = categories.find(c => c.name === "Điện thoại");
+    const appleBrand = brands.find(b => b.name === "Apple");
+    const samsungBrand = brands.find(b => b.name === "Samsung");
+
     if (!phoneCategory) return;
 
     const devicesToCreate = [
-        { name: "iPhone 15 Pro", brand: "Apple", description: "Flagship phone with A17 Pro chip and titanium frame.", category: phoneCategory._id, specs: { screen: "6.1 inch OLED", cpu: "Apple A17 Pro", battery: "3274 mAh", camera: "48MP + 12MP + 12MP", os: "iOS 17" } },
-        { name: "Samsung Galaxy S24 Ultra", brand: "Samsung", description: "Top-tier Android phone with S Pen support.", category: phoneCategory._id, specs: { screen: "6.8 inch AMOLED 120Hz", cpu: "Snapdragon 8 Gen 3", battery: "5000 mAh", camera: "200MP + 12MP + 10MP + 10MP", os: "Android 14" } },
+        { name: "iPhone 15 Pro", brand: appleBrand?._id, description: "Flagship phone with A17 Pro chip and titanium frame.", category: phoneCategory._id, specs: { screen: "6.1 inch OLED", cpu: "Apple A17 Pro", battery: "3274 mAh", camera: "48MP + 12MP + 12MP", os: "iOS 17" } },
+        { name: "Samsung Galaxy S24 Ultra", brand: samsungBrand?._id, description: "Top-tier Android phone with S Pen support.", category: phoneCategory._id, specs: { screen: "6.8 inch AMOLED 120Hz", cpu: "Snapdragon 8 Gen 3", battery: "5000 mAh", camera: "200MP + 12MP + 10MP + 10MP", os: "Android 14" } },
     ];
     const createdDevices = await Device.insertMany(devicesToCreate);
     console.log(">>> Seeded devices successfully");
 
     const variantsToCreate = [
-        { deviceId: createdDevices[0]._id, color: "Black Titanium", storage: "256GB", ram: "8GB", price: 28990000, stock: 12 },
-        { deviceId: createdDevices[0]._id, color: "White Titanium", storage: "512GB", ram: "8GB", price: 32990000, stock: 7 },
-        { deviceId: createdDevices[1]._id, color: "Phantom Black", storage: "512GB", ram: "12GB", price: 30990000, stock: 15 },
-        { deviceId: createdDevices[1]._id, color: "Titanium Gray", storage: "1TB", ram: "12GB", price: 35990000, stock: 5 },
+        { deviceId: createdDevices[0]?._id, color: "Black Titanium", storage: "256GB", ram: "8GB", price: 28990000, stock: 12 },
+        { deviceId: createdDevices[0]?._id, color: "White Titanium", storage: "512GB", ram: "8GB", price: 32990000, stock: 7 },
+        { deviceId: createdDevices[1]?._id, color: "Phantom Black", storage: "512GB", ram: "12GB", price: 30990000, stock: 15 },
+        { deviceId: createdDevices[1]?._id, color: "Titanium Gray", storage: "1TB", ram: "12GB", price: 35990000, stock: 5 },
     ];
     await Variant.insertMany(variantsToCreate);
     console.log(">>> Seeded variants successfully");
 };
 
-const seedAccessories = async (categories: any[]) => {
+const seedAccessories = async (categories: any[], brands: any[]) => {
     const accessoryCount = await Accessory.countDocuments();
-    if (accessoryCount > 0) {
-        console.log(">>> Accessories already exist, skipping seed.");
-        return;
-    }
+    if (accessoryCount > 0) return;
 
     const headphoneCategory = categories.find(c => c.name === "Tai nghe");
     const chargerCategory = categories.find(c => c.name === "Cáp sạc");
+    const appleBrand = brands.find(b => b.name === "Apple");
+    const samsungBrand = brands.find(b => b.name === "Samsung");
 
     const accessoriesToCreate = [
-        { name: "Apple AirPods Pro 2", brand: "Apple", category: headphoneCategory?._id, description: "Wireless noise-canceling earbuds with MagSafe case.", price: 5990000, stock: 25, discount: 10 },
-        { name: "Samsung 45W Charger", brand: "Samsung", category: chargerCategory?._id, description: "Super fast charging adapter with USB-C cable.", price: 990000, stock: 40 },
-        { name: "iPhone 15 Pro Case - Leather", brand: "Apple", category: chargerCategory?._id, description: "Premium leather case designed for iPhone 15 Pro.", price: 1590000, stock: 20 },
+        { name: "Apple AirPods Pro 2", brand: appleBrand?._id, category: headphoneCategory?._id, description: "Wireless noise-canceling earbuds with MagSafe case." },
+        { name: "Samsung 45W Charger", brand: samsungBrand?._id, category: chargerCategory?._id, description: "Super fast charging adapter with USB-C cable." },
     ];
-    await Accessory.insertMany(accessoriesToCreate);
+    const createdAccessories = await Accessory.insertMany(accessoriesToCreate);
     console.log(">>> Seeded accessories successfully");
+
+    const accessoryVariantsToCreate = [
+        { accessoryId: createdAccessories[0]?._id, color: "White", price: 5990000, stock: 25, discount: 10 },
+        { accessoryId: createdAccessories[1]?._id, color: "Black", price: 990000, stock: 40 },
+        { accessoryId: createdAccessories[1]?._id, color: "White", price: 990000, stock: 30 },
+    ];
+    await AccessoriesVariant.insertMany(accessoryVariantsToCreate);
+    console.log(">>> Seeded accessory variants successfully");
 };
 
 const initDatabase = async () => {
     try {
-        await seedUsers();
-        await seedBrands();
-        const categories = await seedCategories();
-        if (categories) {
-            await seedProducts(categories);
-            await seedAccessories(categories);
+        const userCount = await User.countDocuments();
+        const brandCount = await Brand.countDocuments();
+        const categoryCount = await Category.countDocuments();
+
+        // Chỉ seed khi tất cả đều trống để đảm bảo tính nhất quán
+        if (userCount > 0 || brandCount > 0 || categoryCount > 0) {
+            console.log(">>> Database has already been seeded. Skipping.");
+            return;
         }
+
+        console.log(">>> Starting database seed...");
+
+        await Promise.all([
+            seedUsers(),
+            seedBrands(),
+            seedCategories(),
+        ]);
+
+        // Lấy dữ liệu vừa tạo để dùng cho các bước sau
+        const [categories, brands] = await Promise.all([
+            Category.find().lean(),
+            Brand.find().lean(),
+        ]);
+
+        await Promise.all([
+            seedProducts(categories, brands),
+            seedAccessories(categories, brands),
+        ]);
+
+        console.log(">>> Database seeding completed successfully!");
     } catch (error) {
         console.error(">>> Error seeding database:", error);
     }

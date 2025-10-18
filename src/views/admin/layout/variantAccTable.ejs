@@ -1,0 +1,46 @@
+<table class="table table-hover table-bordered">
+    <thead class="table-light">
+        <tr>
+            <th>Color</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (variants && variants.length> 0) { %>
+            <% variants.forEach(function(variant) { %>
+                <tr>
+                    <td>
+                        <%= variant.color %>
+                    </td>
+                    <td>
+                        <%= variant.price ? variant.price.toLocaleString('vi-VN') + ' ₫' : 'N/A' %>
+                    </td>
+                    <td style="color: <%= variant.stock > 0 ? 'green' : 'red' %>;">
+                        <%= variant.stock %>
+                    </td>
+
+                    <td>
+                        <div class="d-flex gap-2">
+                            <form action="/admin/delete-variant-acc/<%= variant._id %>/<%= accessory._id %>"
+                                method="post">
+                                <button class="btn btn-danger btn-sm" type="submit"
+                                    onclick="return confirm('Bạn có chắc chắn muốn xóa biến thể này không?')">
+                                    Delete
+                                </button>
+                            </form>
+                            <form action="/admin/view-variant-acc/<%= variant._id %>" method="get">
+                                <button class="btn btn-warning btn-sm" type="submit">View & Edit</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="8" class="text-center text-muted">No variants found</td>
+                        </tr>
+                        <% } %>
+    </tbody>
+</table>

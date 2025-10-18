@@ -180,7 +180,7 @@ const getViewVariantPage = async (req: Request, res: Response) => {
     const id = req.params.id;
     const variant = await Variant.findById(id);
     const device = await getDeviceById(variant.deviceId.toString());
-    res.render("admin/product/detail-variant.ejs", {
+    res.render("admin/product/detail-variant-device.ejs", {
         variant, device
     });
 }

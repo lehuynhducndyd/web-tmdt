@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
+import { get } from 'http';
 import { Brand } from 'models/brand';
-import { Accessory } from 'models/product';
+import { AccessoriesVariant, Accessory } from 'models/product';
 import { getTypeAccessories } from 'services/category.service';
 import { getAccessoryById, getAllAccessories } from 'services/product.service';
 
@@ -48,10 +49,10 @@ const postCreateAccessory = async (req: Request, res: Response) => {
             }));
         }
 
-        const { name, brand, category, description, price, stock, discount } = req.body;
+        const { name, brand, category, description, } = req.body;
 
         const accessory = new Accessory({
-            name, brand, category, description, price, stock, discount, thumbnail, images
+            name, brand, category, description, thumbnail, images
         });
 
         await accessory.save();
@@ -69,10 +70,11 @@ const getViewAccessoryPage = async (req: Request, res: Response) => {
         const { id } = req.params;
         const accessory = await getAccessoryById(id);
         const categories = await getTypeAccessories();
+        const variants = await AccessoriesVariant.find({ accessoryId: id });
         if (!accessory) {
             return res.status(404).render('404.ejs');
         }
-        res.render("admin/product/detail-accessory.ejs", { accessory, categories, brands });
+        res.render("admin/product/detail-accessory.ejs", { accessory, categories, brands, variants });
     } catch (error) {
         console.error(error);
         res.status(500).send("Error getting accessory detail page");
@@ -85,14 +87,11 @@ const postUpdateAccessory = async (req: Request, res: Response) => {
         const accessory = await Accessory.findById(id);
         if (!accessory) return res.status(404).send("Accessory not found");
 
-        const { name, brand, category, description, price, stock, discount } = req.body;
+        const { name, brand, category, description } = req.body;
         accessory.name = name;
         accessory.brand = brand;
         accessory.category = category;
         accessory.description = description;
-        accessory.price = price;
-        accessory.stock = stock;
-        accessory.discount = discount;
 
         const files = req.files as { [fieldname: string]: Express.Multer.File[] };
         if (files?.thumbnail?.[0]) {
@@ -124,12 +123,72 @@ const postDeleteAccessory = async (req: Request, res: Response) => {
     }
 };
 
+const getCreateVariantAccPage = async (req: Request, res: Response) => {
+    const accessoryId = req.params.accId;
+    const accessory = await getAccessoryById(accessoryId);
+    res.render("admin/product/create-variant-acc.ejs", {
+        accessory
+    });
+}
+
+const postCreateVariantAcc = async (req: Request, res: Response) => {
+    try {
+        const { color, price, stock, discount, accessoryId } = req.body;
+
+        const newVariant = new AccessoriesVariant({
+            accessoryId,
+            color,
+            price: Number(price),
+            stock: Number(stock),
+            discount: discount ? Number(discount) : 0,
+        });
+
+        await newVariant.save();
+
+        res.redirect(`/admin/view-accessory/${accessoryId}`);
+    } catch (error) {
+        console.error("Error creating accessory variant:", error);
+        res.status(500).send("Error creating accessory variant");
+    }
+}
+
+const getViewVariantAccPage = async (req: Request, res: Response) => {
+    try {
+        const variant = await AccessoriesVariant.findById(req.params.id);
+        if (!variant) {
+            return res.status(404).render('404.ejs');
+        }
+        const accessory = await getAccessoryById(variant.accessoryId.toString());
+        res.render("admin/product/detail-variant-acc.ejs", { variant, accessory });
+    } catch (error) {
+        console.error("Error getting accessory variant detail page:", error);
+        res.status(500).send("Error getting accessory variant detail page");
+    }
+}
+
+const postUpdateVariantAcc = async (req: Request, res: Response) => {
+    const { id, accId } = req.params;
+    const { color, price, stock, discount } = req.body;
+    await AccessoriesVariant.updateOne({ _id: id }, { color, price: Number(price), stock: Number(stock), discount: Number(discount) });
+    res.redirect(`/admin/view-accessory/${accId}`);
+}
+
+const postDeleteVariantAcc = async (req: Request, res: Response) => {
+    const { id, accId } = req.params;
+    await AccessoriesVariant.deleteOne({ _id: id });
+    res.redirect(`/admin/view-accessory/${accId}`);
+};
+
 export {
     getCreateAccessoryPage,
     postCreateAccessory,
     getViewAccessoryPage,
     postUpdateAccessory,
     postDeleteAccessory,
-    getAccessoryPage
-
+    getAccessoryPage,
+    getCreateVariantAccPage,
+    postCreateVariantAcc,
+    getViewVariantAccPage,
+    postUpdateVariantAcc,
+    postDeleteVariantAcc,
 };
