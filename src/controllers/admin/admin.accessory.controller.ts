@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import { get } from 'http';
 import { Brand } from 'models/brand';
 import { AccessoriesVariant, Accessory } from 'models/product';
-import { getTypeAccessories } from 'services/category.service';
-import { getAccessoryById, getAllAccessories } from 'services/product.service';
+import { getTypeAccessories } from 'services/admin/category.service';
+import { getAccessoryById, getAllAccessories } from 'services/admin/product.service';
 
 const getAccessoryPage = async (req: Request, res: Response) => {
     const categoryFilter = req.query.category as string;

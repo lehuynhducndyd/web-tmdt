@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { CATEGORY_TYPES } from "config/constant";
-import { createCategory, deleteCategory, getAllCategories, getCategoryById, getTypeAccessories, getTypeDevices, updateCategory } from 'services/category.service';
+import { createCategory, deleteCategory, getAllCategories, getCategoryById, getTypeAccessories, getTypeDevices, updateCategory } from 'services/admin/category.service';
 
 const getCategoryPage = async (req: Request, res: Response) => {
     const categoriesDevices = await getTypeDevices();

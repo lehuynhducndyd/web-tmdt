@@ -4,7 +4,7 @@ import { getCategoryPage, getCreateCategoryPage, getViewCategoryPage, postCreate
 import { getAdminPage } from 'controllers/admin/admin.dashboard.controller';
 import { getCreateDevicePage, getCreateVariantPage, getDevicePage, getViewDevicePage, getViewVariantPage, postCreateDevice, postCreateVariant, postDeleteDevice, postDeleteVariant, postUpdateDevice, postUpdateVariant } from 'controllers/admin/admin.device.controller';
 import { getUserPage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUserPage, postUpdateUser } from 'controllers/admin/admin.user.controller';
-import { getHomePage } from 'controllers/user.controller';
+import { getHomePage } from 'controllers/client/user.controller';
 import express, { Express } from 'express';
 import { fileUploadMiddleware } from 'src/middleware/multer';
 const router = express.Router();
@@ -13,9 +13,8 @@ const router = express.Router();
 const webRoutes = (app: Express) => {
 
     // User routes
-    router.get('/test', getHomePage);
+    router.get('/', getHomePage);
     // Admin routes
-    router.get('/', getAdminPage);
     router.get('/admin', getAdminPage);
 
     router.get('/admin/user', getUserPage);

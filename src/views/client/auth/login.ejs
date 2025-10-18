@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Tripple D Shop</title>
+    <style>
+        :root {
+            --primary-color: #002244;
+            /* Xanh đậm từ navbar */
+            --accent-color: #061f46;
+            /* Xanh đậm từ nút "Điện thoại" */
+            --background-color: #fcfaf5;
+            /* Nền trắng/kem nhạt */
+            --text-color: #333;
+        }
+
+        /* Định dạng chung cho Body */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-color);
+            box-sizing: border-box;
+        }
+
+        /* Header giả lập */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+            box-sizing: border-box;
+            z-index: 100;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .header-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .header-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Khung chứa Form */
+        .form-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            margin-top: 80px;
+            /* Tránh header cố định */
+        }
+
+        .form-container h2 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 28px;
+            border-bottom: 3px solid var(--accent-color);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        /* Định dạng Input */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+
+        /* Định dạng Nút Submit */
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background-color: #e69500;
+            /* Màu vàng đậm hơn khi hover */
+        }
+
+        /* Link chuyển đổi form */
+        .switch-link {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .switch-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .switch-link a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Nút đăng nhập với Google */
+        .google-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 12px;
+            background-color: #fff;
+            color: #757575;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+            text-decoration: none;
+            margin-top: 15px;
+        }
+
+        .google-btn:hover {
+            background-color: #f5f5f5;
+            border-color: #ccc;
+        }
+
+        .google-btn img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        /* Dải phân cách */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 25px 0;
+            color: #aaa;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .divider:not(:empty)::before {
+            margin-right: .5em;
+        }
+
+        .divider:not(:empty)::after {
+            margin-left: .5em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>Tripple D Shop</h1>
+        <div class="header-links">
+            <a href="/">Trang chủ</a>
+            <a href="#">Liên hệ</a>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <h2>Đăng nhập</h2>
+
+        <form id="login-form">
+            <div class="form-group">
+                <label for="login-email">Email:</label>
+                <input type="email" id="login-email" required placeholder="example@gmail.com">
+            </div>
+            <div class="form-group">
+                <label for="login-password">Mật khẩu:</label>
+                <input type="password" id="login-password" required placeholder="Nhập mật khẩu">
+            </div>
+            <p style="text-align: right; margin-bottom: 25px; font-size: 14px;">
+                <a href="#" style="color: var(--primary-color); text-decoration: none;">Quên mật khẩu?</a>
+            </p>
+            <button type="submit" class="submit-btn">Đăng nhập</button>
+        </form>
+
+        <div class="divider">hoặc</div>
+        <form action="/auth/google" method="get">
+            <button type="submit" class="submit-btn google-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
+                    alt="Google logo">
+                Đăng nhập với Google
+            </button>
+        </form>
+
+
+        <p class="switch-link">
+            Chưa có tài khoản? <a href="/register">Đăng kí ngay</a>
+        </p>
+    </div>
+</body>
+
+</html>

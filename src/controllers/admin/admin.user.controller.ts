@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createUser, deleteUser, getAllUserAdmin, getAllUserCustomer, getAllUserStaff, getUserById, updateUser } from 'services/user.service';
+import { createUser, deleteUser, getAllUserAdmin, getAllUserCustomer, getAllUserStaff, getUserById, updateUser } from 'services/admin/user.service';
 
 const getUserPage = async (req: Request, res: Response) => {
     const admins = await getAllUserAdmin();

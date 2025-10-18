@@ -5,6 +5,11 @@ const getAllDevices = async () => {
     return devices;
 }
 
+const getDeviceByCategory = async (category: string) => {
+    const devices = await Device.find({ category }).lean();
+    return devices;
+}
+
 const getVariantByDeviceId = async (deviceId: string) => {
     const variants = await Variant.find({ deviceId }).lean();
     return variants;
@@ -23,4 +28,9 @@ const getAccessoryById = async (id: string) => {
     const accessory = await Accessory.findById(id);
     return accessory;
 }
-export { getAllDevices, getAllAccessories, getDeviceById, getVariantByDeviceId, getAccessoryById }
+export {
+    getAllDevices, getAllAccessories,
+    getDeviceById,
+    getVariantByDeviceId, getAccessoryById,
+    getDeviceByCategory,
+}

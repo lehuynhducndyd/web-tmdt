@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { Brand } from 'models/brand';
 import { Device, Variant } from 'models/product';
-import { getAllCategories, getTypeDevices } from 'services/category.service';
-import { getAllAccessories, getAllDevices, getDeviceById, getVariantByDeviceId } from 'services/product.service';
+import { getAllCategories, getTypeDevices } from 'services/admin/category.service';
+import { getAllAccessories, getAllDevices, getDeviceById, getVariantByDeviceId } from 'services/admin/product.service';
 
 const getDevicePage = async (req: Request, res: Response) => {
     const categoryFilter = req.query.category as string;
