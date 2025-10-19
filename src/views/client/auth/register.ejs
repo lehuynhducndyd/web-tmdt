@@ -71,7 +71,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 400px;
+            max-width: 600px;
             text-align: center;
             margin-top: 80px;
             /* Tránh header cố định */
@@ -151,6 +151,11 @@
             color: var(--accent-color);
         }
     </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -164,30 +169,38 @@
 
     <div class="form-container">
         <h2>Đăng kí Tài khoản</h2>
+        <% errors.forEach(function(error){ %>
+            <div class="alert alert-danger mb-3">
+                <%= error %>
+            </div>
+            <% }); %>
+                <form id="register-form" method="post" action="/register">
+                    <div class="form-group">
+                        <label for="register-name">Tên đầy đủ:</label>
+                        <input type="text" id="register-name" required placeholder="Nguyễn Văn A" name="name"
+                            value="<%= oldData.name %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email:</label>
+                        <input type="email" id="register-email" required placeholder="example@gmail.com" name="email"
+                            value="<%= oldData.email %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Mật khẩu:</label>
+                        <input type="password" id="register-password" required placeholder="Tối thiểu 6 kí tự"
+                            name="password" value="<%= oldData.password %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm-password">Xác nhận mật khẩu:</label>
+                        <input type="password" id="register-confirm-password" required placeholder="Nhập lại mật khẩu"
+                            name="confirmPassword" value="<%= oldData.confirmPassword %>">
+                    </div>
+                    <button type="submit" class="submit-btn">Đăng kí</button>
+                </form>
 
-        <form id="register-form">
-            <div class="form-group">
-                <label for="register-name">Tên đầy đủ:</label>
-                <input type="text" id="register-name" required placeholder="Nguyễn Văn A">
-            </div>
-            <div class="form-group">
-                <label for="register-email">Email:</label>
-                <input type="email" id="register-email" required placeholder="example@gmail.com">
-            </div>
-            <div class="form-group">
-                <label for="register-password">Mật khẩu:</label>
-                <input type="password" id="register-password" required placeholder="Tối thiểu 6 kí tự">
-            </div>
-            <div class="form-group">
-                <label for="register-confirm-password">Xác nhận mật khẩu:</label>
-                <input type="password" id="register-confirm-password" required placeholder="Nhập lại mật khẩu">
-            </div>
-            <button type="submit" class="submit-btn">Đăng kí</button>
-        </form>
-
-        <p class="switch-link">
-            Đã có tài khoản? <a href="login.html">Đăng nhập ngay</a>
-        </p>
+                <p class="switch-link">
+                    Đã có tài khoản? <a href="/login">Đăng nhập ngay</a>
+                </p>
     </div>
 </body>
 

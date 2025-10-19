@@ -16,7 +16,7 @@ const emailSchema =
         });
 
 const RegisterSchema = z.object({
-    fullName: z.string().trim().min(1, { message: "Full name is required" }),
+    name: z.string().trim().min(1, { message: "Full name is required" }),
     email: emailSchema,
     password: passwordSchema,
     confirmPassword: z.string(),

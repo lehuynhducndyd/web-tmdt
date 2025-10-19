@@ -5,6 +5,9 @@ dotenv.config();
 import webRoutes from './routes/web';
 import connection from './config/database';
 import initDatabase from './config/seed';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
+import configPassportLocal from './middleware/passport.local';
 
 
 const app = express();
@@ -17,6 +20,24 @@ app.set('views', __dirname + '/views');
 //public file
 app.use(express.static('public'));
 
+
+
+//session
+app.use(session({
+    cookie: {
+        maxAge: 7 * 24 * 60 * 60 * 1000 // ms
+    },
+    secret: process.env.SESSION_SECRET || 'a-very-secret-key',
+    resave: true,
+    saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: process.env.DATABASE_URL })
+}))
+//passport
+import passport from 'passport';
+app.use(passport.session());
+
+//config passport local
+configPassportLocal();
 //request req.body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -40,4 +61,3 @@ webRoutes(app);
         }
     }
 )()
-

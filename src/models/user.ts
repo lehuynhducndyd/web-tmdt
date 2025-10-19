@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     default: ACCOUNT_TYPE.SYSTEM,
   },
   phone: String,
-  street: { type: String, required: true },
+  street: { type: String },
   province: String,
   commune: String,
   isActive: { type: Boolean, default: true }

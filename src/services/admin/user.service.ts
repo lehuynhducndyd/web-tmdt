@@ -1,5 +1,6 @@
 import User from "models/user";
 import bcrypt from "bcrypt";
+import { ACCOUNT_TYPE } from "config/constant";
 
 const getAllUsers = async () => {
     const users = await User.find();
@@ -65,4 +66,20 @@ const updateUser = async (
 
     await User.updateOne({ _id: id }, { name, email, password: hashedPassword, role, phone, province, commune, street, isActive });
 }
-export { getAllUsers, getAllUserAdmin, getAllUserStaff, getAllUserCustomer, createUser, deleteUser, updateUser, getUserById };
+const registerNewUser = async (name: string, email: string, password: string) => {
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const user = await User.create({ name, email, password: hashedPassword, role: 'customer', isActive: true, accountType: ACCOUNT_TYPE.SYSTEM });
+    return user;
+}
+
+const comparePassword = async (password: string, hashedPassword: string) => {
+    const isMatch = await bcrypt.compare(password, hashedPassword);
+    return isMatch;
+}
+
+
+export {
+    getAllUsers, getAllUserAdmin, getAllUserStaff,
+    registerNewUser, getAllUserCustomer, createUser, deleteUser, updateUser, getUserById, comparePassword
+};

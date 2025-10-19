@@ -71,7 +71,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 400px;
+            max-width: 600px;
             text-align: center;
             margin-top: 80px;
             /* Tránh header cố định */
@@ -205,6 +205,11 @@
             margin-left: .5em;
         }
     </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -218,35 +223,37 @@
 
     <div class="form-container">
         <h2>Đăng nhập</h2>
-
-        <form id="login-form">
-            <div class="form-group">
-                <label for="login-email">Email:</label>
-                <input type="email" id="login-email" required placeholder="example@gmail.com">
+        <% messages.forEach(function(message){ %>
+            <div class="alert alert-danger mb-3">
+                <%= message %>
             </div>
-            <div class="form-group">
-                <label for="login-password">Mật khẩu:</label>
-                <input type="password" id="login-password" required placeholder="Nhập mật khẩu">
-            </div>
-            <p style="text-align: right; margin-bottom: 25px; font-size: 14px;">
-                <a href="#" style="color: var(--primary-color); text-decoration: none;">Quên mật khẩu?</a>
-            </p>
-            <button type="submit" class="submit-btn">Đăng nhập</button>
-        </form>
+            <% }); %>
+                <form id="login-form" method="post" action="/login">
+                    <div class="form-group">
+                        <label for="login-email">Email:</label>
+                        <input type="email" id="login-email" required placeholder="example@gmail.com" name="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Mật khẩu:</label>
+                        <input type="password" id="login-password" required placeholder="Nhập mật khẩu" name="password">
+                    </div>
 
-        <div class="divider">hoặc</div>
-        <form action="/auth/google" method="get">
-            <button type="submit" class="submit-btn google-btn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
-                    alt="Google logo">
-                Đăng nhập với Google
-            </button>
-        </form>
+                    <button type="submit" class="submit-btn">Đăng nhập</button>
+                </form>
+
+                <div class="divider">hoặc</div>
+                <form action="/auth/google" method="get">
+                    <button type="submit" class="submit-btn google-btn">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
+                            alt="Google logo">
+                        Đăng nhập với Google
+                    </button>
+                </form>
 
 
-        <p class="switch-link">
-            Chưa có tài khoản? <a href="/register">Đăng kí ngay</a>
-        </p>
+                <p class="switch-link">
+                    Chưa có tài khoản? <a href="/register">Đăng kí ngay</a>
+                </p>
     </div>
 </body>
 
