@@ -10,12 +10,17 @@ import express, { Express } from 'express';
 import passport from 'passport';
 import { isAdmin, isLogin } from 'src/middleware/auth';
 import { fileUploadMiddleware } from 'src/middleware/multer';
+import { getShopPage } from 'controllers/client/user.controller';
+
 const router = express.Router();
 
 
 const webRoutes = (app: Express) => {
 
+    // Shop routes
+    router.get('/shop', getShopPage);
     // User routes
+ 
     router.get('/', getHomePage);
     router.get("/success-redirect", getSuccessRedirectPage);
     router.get('/login', isLogin, getLoginPage);

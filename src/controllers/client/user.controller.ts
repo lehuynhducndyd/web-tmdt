@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { get } from 'http'; 
 import { Device, Variant } from 'models/product';
 
 const getHomePage = async (req: Request, res: Response) => {
@@ -30,3 +31,27 @@ const getHomePage = async (req: Request, res: Response) => {
 }
 
 export { getHomePage };
+
+const getShopPage = async (req: Request, res: Response) => {
+  try {
+    const products = await   Device.find(); // hoặc logic phân trang/lọc
+    const categories = ["Apples","Oranges","Strawberry","Banana","Pumpkin"]; 
+    const pagination = {
+      current: 1,
+      pages: [1,2,3],
+      next: 2,
+      prev: null
+    };
+
+    return res.render("client/home/shop.ejs", {
+      products,
+      categories,
+      pagination
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("Internal server error");
+  }
+};
+
+export { getShopPage };
