@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { Device, Variant } from 'models/product';
 
 const getHomePage = async (req: Request, res: Response) => {
+    const user = req.user as any;
+    console.log(user);
     try {
         let latestDevices = await Device.find()
             .sort({ createdAt: -1 }) // Sắp xếp theo thời gian tạo, mới nhất trước

@@ -123,7 +123,6 @@ const initDatabase = async () => {
         const brandCount = await Brand.countDocuments();
         const categoryCount = await Category.countDocuments();
 
-        // Chỉ seed khi tất cả đều trống để đảm bảo tính nhất quán
         if (userCount > 0 || brandCount > 0 || categoryCount > 0) {
             console.log(">>> Database has already been seeded. Skipping.");
             return;

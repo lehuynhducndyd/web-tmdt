@@ -12,7 +12,6 @@ import configPassportLocal from './middleware/passport.local';
 
 const app = express();
 const port = process.env.PORT || 8080;
-
 //template engine
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
@@ -34,16 +33,22 @@ app.use(session({
 }))
 //passport
 import passport from 'passport';
+import configPassportGoogle from './middleware/passport.google';
 app.use(passport.session());
 
 //config passport local
 configPassportLocal();
+configPassportGoogle();
 //request req.body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 //seeding data
 
 initDatabase();
+app.use((req, res, next) => {
+    res.locals.user = req.user || null; // Pass user object to all views
+    next();
+});
 
 webRoutes(app);
 

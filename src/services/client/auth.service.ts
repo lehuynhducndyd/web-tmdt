@@ -13,6 +13,10 @@ const handleLogin = async (email: string, password: string, callback: any) => {
         return callback(null, false, { message: `Email/password is incorrect` });
     }
 
+    if (!user.password) { // Kiểm tra cả null, undefined và chuỗi rỗng
+        return callback(null, false, { message: `Email đã tồn tại, hãy thử email khác hoặc đăng nhập bằng google` });
+    }
+
     const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
         return callback(null, false, { message: "Email/password is incorrect" });

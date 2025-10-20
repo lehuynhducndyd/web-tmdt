@@ -5,7 +5,7 @@ import { ACCOUNT_TYPE } from "../config/constant";
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, unique: true, required: true },
-  password: { type: String, required: true },
+  password: { type: String, required: false },
   role: { type: String, enum: ["admin", "staff", "customer"], default: "customer" },
   accountType: {
     type: String,
@@ -13,7 +13,8 @@ const userSchema = new mongoose.Schema({
     default: ACCOUNT_TYPE.SYSTEM,
   },
   phone: String,
-  street: { type: String },
+  googleId: { type: String, unique: true, sparse: true },
+  street: String,
   province: String,
   commune: String,
   isActive: { type: Boolean, default: true }

@@ -1,5 +1,5 @@
 import { error } from 'console';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { registerNewUser } from 'services/admin/user.service';
 import { RegisterSchema } from 'src/validation/register.schema';
 
@@ -46,8 +46,25 @@ const postRegisterPage = async (req: Request, res: Response) => {
     return res.redirect("/login");
 }
 
+const getSuccessRedirectPage = (req: Request, res: Response) => {
+    const user = req.user as any;
+    if (user?.role === "admin") {
+        return res.redirect("/admin");
+    } else return res.redirect("/");
+}
+
+const postLogout = (req: Request, res: Response, next: NextFunction) => {
+    req.logout(function (err) {
+        if (err) { return next(err); }
+        res.redirect('/');
+    })
+}
+
 export {
     getLoginPage,
     getRegisterPage,
     postRegisterPage,
+    getSuccessRedirectPage,
+    postLogout,
+
 }
