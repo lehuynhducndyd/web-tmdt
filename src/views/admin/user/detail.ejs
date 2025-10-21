@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Manage User</title>
+    <title>Quản lý người dùng</title>
     <link href="/admin/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
@@ -19,19 +19,19 @@
                 <div id="layoutSidenav_content">
                     <main>
                         <div class="container-fluid px-4">
-                            <h1 class="mt-4">Manage Users</h1>
+                            <h1 class="mt-4">Quản lý người dùng</h1>
                             <ol class="breadcrumb mb-4">
-                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                <li class="breadcrumb-item active"><a href="/admin/user">Users</a></li>
+                                <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
+                                <li class="breadcrumb-item active"><a href="/admin/user">Người dùng</a></li>
                             </ol>
                             <div class="row">
                                 <div class="col-6 mx-auto">
                                     <div>
-                                        <h5 style="padding: 10px 0;">View User</h5>
+                                        <h5 style="padding: 10px 0;">Chi tiết người dùng</h5>
                                         <form action="/admin/update-user" method="post">
                                             <input type="hidden" name="id" value="<%= user.id %>">
                                             <div class="mb-3">
-                                                <label class="form-label">Full name</label>
+                                                <label class="form-label">Họ tên</label>
                                                 <input type="text" class="form-control" name="name"
                                                     value="<%= user.name %>" required>
                                             </div>
@@ -41,25 +41,25 @@
                                                     value="<%= user.email %>" required>
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label">Password</label>
+                                                <label class="form-label">Mật khẩu</label>
                                                 <input type="password" class="form-control" name="password"
-                                                    placeholder="Enter new password if you want to change">
+                                                    placeholder="Xác nhận mật khẩu mới nếu bạn muốn thay đổi">
                                             </div>
                                             <div class="row">
                                                 <div class="col-6 mb-3">
-                                                    <label class="form-label">Phone</label>
+                                                    <label class="form-label">Điện thoại</label>
                                                     <input type="text" class="form-control" name="phone"
                                                         value="<%= user.phone %>">
                                                 </div>
                                                 <div class="col-6 mb-3">
-                                                    <label class="form-label">Role</label>
+                                                    <label class="form-label">Vai trò</label>
                                                     <select name="role" class="form-select">
                                                         <option value="customer" <%=user.role==='customer' ? 'selected'
-                                                            : '' %>>Customer</option>
+                                                            : '' %>>Khách hàng</option>
                                                         <option value="staff" <%=user.role==='staff' ? 'selected' : ''
-                                                            %>>Staff</option>
+                                                            %>>Nhân viên</option>
                                                         <option value="admin" <%=user.role==='admin' ? 'selected' : ''
-                                                            %>>Admin</option>
+                                                            %>>Quản lý</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -72,10 +72,10 @@
                                             <div class="mb-3 form-check">
                                                 <input type="checkbox" class="form-check-input" name="isActive"
                                                     <%=user.isActive ? 'checked' : '' %>>
-                                                <label class="form-check-label">Active</label>
+                                                <label class="form-check-label">Hoạt động</label>
                                             </div>
                                             <div class="mb-3">
-                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                <button type="submit" class="btn btn-primary">Cập nhật</button>
                                             </div>
                                         </form>
                                     </div>

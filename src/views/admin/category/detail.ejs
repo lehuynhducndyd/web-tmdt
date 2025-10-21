@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Manage Category</title>
+    <title>Quản lý danh mục</title>
     <link href="/admin/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
@@ -19,25 +19,24 @@
                 <div id="layoutSidenav_content">
                     <main>
                         <div class="container-fluid px-4">
-                            <h1 class="mt-4">Manage Category</h1>
+                            <h1 class="mt-4">Quản lý danh mục</h1>
                             <ol class="breadcrumb mb-4">
-                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                <li class="breadcrumb-item active"><a href="/admin/category">Category</a></li>
+                                <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
+                                <li class="breadcrumb-item active"><a href="/admin/category">Danh mục</a></li>
                             </ol>
                             <div class="row">
                                 <div class="col-6 mx-auto">
                                     <div>
-                                        <h5 style="padding: 10px 0;">View Category</h5>
+                                        <h5 style="padding: 10px 0;">Chi tiết danh mục</h5>
                                         <form action="/admin/update-category" method="post">
                                             <input type="hidden" name="id" value="<%= category.id %>">
                                             <div class="mb-3">
-                                                <label class="form-label">Name</label>
-                                                <input type="text" class="form-control"
-                                                    placeholder="Enter name of category" name="name" required
-                                                    value="<%= category.name %>">
+                                                <label class="form-label">Tên</label>
+                                                <input type="text" class="form-control" placeholder="Nhập tên danh mục"
+                                                    name="name" required value="<%= category.name %>">
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label">Type</label>
+                                                <label class="form-label">Loại</label>
                                                 <select name="type" class="form-select">
                                                     <% Object.values(CATEGORY_TYPES).forEach(typeInfo=> { %>
                                                         <option value="<%= typeInfo.value %>"
@@ -48,12 +47,12 @@
                                                 </select>
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label">Description</label>
+                                                <label class="form-label">Mô tả</label>
                                                 <textarea class="form-control" rows="3"
                                                     name="description"><%= category.description %></textarea>
                                             </div>
                                             <div class="mb-3">
-                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                <button type="submit" class="btn btn-primary">Xác nhận</button>
                                             </div>
                                         </form>
                                     </div>

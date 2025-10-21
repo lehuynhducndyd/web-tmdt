@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="Hỏi Dân IT" />
-    <title>Manage Brand</title>
+    <title>Quản lý thương hiệu</title>
     <link href="/admin/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
@@ -19,24 +19,24 @@
                 <div id="layoutSidenav_content">
                     <main>
                         <div class="container-fluid px-4">
-                            <h1 class="mt-4">Manage Brand</h1>
+                            <h1 class="mt-4">Quản lý thương hiệu</h1>
                             <ol class="breadcrumb mb-4">
-                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Brand</li>
+                                <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
+                                <li class="breadcrumb-item active">Thương hiệu</li>
                             </ol>
                             <div class="d-flex justify-content-between align-items-center">
-                                <h5>Table Brand</h5>
+                                <h5>Danh sách thương hiệu</h5>
                                 <div>
-                                    <a href="/admin/create-brand" class="btn btn-warning">Create a new brand</a>
+                                    <a href="/admin/create-brand" class="btn btn-warning">Tạo mới thương hiệu</a>
                                 </div>
                             </div>
                             <hr>
                             <table class="table table-hover table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Action</th>
+                                        <th>Tên thương hiệu</th>
+                                        <th>Mô tả</th>
+                                        <th>Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -55,13 +55,13 @@
                                                         <form action="/admin/delete-brand/<%= brand.id %>"
                                                             method="post">
                                                             <button class="btn btn-danger btn-sm" type="submit"
-                                                                onclick="return confirm('Bạn có chắc chắn muốn xóa hãng <%= brand.name %> không?')">
-                                                                Delete
+                                                                onclick="return confirm('Bạn có chắc chắn muốn xóa thương hiệu <%= brand.name %> không?')">
+                                                                Xóa
                                                             </button>
                                                         </form>
                                                         <form action="/admin/view-brand/<%= brand.id %>" method="get">
-                                                            <button class="btn btn-warning btn-sm" type="submit">View &
-                                                                Edit</button>
+                                                            <button class="btn btn-warning btn-sm" type="submit">Xem &
+                                                                Sửa</button>
                                                         </form>
                                                     </div>
                                                 </td>
@@ -69,8 +69,8 @@
                                             <% }); %>
                                                 <% } else { %>
                                                     <tr>
-                                                        <td colspan="7" class="text-center text-muted">No brands
-                                                            found
+                                                        <td colspan="7" class="text-center text-muted">Không có thương
+                                                            hiệu nào
                                                         </td>
                                                     </tr>
                                                     <% } %>

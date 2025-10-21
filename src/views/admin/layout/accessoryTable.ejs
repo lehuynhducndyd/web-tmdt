@@ -1,9 +1,9 @@
 <table class="table table-hover table-bordered">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Action</th>
+            <th>Tên phụ kiện</th>
+            <th>Mô tả</th>
+            <th>Thao tác</th>
         </tr>
     </thead>
     <tbody>
@@ -17,11 +17,11 @@
                         <%= accessory.description %>
                     </td>
                     <td class="d-flex gap-2">
-                        <a href="/admin/view-accessory/<%= accessory.id %>" class="btn btn-warning btn-sm">View &
-                            Edit</a>
+                        <a href="/admin/view-accessory/<%= accessory.id %>" class="btn btn-warning btn-sm">Chi tiết &
+                            Chỉnh sửa</a>
                         <form action="/admin/delete-accessory/<%= accessory.id %>" method="post">
                             <button class="btn btn-danger btn-sm" type="submit"
-                                onclick="return confirm('Bạn có chắc chắn muốn xóa phụ kiện <%= accessory.name %> không?')">Delete</button>
+                                onclick="return confirm('Bạn có chắc chắn muốn xóa phụ kiện <%= accessory.name %> không?')">Xóa</button>
                         </form>
                     </td>
                 </tr>

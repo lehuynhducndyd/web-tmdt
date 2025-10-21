@@ -1,10 +1,10 @@
 <table class="table table-hover table-bordered">
     <thead class="table-light">
         <tr>
-            <th>Color</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Action</th>
+            <th>Màu sắc</th>
+            <th>Giá bán</th>
+            <th>Tồn kho</th>
+            <th>Thao tác</th>
         </tr>
     </thead>
     <tbody>
@@ -27,11 +27,11 @@
                                 method="post">
                                 <button class="btn btn-danger btn-sm" type="submit"
                                     onclick="return confirm('Bạn có chắc chắn muốn xóa biến thể này không?')">
-                                    Delete
+                                    Xóa
                                 </button>
                             </form>
                             <form action="/admin/view-variant-acc/<%= variant._id %>" method="get">
-                                <button class="btn btn-warning btn-sm" type="submit">View & Edit</button>
+                                <button class="btn btn-warning btn-sm" type="submit">Chi tiết & Chỉnh sửa</button>
                             </form>
                         </div>
                     </td>
@@ -39,7 +39,7 @@
                 <% }) %>
                     <% } else { %>
                         <tr>
-                            <td colspan="8" class="text-center text-muted">No variants found</td>
+                            <td colspan="8" class="text-center text-muted">Không có biến thể nào</td>
                         </tr>
                         <% } %>
     </tbody>

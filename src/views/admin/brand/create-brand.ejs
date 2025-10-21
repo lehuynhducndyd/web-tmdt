@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="Hỏi Dân IT" />
-    <title>Create Brand</title>
+    <title>Tạo mới thương hiệu</title>
     <link href="/admin/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
@@ -19,34 +19,34 @@
                 <div id="layoutSidenav_content">
                     <main>
                         <div class="container-fluid px-4">
-                            <h1 class="mt-4">Create New Brand</h1>
+                            <h1 class="mt-4">Tạo mới thương hiệu</h1>
                             <ol class="breadcrumb mb-4">
-                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                <li class="breadcrumb-item"><a href="/admin/brand">Brand</a></li>
-                                <li class="breadcrumb-item active">Create Brand</li>
+                                <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/brand">Thương hiệu</a></li>
+                                <li class="breadcrumb-item active">Tạo mới thương hiệu</li>
                             </ol>
                             <div class="row">
                                 <div class="col-6 mx-auto">
-                                    <h5>Add New Brand</h5>
+                                    <h5>Thêm thương hiệu mới</h5>
                                     <form action="/admin/create-brand" method="POST" enctype="multipart/form-data">
                                         <div class="mb-3">
-                                            <label for="name" class="form-label">Brand Name</label>
+                                            <label for="name" class="form-label">Tên thương hiệu</label>
                                             <input type="text" class="form-control" id="name" name="name" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="description" class="form-label">Description</label>
+                                            <label for="description" class="form-label">Mô tả</label>
                                             <textarea class="form-control" id="description" name="description"
                                                 rows="3"></textarea>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="logo" class="form-label">Brand Logo</label>
+                                            <label for="logo" class="form-label">Logo thương hiệu</label>
                                             <input class="form-control" type="file" id="logo" name="logo"
                                                 accept="image/*" onchange="previewLogo(event)">
                                             <img id="logo-preview" src="#" alt="Logo Preview" class="mt-2"
                                                 style="display: none; max-width: 200px; max-height: 200px;" />
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Create Brand</button>
-                                        <a href="/admin/brand" class="btn btn-secondary">Cancel</a>
+                                        <button type="submit" class="btn btn-primary">Tạo thương hiệu mới</button>
+                                        <a href="/admin/brand" class="btn btn-secondary">Hủy bỏ</a>
 
                                     </form>
                                 </div>

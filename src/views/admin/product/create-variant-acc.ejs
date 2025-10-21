@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="Create new accessory variant" />
     <meta name="author" content="" />
-    <title>Create Variant - <%= accessory.name %>
+    <title>Thêm biến thể phụ kiện - <%= accessory.name %>
     </title>
     <link href="/admin/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -24,43 +24,43 @@
                                 <%= accessory.name %>
                             </h1>
                             <ol class="breadcrumb mb-4">
-                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                <li class="breadcrumb-item"><a href="/admin/accessory">Accessory</a></li>
+                                <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/accessory">Phụ kiện</a></li>
                                 <li class="breadcrumb-item"><a href="/admin/view-accessory/<%= accessory._id %>">
                                         <%= accessory.name %>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item active">Create Variant</li>
+                                <li class="breadcrumb-item active">Thêm mới biến thể</li>
                             </ol>
 
                             <div class="row">
                                 <div class="col-6 mx-auto">
                                     <div>
-                                        <h5 style="padding: 10px 0;">Create a new variant for <strong>
+                                        <h5 style="padding: 10px 0;">Thêm biến thể mới cho <strong>
                                                 <%= accessory.name %>
                                             </strong></h5>
                                         <form action="/admin/create-variant-acc" method="post">
 
                                             <div class="mb-3">
-                                                <label class="form-label">Color</label>
+                                                <label class="form-label">Màu sắc</label>
                                                 <input type="text" class="form-control" name="color"
-                                                    placeholder="Enter color" required>
+                                                    placeholder="Nhập màu" required>
                                             </div>
 
                                             <div class="row">
                                                 <div class="mb-3 col-4">
-                                                    <label class="form-label">Price (VNĐ)</label>
+                                                    <label class="form-label">Giá bán (VNĐ)</label>
                                                     <input type="number" class="form-control" name="price"
-                                                        placeholder="Enter price" required>
+                                                        placeholder="Nhập giá bán" required>
                                                 </div>
 
                                                 <div class="mb-3 col-4">
-                                                    <label class="form-label">Stock Quantity</label>
+                                                    <label class="form-label">Tồn kho</label>
                                                     <input type="number" class="form-control" name="stock"
-                                                        placeholder="Enter stock" required>
+                                                        placeholder="Nhập số lượng tồn kho" required>
                                                 </div>
                                                 <div class="mb-3 col-4">
-                                                    <label class="form-label">Discount (%)</label>
+                                                    <label class="form-label">Giảm giá (%)</label>
                                                     <input type="number" class="form-control" name="discount" min="0"
                                                         max="100" value="0">
                                                 </div>
@@ -69,7 +69,7 @@
                                             <input type="hidden" name="accessoryId" value="<%= accessory._id %>">
 
                                             <div class="mt-4">
-                                                <button type="submit" class="btn btn-primary">Create Variant</button>
+                                                <button type="submit" class="btn btn-primary">Thêm mới biến thể</button>
                                             </div>
                                         </form>
                                     </div>

@@ -2,24 +2,24 @@
     <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
         <div class="sb-sidenav-menu">
             <div class="nav ps-2">
-                <div class="sb-sidenav-menu-heading ">Features</div>
+                <h2 style="font-size: large;" class="sb-sidenav-menu-heading ">Công cụ</h2>
 
                 <a class="nav-link" href="/admin">
 
-                    Dashboard
+                    Trang chủ
                 </a>
 
                 <a class="nav-link" href="/admin/user">
 
-                    User
+                    Người dùng
                 </a>
                 <a class="nav-link" href="/admin/category">
 
-                    Category
+                    Danh mục sản phẩm
                 </a>
                 <a class="nav-link" href="/admin/brand">
 
-                    Brand
+                    Thương hiệu
                 </a>
                 <p style="padding: 12px 16px; margin: 0;">
 
@@ -41,18 +41,18 @@
 
 
                 <a class="nav-link" href="/admin/order">
-                    Order
+                    Đơn đặt hàng
                 </a>
 
             </div>
         </div>
         <div class="sb-sidenav-footer">
-            <div class="small">Logged in as:</div>
-            <% if(user){ %>
-                <%= user.role %>
-                    <% } else{ %>
+            <div class="small">Vai trò: <% if(user){ %>
+                    <%= user.role %>
+                        <% } else{ %>
 
-                        <% } %>
+                            <% } %>
+            </div>
         </div>
     </nav>
 </div>

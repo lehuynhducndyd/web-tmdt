@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="Hỏi Dân IT" />
-    <title>Detail Brand</title>
+    <title>Chi tiết thương hiệu</title>
     <link href="/admin/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
@@ -19,31 +19,31 @@
                 <div id="layoutSidenav_content">
                     <main>
                         <div class="container-fluid px-4">
-                            <h1 class="mt-4">Brand Details</h1>
+                            <h1 class="mt-4">Chi tiết thương hiệu</h1>
                             <ol class="breadcrumb mb-4">
-                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                <li class="breadcrumb-item"><a href="/admin/brand">Brand</a></li>
-                                <li class="breadcrumb-item active">View & Edit Brand</li>
+                                <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/brand">Thương hiệu</a></li>
+                                <li class="breadcrumb-item active">Chi tiết & Chỉnh sửa thương hiệu</li>
                             </ol>
 
                             <div class="row">
 
                                 <div class="col-6 mx-auto">
-                                    <h5>Edit Brand</h5>
+                                    <h5>Chỉnh sửa thương hiệu</h5>
                                     <form action="/admin/update-brand" method="POST" enctype="multipart/form-data">
                                         <input type="hidden" name="id" value="<%= brand.id %>">
                                         <div class="mb-3">
-                                            <label for="name" class="form-label">Brand Name</label>
+                                            <label for="name" class="form-label">Tên thương hiệu</label>
                                             <input type="text" class="form-control" id="name" name="name"
                                                 value="<%= brand.name %>" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="description" class="form-label">Description</label>
+                                            <label for="description" class="form-label">Mô tả</label>
                                             <textarea class="form-control" id="description" name="description"
                                                 rows="3"><%= brand.description %></textarea>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="logo" class="form-label">Brand Logo</label>
+                                            <label for="logo" class="form-label">Logo thương hiệu</label>
                                             <input class="form-control" type="file" id="logo" name="logo"
                                                 accept="image/*" onchange="previewLogo(event)">
                                             <div class="mt-2">
@@ -52,13 +52,13 @@
                                                         src="data:<%= brand.logo.contentType %>;base64,<%= brand.logo.data.toString('base64') %>"
                                                         alt="Current Logo" style="max-width: 200px; max-height: 200px;">
                                                     <% } else { %>
-                                                        <p>No logo available.</p>
+                                                        <p>Không có logo.</p>
                                                         <% } %>
                                             </div>
                                             <img id="logo-preview" src="#" alt="New Logo Preview" class="mt-2"
                                                 style="display: none; max-width: 200px; max-height: 200px;" />
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Update Brand</button>
+                                        <button type="submit" class="btn btn-primary">Cập nhật thương hiệu</button>
 
                                     </form>
                                 </div>

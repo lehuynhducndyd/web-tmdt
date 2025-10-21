@@ -1,13 +1,13 @@
 <table class="table table-hover table-bordered">
     <thead>
         <tr>
-            <th>Name</th>
+            <th>Tên</th>
             <th>Email</th>
-            <th>Role</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>Active</th>
-            <th>Action</th>
+            <th>Vai trò</th>
+            <th>Điện thoại</th>
+            <th>Địa chỉ</th>
+            <th>Hoạt động</th>
+            <th>Hành động</th>
         </tr>
     </thead>
     <tbody>
@@ -30,17 +30,17 @@
                         <%= user.street %>, <%= user.commune %>, <%= user.province %>
                     </td>
                     <td>
-                        <%= user.isActive ? 'Yes' : 'No' %>
+                        <%= user.isActive ? 'Có' : 'Không' %>
                     <td>
                         <div class="d-flex gap-2">
                             <form action="/admin/delete-user/<%= user.id %>" method="post">
                                 <button class="btn btn-danger btn-sm" type="submit"
                                     onclick="return confirm('Bạn có chắc chắn muốn xóa user <%= user.name %> không?')">
-                                    Delete
+                                    Xóa
                                 </button>
                             </form>
                             <form action="/admin/view-user/<%= user.id %>" method="get">
-                                <button class="btn btn-warning btn-sm" type="submit">View & Edit</button>
+                                <button class="btn btn-warning btn-sm" type="submit">Xem & Sửa</button>
                             </form>
                         </div>
                     </td>
@@ -48,7 +48,7 @@
                 <% }); %>
                     <% } else { %>
                         <tr>
-                            <td colspan="7" class="text-center text-muted">No users found</td>
+                            <td colspan="7" class="text-center text-muted">Không tìm thấy người dùng</td>
                         </tr>
                         <% } %>
     </tbody>
