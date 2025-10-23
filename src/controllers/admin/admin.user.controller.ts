@@ -1,3 +1,4 @@
+import { ROLE_TYPES } from 'config/constant';
 import { Request, Response } from 'express';
 import { createUser, deleteUser, getAllUserAdmin, getAllUserCustomer, getAllUserStaff, getUserById, updateUser } from 'services/admin/user.service';
 
@@ -6,7 +7,7 @@ const getUserPage = async (req: Request, res: Response) => {
     const staffs = await getAllUserStaff();
     const customers = await getAllUserCustomer();
     res.render("admin/user/show.ejs",
-        { admins, staffs, customers }
+        { admins, staffs, customers, ROLE_TYPES }
     );
 }
 const getCreateUserPage = async (req: Request, res: Response) => {

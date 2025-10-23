@@ -53,17 +53,17 @@
                             <div class="tab-content mt-3">
                                 <!-- Customers -->
                                 <div class="tab-pane fade show active" id="customers" role="tabpanel">
-                                    <%- include('../layout/userTable', { users: customers }) %>
+                                    <%- include('../layout/userTable', { users: customers, ROLE_TYPES}) %>
                                 </div>
 
                                 <!-- Staffs -->
                                 <div class="tab-pane fade" id="staffs" role="tabpanel">
-                                    <%- include('../layout/userTable', { users: staffs }) %>
+                                    <%- include('../layout/userTable', { users: staffs,ROLE_TYPES}) %>
                                 </div>
 
                                 <!-- Admins -->
                                 <div class="tab-pane fade" id="admins" role="tabpanel">
-                                    <%- include('../layout/userTable', { users: admins }) %>
+                                    <%- include('../layout/userTable', { users: admins,ROLE_TYPES}) %>
                                 </div>
                             </div>
                         </div>

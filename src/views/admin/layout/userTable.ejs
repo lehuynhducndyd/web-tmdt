@@ -21,7 +21,12 @@
                         <%= user.email %>
                     </td>
                     <td>
-                        <%= user.role %>
+                        <% const roleKey=Object.keys(ROLE_TYPES).find(key=> ROLE_TYPES[key].value === user.role); %>
+                            <% if (roleKey) { %>
+                                <%= ROLE_TYPES[roleKey].label %>
+                                    <% } else { %>
+                                        <%= user.role %>
+                                            <% } %>
                     </td>
                     <td>
                         <%= user.phone %>
