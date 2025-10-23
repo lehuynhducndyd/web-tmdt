@@ -15,7 +15,11 @@
                         <%= category.name %>
                     </td>
                     <td>
-                        <%= category.type %>
+                        <% if (category.type==='device' ) { %>
+                            Thiết bị
+                            <% } else if (category.type==='accessory' ) { %>
+                                Phụ kiện
+                                <% } %>
                     </td>
                     <td>
                         <%= category.description %>

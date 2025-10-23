@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="Edit variant" />
     <meta name="author" content="" />
-    <title>Edit Variant - <%= device.name %>
+    <title>Chỉnh sửa thiết bị - <%= device.name %>
     </title>
     <link href="/admin/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -24,35 +24,35 @@
                                 <%= device.name %>
                             </h1>
                             <ol class="breadcrumb mb-4">
-                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                <li class="breadcrumb-item"><a href="/admin/view-device/<%= device._id %>">Phone</a>
+                                <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/view-device/<%= device._id %>">Thiết bị</a>
                                 </li>
-                                <li class="breadcrumb-item active">Edit Variant</li>
+                                <li class="breadcrumb-item active">Chỉnh sửa thiết bị</li>
                             </ol>
 
                             <div class="row">
                                 <div class="col-6 mx-auto">
                                     <div>
-                                        <h5 style="padding: 10px 0;">Edit variant for <strong>
+                                        <h5 style="padding: 10px 0;">Chỉnh sửa biến thể của <strong>
                                                 <%= device.name %>
                                             </strong></h5>
                                         <form action="/admin/update-variant/<%= variant._id %>/<%= device._id %>"
                                             method="post">
 
                                             <div class="mb-3">
-                                                <label class="form-label">Color</label>
+                                                <label class="form-label">Màu sắc</label>
                                                 <input type="text" class="form-control" name="color"
                                                     placeholder="Enter color" value="<%= variant.color %>" required>
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label">Discount (%)</label>
+                                                <label class="form-label">Giảm giá (%)</label>
                                                 <input type="number" class="form-control" name="discount" min="0"
                                                     max="100" value="<%= variant.discount %>">
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-6 mb-3">
-                                                    <label class="form-label">Storage</label>
+                                                    <label class="form-label">Dung lượng</label>
                                                     <input type="text" class="form-control" name="storage"
                                                         placeholder="e.g. 128GB" value="<%= variant.storage %>"
                                                         required>
@@ -66,20 +66,20 @@
                                             </div>
                                             <div class="row">
                                                 <div class="mb-3 col-6">
-                                                    <label class="form-label">Price (VNĐ)</label>
+                                                    <label class="form-label">Giá bán (VNĐ)</label>
                                                     <input type="number" class="form-control" name="price"
                                                         placeholder="Enter price" value="<%= variant.price %>" required>
                                                 </div>
 
                                                 <div class="mb-3 col-6">
-                                                    <label class="form-label">Stock Quantity</label>
+                                                    <label class="form-label">Số lượng tồn kho</label>
                                                     <input type="number" class="form-control" name="stock"
                                                         placeholder="Enter stock" value="<%= variant.stock %>" required>
                                                 </div>
                                             </div>
 
                                             <div class="mb-3">
-                                                <label class="form-label">3D Model</label>
+                                                <label class="form-label">Hình ảnh 3D</label>
                                                 <input type="text" class="form-control" name="model3d"
                                                     id="model3d-input" placeholder="https://..."
                                                     value="<%= variant.model3d || '' %>">
@@ -91,7 +91,7 @@
                                             <input type="hidden" name="deviceId" value="<%= device._id %>">
 
                                             <div class="mt-4">
-                                                <button type="submit" class="btn btn-primary">Update Variant</button>
+                                                <button type="submit" class="btn btn-primary">Cập nhật biến thể</button>
                                             </div>
                                         </form>
                                     </div>

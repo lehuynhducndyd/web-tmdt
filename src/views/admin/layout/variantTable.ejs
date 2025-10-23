@@ -1,11 +1,11 @@
 <table class="table table-hover table-bordered">
     <thead class="table-light">
         <tr>
-            <th>Color</th>
-            <th>Ram/Storage</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Action</th>
+            <th>Màu sắc</th>
+            <th>Ram/Dung lượng</th>
+            <th>Giá bán</th>
+            <th>Tồn kho</th>
+            <th>Thao tác</th>
         </tr>
     </thead>
     <tbody>
@@ -30,11 +30,11 @@
                             <form action="/admin/delete-variant/<%= variant._id %>/<%= device._id %>" method="post">
                                 <button class="btn btn-danger btn-sm" type="submit"
                                     onclick="return confirm('Bạn có chắc chắn muốn xóa biến thể này không?')">
-                                    Delete
+                                    Xóa
                                 </button>
                             </form>
                             <form action="/admin/view-variant/<%= variant._id %>" method="get">
-                                <button class="btn btn-warning btn-sm" type="submit">View & Edit</button>
+                                <button class="btn btn-warning btn-sm" type="submit">Xem & Sửa</button>
                             </form>
                         </div>
                     </td>
@@ -42,7 +42,7 @@
                 <% }) %>
                     <% } else { %>
                         <tr>
-                            <td colspan="8" class="text-center text-muted">No variants found</td>
+                            <td colspan="8" class="text-center text-muted">Không có biến thể nào</td>
                         </tr>
                         <% } %>
     </tbody>

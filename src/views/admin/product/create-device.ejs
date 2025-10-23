@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Create Device</title>
+    <title>Tạo mới thiết bị</title>
     <link href="/admin/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
@@ -17,24 +17,25 @@
                 <div id="layoutSidenav_content">
                     <main>
                         <div class="container-fluid px-4">
-                            <h1 class="mt-4">Manage Devices</h1>
+                            <h1 class="mt-4">Quản lý thiết bị</h1>
                             <ol class="breadcrumb mb-4">
-                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                <li class="breadcrumb-item active"><a href="/admin/product">Devices</a></li>
+                                <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
+                                <li class="breadcrumb-item active"><a href="/admin/device">Thiết bị</a></li>
+                                <li class="breadcrumb-item active">Thêm thiết bị mới</li>
                             </ol>
                             <div class="row">
                                 <div class="col-8 mx-auto">
                                     <div>
-                                        <h5 style="padding: 10px 0;">Create a new Device</h5>
+                                        <h5 style="padding: 10px 0;">Thêm thiết bị mới</h5>
                                         <form action="/admin/create-device" method="post" enctype="multipart/form-data">
                                             <!-- Basic info -->
                                             <div class="mb-3">
-                                                <label class="form-label">Name</label>
+                                                <label class="form-label">Tên thiết bị</label>
                                                 <input type="text" class="form-control" name="name" required>
                                             </div>
                                             <div class="row">
                                                 <div class="col-6 mb-3">
-                                                    <label class="form-label">Brand</label>
+                                                    <label class="form-label">Thương hiệu</label>
                                                     <select name="brand" class="form-select">
                                                         <% brands.forEach(brand=> { %>
                                                             <option value="<%= brand._id %>">
@@ -44,7 +45,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-6 mb-3">
-                                                    <label class="form-label">Category</label>
+                                                    <label class="form-label">Danh mục</label>
                                                     <select name="category" class="form-select">
                                                         <% categories.forEach(cat=> { %>
                                                             <option value="<%= cat._id %>">
@@ -56,7 +57,7 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label class="form-label">Description</label>
+                                                <label class="form-label">Mô tả</label>
                                                 <textarea class="form-control" rows="3" name="description"></textarea>
                                             </div>
 
@@ -64,7 +65,7 @@
                                             <!-- Images -->
 
                                             <div class="mb-3">
-                                                <label class="form-label">Thumbnail</label>
+                                                <label class="form-label">Ảnh bìa</label>
                                                 <input type="file" class="form-control" name="thumbnail"
                                                     accept="image/*"
                                                     onchange="previewImage(event, 'thumbnail-preview')">
@@ -76,7 +77,7 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label class="form-label">Images</label>
+                                                <label class="form-label">Ảnh chi tiết</label>
                                                 <input type="file" class="form-control" name="images" accept="image/*"
                                                     multiple onchange="previewMultipleImages(event, 'images-preview')">
                                                 <div id="images-preview" class="d-flex flex-wrap gap-2 mt-2"></div>
@@ -85,10 +86,10 @@
 
 
                                             <!-- Specs -->
-                                            <h5>Specifications</h5>
+                                            <h5>Thông số kỹ thuật</h5>
                                             <div class="row">
                                                 <div class="col-4 mb-3">
-                                                    <label class="form-label">Screen</label>
+                                                    <label class="form-label">Màn hình</label>
                                                     <input type="text" class="form-control" name="specs[screen]">
                                                 </div>
                                                 <div class="col-4 mb-3">
@@ -97,7 +98,7 @@
                                                 </div>
 
                                                 <div class="col-4 mb-3">
-                                                    <label class="form-label">Battery</label>
+                                                    <label class="form-label">Pin</label>
                                                     <input type="text" class="form-control" name="specs[battery]">
                                                 </div>
                                                 <div class="col-6 mb-3">
@@ -105,7 +106,7 @@
                                                     <input type="text" class="form-control" name="specs[camera]">
                                                 </div>
                                                 <div class="col-6 mb-3">
-                                                    <label class="form-label">OS</label>
+                                                    <label class="form-label">Hệ điều hành</label>
                                                     <input type="text" class="form-control" name="specs[os]">
                                                 </div>
                                             </div>
@@ -150,12 +151,12 @@
                                             </div>
                                             <button type="button" class="btn btn-secondary mb-3" id="addVariantBtn">+
                                                 Add Variant</button> -->
-                                            <h5>Variants</h5>
+                                            <h5>Biến thể thiết bị</h5>
 
 
                                             <!-- Submit -->
                                             <div class="mb-3">
-                                                <button type="submit" class="btn btn-primary">Create Device</button>
+                                                <button type="submit" class="btn btn-primary">Thêm biến thể mới</button>
                                             </div>
                                         </form>
                                     </div>

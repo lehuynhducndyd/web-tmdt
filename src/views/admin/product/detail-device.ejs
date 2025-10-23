@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Edit Device</title>
+    <title>Chỉnh sửa thiết bị</title>
     <link href="/admin/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
@@ -16,28 +16,28 @@
                 <div id="layoutSidenav_content">
                     <main>
                         <div class="container-fluid px-4">
-                            <h1 class="mt-4">Edit Device</h1>
+                            <h1 class="mt-4">Chỉnh sửa thiết bị</h1>
                             <ol class="breadcrumb mb-4">
-                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                <li class="breadcrumb-item"><a href="/admin/device">Devices</a></li>
+                                <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/device">Thiết bị</a></li>
                                 <li class="breadcrumb-item active">
                                     <%= device.name %>
                                 </li>
                             </ol>
                             <div class="row">
                                 <div class="col-6 mx-auto">
-                                    <h5>View detail device</h5>
+                                    <h5>Chi tiết chỉnh sửa thiết bị</h5>
                                     <form action="/admin/update-device/<%= device._id %>" method="POST"
                                         enctype="multipart/form-data">
                                         <!-- Basic info -->
                                         <div class="mb-3">
-                                            <label class="form-label">Name</label>
+                                            <label class="form-label">Tên thiết bị</label>
                                             <input type="text" class="form-control" name="name"
                                                 value="<%= device.name %>" required>
                                         </div>
                                         <div class="row">
                                             <div class="col-6 mb-3">
-                                                <label class="form-label">Brand</label>
+                                                <label class="form-label">Thương hiệu</label>
                                                 <select name="brand" class="form-select">
                                                     <% brands.forEach(brand=> { %>
                                                         <option value="<%= brand._id %>"
@@ -49,7 +49,7 @@
                                                 </select>
                                             </div>
                                             <div class="col-6 mb-3">
-                                                <label class="form-label">Category</label>
+                                                <label class="form-label">Danh mục</label>
                                                 <select name="category" class="form-select">
                                                     <% categories.forEach(cat=> { %>
                                                         <option value="<%= cat._id %>"
@@ -62,7 +62,7 @@
                                         </div>
 
                                         <div class="mb-3">
-                                            <label class="form-label">Description</label>
+                                            <label class="form-label">Mô tả</label>
                                             <textarea class="form-control" rows="3"
                                                 name="description"><%= device.description %></textarea>
                                         </div>
@@ -70,7 +70,7 @@
 
                                         <!-- Thumbnail -->
                                         <div class="mb-3">
-                                            <label class="form-label">Thumbnail</label>
+                                            <label class="form-label">Ảnh bìa</label>
                                             <input type="file" class="form-control" name="thumbnail" accept="image/*"
                                                 onchange="previewImage(event, 'thumbnail-preview')">
                                             <div class="mt-2">
@@ -83,7 +83,7 @@
 
                                         <!-- Images -->
                                         <div class="mb-3">
-                                            <label class="form-label">Images</label>
+                                            <label class="form-label">Ảnh chi tiết sản phẩm</label>
                                             <input type="file" class="form-control" name="images" accept="image/*"
                                                 multiple multiple
                                                 onchange="previewMultipleImages(event, 'images-preview')">
@@ -99,10 +99,10 @@
                                         </div>
 
                                         <!-- Specs -->
-                                        <h5>Specifications</h5>
+                                        <h5>Thông số kỹ thuật</h5>
                                         <div class="row">
                                             <div class="col-4 mb-3">
-                                                <label class="form-label">Screen</label>
+                                                <label class="form-label">Màn hình</label>
                                                 <input type="text" class="form-control" name="specs[screen]"
                                                     value="<%= device.specs?.screen %>">
                                             </div>
@@ -112,7 +112,7 @@
                                                     value="<%= device.specs?.cpu %>">
                                             </div>
                                             <div class="col-4 mb-3">
-                                                <label class="form-label">Battery</label>
+                                                <label class="form-label">Pin</label>
                                                 <input type="text" class="form-control" name="specs[battery]"
                                                     value="<%= device.specs?.battery %>">
                                             </div>
@@ -122,7 +122,7 @@
                                                     value="<%= device.specs?.camera %>">
                                             </div>
                                             <div class="col-6 mb-3">
-                                                <label class="form-label">OS</label>
+                                                <label class="form-label">Hệ điều hành</label>
                                                 <input type="text" class="form-control" name="specs[os]"
                                                     value="<%= device.specs?.os %>">
                                             </div>
@@ -131,15 +131,14 @@
 
 
                                         <div class="mb-3">
-                                            <button type="submit" class="btn btn-primary">Update
-                                                Device</button>
+                                            <button type="submit" class="btn btn-primary">Cập nhật thiết bị</button>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="col-6 mx-auto">
-                                    <h5>Variants</h5>
-                                    <a href="/admin/create-variant/<%=device.id%>"
-                                        class="btn btn-warning mb-3">Create</a>
+                                    <h5>Biến thể thiết bị</h5>
+                                    <a href="/admin/create-variant/<%=device.id%>" class="btn btn-warning mb-3">Thêm mới
+                                        biến thể</a>
                                     <%- include('../layout/variantTable'); -%>
                                 </div>
                             </div>

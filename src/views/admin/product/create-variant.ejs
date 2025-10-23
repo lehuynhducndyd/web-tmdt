@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="Create new variant" />
     <meta name="author" content="" />
-    <title>Create Variant - <%= device.name %>
+    <title> - <%= device.name %>
     </title>
     <link href="/admin/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -24,33 +24,33 @@
                                 <%= device.name %>
                             </h1>
                             <ol class="breadcrumb mb-4">
-                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                <li class="breadcrumb-item"><a href="/admin/view-device/<%= device._id %>">device</a>
+                                <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/view-device/<%= device._id %>">Thiết bị</a>
                                 </li>
-                                <li class="breadcrumb-item active">Create Variant</li>
+                                <li class="breadcrumb-item active">Thêm mới biến thể thiết bị</li>
                             </ol>
 
                             <div class="row">
                                 <div class="col-6 mx-auto">
                                     <div>
-                                        <h5 style="padding: 10px 0;">Create a new variant for <strong>
+                                        <h5 style="padding: 10px 0;">Thêm biến thể mới cho <strong>
                                                 <%= device.name %>
                                             </strong></h5>
                                         <form action="/admin/create-variant" method="post">
 
                                             <div class="mb-3">
-                                                <label class="form-label">Color</label>
+                                                <label class="form-label">Màu sắc</label>
                                                 <input type="text" class="form-control" name="color"
                                                     placeholder="Enter color" required>
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label">Discount (%)</label>
+                                                <label class="form-label">Giảm giá (%)</label>
                                                 <input type="number" class="form-control" name="discount" min="0"
                                                     max="100" value="0">
                                             </div>
                                             <div class="row">
                                                 <div class="col-6 mb-3">
-                                                    <label class="form-label">Storage</label>
+                                                    <label class="form-label">Dung lượng</label>
                                                     <input type="text" class="form-control" name="storage"
                                                         placeholder="e.g. 128GB" required>
                                                 </div>
@@ -63,13 +63,13 @@
                                             </div>
                                             <div class="row">
                                                 <div class="mb-3 col-6">
-                                                    <label class="form-label">Price (VNĐ)</label>
+                                                    <label class="form-label">Giá bán (VNĐ)</label>
                                                     <input type="number" class="form-control" name="price"
                                                         placeholder="Enter price" required>
                                                 </div>
 
                                                 <div class="mb-3 col-6">
-                                                    <label class="form-label">Stock Quantity</label>
+                                                    <label class="form-label">Tồn kho</label>
                                                     <input type="number" class="form-control" name="stock"
                                                         placeholder="Enter stock" required>
                                                 </div>
@@ -78,7 +78,7 @@
 
 
                                             <div class="mb-3">
-                                                <label class="form-label">3D Model</label>
+                                                <label class="form-label">Hình ảnh 3D</label>
                                                 <input type="text" class="form-control" name="model3d"
                                                     id="model3d-input" placeholder="https://...">
                                                 <div id="model3d-preview" class="mt-3">
@@ -89,7 +89,7 @@
                                             <input type="hidden" name="deviceId" value="<%= device._id %>">
 
                                             <div class="mt-4">
-                                                <button type="submit" class="btn btn-primary">Create Variant</button>
+                                                <button type="submit" class="btn btn-primary">Thêm mới biến thể</button>
                                             </div>
                                         </form>
                                     </div>

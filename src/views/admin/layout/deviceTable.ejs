@@ -1,9 +1,9 @@
 <table class="table table-hover table-bordered">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Action</th>
+            <th>Tên thiết bị</th>
+            <th>Mô tả</th>
+            <th>Thao tác</th>
         </tr>
     </thead>
     <tbody>
@@ -21,11 +21,11 @@
                             <form action="/admin/delete-device/<%= device.id %>" method="post">
                                 <button class="btn btn-danger btn-sm" type="submit"
                                     onclick="return confirm('Bạn có chắc chắn muốn xóa thiết bị <%= device.name %> không?')">
-                                    Delete
+                                    Xóa
                                 </button>
                             </form>
                             <form action="/admin/view-device/<%= device.id %>" method="get">
-                                <button class="btn btn-warning btn-sm" type="submit">View & Edit</button>
+                                <button class="btn btn-warning btn-sm" type="submit">Xem & Chỉnh sửa</button>
                             </form>
                             <!-- <form action="/admin/preview-device/<%= device.id %>" method="get">
                                 <button class="btn btn-primary btn-sm" type="submit">Preview (Dev)</button>

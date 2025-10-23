@@ -23,6 +23,7 @@
                             <ol class="breadcrumb mb-4">
                                 <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
                                 <li class="breadcrumb-item active"><a href="/admin/user">Người dùng</a></li>
+                                <li class="breadcrumb-item active">Chi tiết người dùng</li>
                             </ol>
                             <div class="row">
                                 <div class="col-6 mx-auto">
@@ -65,7 +66,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <%- include('../layout/addressUpdate'); -%>
-                                                    <label class="form-label">Street:</label>
+                                                    <label class="form-label">Địa chỉ:</label>
                                                     <textarea class="form-control" rows="3"
                                                         name="address"><%= user.street %> </textarea>
                                             </div>
