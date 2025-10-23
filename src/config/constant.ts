@@ -8,8 +8,4 @@ export const CATEGORY_TYPES = {
     ACCESSORY: { value: 'accessory', label: 'Phụ kiện' },
 };
 
-export const ROLE_TYPES = {
-    ADMIN: { value: 'admin', label: 'Quản trị viên' },
-    STAFF: { value: 'staff', label: 'Nhân viên' },
-    CUSTOMER: { value: 'customer', label: 'Khách hàng' },
-};
+

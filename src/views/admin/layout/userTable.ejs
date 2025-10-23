@@ -21,12 +21,13 @@
                         <%= user.email %>
                     </td>
                     <td>
-                        <% const roleKey=Object.keys(ROLE_TYPES).find(key=> ROLE_TYPES[key].value === user.role); %>
-                            <% if (roleKey) { %>
-                                <%= ROLE_TYPES[roleKey].label %>
-                                    <% } else { %>
-                                        <%= user.role %>
-                                            <% } %>
+                        <% if (user.role==='admin' ) { %>
+                            Quản trị viên
+                            <% } else if (user.role==='staff' ) { %>
+                                Nhân viên
+                                <% } else { %>
+                                    Khách hàng
+                                    <% } %>
                     </td>
                     <td>
                         <%= user.phone %>
