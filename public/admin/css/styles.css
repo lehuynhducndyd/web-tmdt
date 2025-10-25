@@ -6815,7 +6815,9 @@ textarea.form-control-lg {
   left: 0;
   z-index: 1030;
 }
-
+.fixed-top {
+  padding-top: 20px;
+}
 .sticky-top {
   position: sticky;
   top: 0;
