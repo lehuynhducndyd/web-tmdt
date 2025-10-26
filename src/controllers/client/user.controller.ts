@@ -58,13 +58,13 @@ export { getShopPage };
 
 const getShopDetailPage = async (req: Request, res: Response) => {
 try {
-        // 1. Tìm kiếm MỘT thiết bị (Device) đầu tiên để làm sản phẩm mẫu
-        const device = await Device.findOne()
+        // 1. Lấy ID sản phẩm từ URL
+        const productId = req.params.id;
+        const device = await Device.findById(productId)
             .populate('brand category')
             .lean();
 
         if (!device) {
-            // Nếu không có thiết bị nào trong DB, hiển thị lỗi 404
             return res.status(404).send("No product found in database to display static detail page.");
         }
 
@@ -106,3 +106,56 @@ try {
 }
 
 export { getShopDetailPage };
+
+const getCartPage = async (req: Request, res: Response) => {
+    try {
+        // --- Logic Controller cho Trang Giỏ Hàng ---
+
+        // 1. Dữ liệu giỏ hàng mẫu (Mô phỏng dữ liệu thực tế từ Session/DB)
+        const cartItems = [
+            {
+                // Giả định: các trường cơ bản cần thiết cho giỏ hàng
+                image: 'img/vegetable-item-3.png',
+                name: 'Big Banana',
+                price: 2.99,
+                quantity: 1,
+                total: 2.99,
+            },
+            {
+                image: 'img/vegetable-item-5.jpg',
+                name: 'Potatoes',
+                price: 2.99,
+                quantity: 1,
+                total: 2.99,
+            },
+            {
+                image: 'img/vegetable-item-2.jpg',
+                name: 'Awesome Brocoli',
+                price: 2.99,
+                quantity: 1,
+                total: 2.99,
+            },
+        ];
+
+        // 2. Tính toán tổng phụ (Subtotal)
+        const subtotal = cartItems.reduce((sum, item) => sum + item.total, 0);
+
+        // 3. Định nghĩa các phí khác
+        const shippingFee = 3.00; // Phí vận chuyển mẫu
+        const total = subtotal + shippingFee;
+
+        // 4. Render View
+        return res.render("client/home/cart.ejs", {
+            cartItems: cartItems,
+            subtotal: subtotal.toFixed(2), // Làm tròn 2 chữ số
+            shippingFee: shippingFee.toFixed(2),
+            total: total.toFixed(2),
+            // Bạn có thể thêm các biến khác như mã giảm giá, v.v.
+        });
+    } catch (error) {
+        console.error("Error getting cart page:", error);
+        res.status(500).send("Error loading cart page");
+    }
+}
+
+export { getCartPage }; // Thêm vào dòng export cuối cùng

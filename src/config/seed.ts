@@ -76,8 +76,8 @@ const seedProducts = async (categories: any[], brands: any[]) => {
     if (!phoneCategory) return;
 
     const devicesToCreate = [
-        { name: "iPhone 15 Pro", brand: appleBrand?._id, description: "Flagship phone with A17 Pro chip and titanium frame.", category: phoneCategory._id, specs: { screen: "6.1 inch OLED", cpu: "Apple A17 Pro", battery: "3274 mAh", camera: "48MP + 12MP + 12MP", os: "iOS 17" } },
-        { name: "Samsung Galaxy S24 Ultra", brand: samsungBrand?._id, description: "Top-tier Android phone with S Pen support.", category: phoneCategory._id, specs: { screen: "6.8 inch AMOLED 120Hz", cpu: "Snapdragon 8 Gen 3", battery: "5000 mAh", camera: "200MP + 12MP + 10MP + 10MP", os: "Android 14" } },
+        { name: "iPhone 15 Pro", brand: appleBrand?._id, description: "Flagship phone with A17 Pro chip and titanium frame.", category: phoneCategory?._id, specs: { screen: "6.1 inch OLED", cpu: "Apple A17 Pro", battery: "3274 mAh", camera: "48MP + 12MP + 12MP", os: "iOS 17" } },
+        { name: "Samsung Galaxy S24 Ultra", brand: samsungBrand?._id, description: "Top-tier Android phone with S Pen support.", category: phoneCategory?._id, specs: { screen: "6.8 inch AMOLED 120Hz", cpu: "Snapdragon 8 Gen 3", battery: "5000 mAh", camera: "200MP + 12MP + 10MP + 10MP", os: "Android 14" } },
     ];
     const createdDevices = await Device.insertMany(devicesToCreate);
     console.log(">>> Seeded devices successfully");

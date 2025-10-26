@@ -12,6 +12,7 @@ import { isAdmin, isLogin } from 'src/middleware/auth';
 import { fileUploadMiddleware } from 'src/middleware/multer';
 import { getShopPage } from 'controllers/client/user.controller';
 import { getShopDetailPage } from 'controllers/client/user.controller';
+import { getCartPage } from 'controllers/client/user.controller';
 const router = express.Router();
 
 
@@ -19,7 +20,8 @@ const webRoutes = (app: Express) => {
 
     // Shop routes
     router.get('/shop', getShopPage);
-    router.get('/shop_detail', getShopDetailPage);
+    router.get('/shop_detail/:id', getShopDetailPage);
+    router.get('/cart', getCartPage);
     // User routes
  
     router.get('/', getHomePage);

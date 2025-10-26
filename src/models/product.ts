@@ -18,7 +18,7 @@ const deviceSpecSchema = new mongoose.Schema({
 /** Schema thiết bị */
 const deviceSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  brand: String,
+  brand: { type: mongoose.Schema.Types.ObjectId, ref: "Brand" },
   category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
 
   thumbnail: imageSchema,
@@ -42,7 +42,7 @@ const variantSchema = new mongoose.Schema({
 /** Schema phụ kiện */
 const accessorySchema = new mongoose.Schema({
   name: { type: String, required: true },
-  brand: String,
+  brand: { type: mongoose.Schema.Types.ObjectId, ref: "Brand" },
   category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
   thumbnail: imageSchema,
   images: [imageSchema],

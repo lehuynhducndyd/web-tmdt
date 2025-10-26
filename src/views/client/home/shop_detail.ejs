@@ -186,7 +186,7 @@
                                                 class="btn btn-outline-secondary rounded-pill me-2 mb-2 variant-selection"
                                                 data-color="<%= variant.color %>" data-ram="<%= variant.RAM %>"
                                                 data-storage="<%= variant.storage %>" data-price="<%= variant.price %>">
-                                                <%= variant.color %> | <%= variant.RAM %>/<%= variant.storage %> | <%=
+                                                <%= variant.color %> | 8GB/<%= variant.storage %> | <%=
                                                                 new Intl.NumberFormat('vi-VN').format(variant.price) %>
                                                                 đ
                                             </a>
@@ -223,15 +223,13 @@
                         <h5 class="fw-bold mt-4">Thông số kỹ thuật chính:</h5>
                         <ul class="list-unstyled">
                             <% if (product.variants && product.variants.length> 0) { %>
-                                <li><i class="fas fa-check text-success me-2"></i>RAM: **<%= product.variants[0].RAM %>
-                                        **
+                                <li><i class="fas fa-check text-success me-2"></i>RAM: <strong><%= product.variants[0].RAM %></strong>
                                         trở lên</li>
-                                <li><i class="fas fa-check text-success me-2"></i>Bộ nhớ: **<%=
-                                        product.variants[0].storage %>** trở lên</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Bộ nhớ: <strong><%=
+                                        product.variants[0].storage %></strong> trở lên</li>
                                 <% } %>
-                                    <li><i class="fas fa-check text-success me-2"></i>Thương hiệu: **<%= product.brand ?
-                                            product.brand.name : 'N/A' %>**
-                                    </li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Thương hiệu: <strong><%= product.brand ?
+                                            product.brand.name : 'N/A' %></strong></li>
                         </ul>
                     </div>
                 </div>
