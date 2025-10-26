@@ -36,7 +36,7 @@
     <%- include('../layout/navbar'); -%>
 
         <!-- Hero Start -->
-        <div class="container-fluid py-5 mb-5 hero-header">
+        <div class="container-fluid hero-header">
             <div class="container py-5">
                 <div class="row g-5 align-items-center">
                     <div class="col-md-12 col-lg-7">
@@ -162,58 +162,52 @@
                         <div id="tab-1" class="tab-pane fade show p-0 active">
                             <div class="row g-4">
                                 <div class="col">
+
                                     <div class="row g-4">
 
                                         <% products.forEach(function(product){ %>
-                                            <div class="col-md-6 col-lg-4 col-xl-3">
-                                                <div class="rounded position-relative fruite-item">
-                                                    <div class="fruite-img p-3">
-                                                        <% if (product.thumbnail && product.thumbnail.data) { %>
-                                                            <img src="data:<%= product.thumbnail.contentType %>;base64,<%= product.thumbnail.data.toString('base64') %>"
-                                                                class="img-fluid w-100 rounded-top"
-                                                                alt="<%= product.name %>"
-                                                                style="height: 250px; object-fit: cover;">
-                                                            <% } else { %>
-                                                                <img src="/admin/img/default-image.png"
-                                                                    class="img-fluid w-100 rounded-top" alt="No Image"
-                                                                    style="height: 250px; object-fit: cover;">
-                                                                <% } %>
-                                                    </div>
-                                                    <div
-                                                        class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                        <h4>
-                                                            <p style="font-size: 15px;">
-                                                                <a href="/product/<%=product.id%>">
+                                            
+                                            <div class="col-md-6 col-lg-4 col-xl-3 ">
+                                                <a href="/shop-detail/<%= product._id %>" class="product-card-link">
+                                                    <div class="rounded position-relative fruite-item border border-light-subtle rounded-bottom">
+                                                        <div class="product-image-container">
+                                                            <% if (product.thumbnail && product.thumbnail.data) { %>
+                                                                <img src="data:<%= product.thumbnail.contentType %>;base64,<%= product.thumbnail.data.toString('base64') %>"
+                                                                    class="img-fluid"
+                                                                    alt="<%= product.name %>"
+                                                                    style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                                                <% } else { %>
+                                                                    <img src="/admin/img/default-image.png"
+                                                                        class="img-fluid" alt="No Image"
+                                                                        style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                                                    <% } %>
+                                                        </div>
+                                                        <div class="p-4">
+                                                            <h4>
+                                                                <p style="font-size: 15px;">
                                                                     <%=product.name%>
-                                                                </a>
-
-                                                            </p>
-
-                                                        </h4>
-
-                                                        <p style="font-size: 13px;">
-                                                            <%=product.description%>
-                                                        </p>
-
-                                                        <div class="d-flex  flex-lg-wrap">
-                                                            <p class="text-dark fs-5 fw-bold mb-3"
-                                                                style="font-size: 15px; text-align: center; width: 100%;">
-                                                                <% if (product.price> 0) { %>
-                                                                    <%= new Intl.NumberFormat('vi-VN', {
-                                                                        style: 'currency' , currency: 'VND'
-                                                                        }).format(product.price) %>
-                                                                        <% } else { %>
-                                                                            Liên hệ <% } %>
-
-                                                            </p>
-                                                            <a href="#"
-                                                                class="btn border border-secondary rounded-pill px-3 text-primary mx-auto"><i
-                                                                    class="fa fa-shopping-bag me-2 text-primary"></i>
-                                                                Add to
-                                                                cart</a>
+                                                                </p>
+                                                            </h4>
+                                                           
+                                                            <div class="d-flex flex-lg-wrap">
+                                                                <p class="text-dark fs-5 fw-bold mb-3"
+                                                                    style="font-size: 15px; text-align: center; width: 100%;">
+                                                                    <% if (product.price> 0) { %>
+                                                                        <%= new Intl.NumberFormat('vi-VN', {
+                                                                            style: 'currency' , currency: 'VND'
+                                                                            }).format(product.price) %>
+                                                                            <% } else { %>
+                                                                                Liên hệ <% } %>
+                                                                </p>
+                                                                <button
+                                                                    class="btn border border-secondary rounded-pill px-3 text-primary mx-auto"><i
+                                                                        class="fa fa-shopping-bag me-2 text-primary"></i>
+                                                                    Add to
+                                                                    cart</button>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </a>
                                             </div>
                                             <% }); %>
                                     </div>

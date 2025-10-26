@@ -136,19 +136,33 @@
 <body id="shop-detail-page">
     <%- include('../layout/navbar'); -%>
 
-        <div class="container-fluid py-5 mt-5">
+        <div class="container-fluid ">
             <div class="container py-5">
                 <div class="row g-4 mb-5">
                     <div class="col-lg-8 col-xl-4">
-                        <div class="position-relative overflow-hidden rounded">
-                            <% if (product.thumbnail && product.thumbnail.data) { %>
-                                <img src="data:<%= product.thumbnail.contentType %>;base64,<%= product.thumbnail.data.toString('base64') %>"
-                                    class="img-fluid w-100 rounded" alt="<%= product.name %>"
-                                    style="height: 450px; object-fit: contain;">
-                                <% } else { %>
-                                    <img src="/admin/img/default-image.png" class="img-fluid w-100 rounded"
-                                        alt="No Image" style="height: 450px; object-fit: contain;">
-                                    <% } %>
+                        <div class="image-gallery">
+                            <div class="main-image position-relative overflow-hidden rounded">
+                                <% const mainImageUrl = (product.thumbnail && product.thumbnail.data) ? `data:${product.thumbnail.contentType};base64,${product.thumbnail.data.toString('base64')}` : '/admin/img/default-image.png'; %>
+                                <img src="<%= mainImageUrl %>" class="img-fluid w-100" alt="<%= product.name %>" id="main-product-image" style="height: 450px; object-fit: contain; cursor: pointer;">
+                            </div>
+                            <div class="image-gallery-thumbnails">
+                                <!-- Main Thumbnail -->
+                                <div class="thumbnail-item active">
+                                    <img src="<%= mainImageUrl %>" alt="Thumbnail 0" onclick="document.getElementById('main-product-image').src='<%= mainImageUrl %>'; document.querySelector('.thumbnail-item.active').classList.remove('active'); this.parentElement.classList.add('active');">
+                                </div>
+                                <!-- Additional Images -->
+                                <% if (product.images && product.images.length > 0) { %>
+                                    <% product.images.forEach(function(image, index) { %>
+                                        <% const imageUrl = `data:${image.contentType};base64,${image.data.toString('base64')}`; %>
+                                        <div class="thumbnail-item">
+                                            <!-- Hidden link for lightbox gallery -->
+                                            <a href="<%= imageUrl %>" data-lightbox="product-gallery" data-title="<%= product.name %> - Ảnh <%= index + 1 %>" style="display:none;"></a>
+                                            <!-- Visible thumbnail -->
+                                            <img src="<%= imageUrl %>" alt="Thumbnail <%= index + 1 %>" onclick="document.getElementById('main-product-image').src='<%= imageUrl %>'; document.querySelector('.thumbnail-item.active').classList.remove('active'); this.parentElement.classList.add('active');">
+                                        </div>
+                                    <% }); %>
+                                <% } %>
+                            </div>
                         </div>
                     </div>
 
@@ -181,32 +195,33 @@
 
                                     <h5 class="fw-bold mt-4">Chọn Phiên bản:</h5>
                                     <div class="d-flex flex-wrap mb-4">
-                                        <% product.variants.forEach(function(variant){ %>
+                                        <% variants.forEach(function(variant){ %>
                                             <a href="#"
-                                                class="btn btn-outline-secondary rounded-pill me-2 mb-2 variant-selection"
+                                                class="btn btn-outline-secondary rounded-pill me-2 mb-2 variant-selection" data-model-url="<%= variant.model3d %>"
                                                 data-color="<%= variant.color %>" data-ram="<%= variant.RAM %>"
                                                 data-storage="<%= variant.storage %>" data-price="<%= variant.price %>">
-                                                <%= variant.color %> | 8GB/<%= variant.storage %> | <%=
-                                                                new Intl.NumberFormat('vi-VN').format(variant.price) %>
-                                                                đ
+                                                <%= variant.color %> | 8GB/<%= variant.storage %>
                                             </a>
                                             <% }); %>
                                     </div>
-                                    <div class="d-flex align-items-center mb-5">
-                                        <div class="input-group quantity me-3" style="width: 100px;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="input-group quantity me-4" style="width: 120px;">
                                             <div class="input-group-btn">
-                                                <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                <button class="btn-sm btn-minus rounded-circle bg-light border">
                                                     <i class="fa fa-minus"></i>
                                                 </button>
                                             </div>
                                             <input type="text" class="form-control form-control-sm text-center border-0"
                                                 value="1" id="quantityInput">
                                             <div class="input-group-btn">
-                                                <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                <button class="btn-sm btn-plus rounded-circle bg-light border">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
                                             </div>
                                         </div>
+                                        <a href="#" id="view-3d-btn" class="btn btn-warning rounded-pill px-4 py-2 me-3" data-bs-toggle="modal" data-bs-target="#model3dModal" style="display: none;">
+                                            <i class="fas fa-cube me-2"></i> Xem 3D
+                                        </a>
                                         <a href="#"
                                             class="btn border border-secondary rounded-pill px-4 py-2 text-primary">
                                             <i class="fa fa-shopping-bag me-2 text-primary"></i> Thêm vào giỏ
@@ -235,45 +250,44 @@
                 </div>
 
                 <div class="container-fluid fruite py-5">
-                    <div class="container py-5">
+                    <div class="container py-5 fruite">
                         <h1 class="fw-bold mb-4">Sản phẩm liên quan</h1>
                         <div class="row g-4">
                             <% relatedProducts.forEach(function(relatedProduct){ %>
                                 <div class="col-md-6 col-lg-4 col-xl-3">
-                                    <div class="rounded position-relative fruite-item">
-                                        <div class="fruite-img p-3">
-                                            <% if (relatedProduct.thumbnail && relatedProduct.thumbnail.data) { %>
-                                                <img src="data:<%= relatedProduct.thumbnail.contentType %>;base64,<%= relatedProduct.thumbnail.data.toString('base64') %>"
-                                                    class="img-fluid w-100 rounded-top" alt="<%= relatedProduct.name %>"
-                                                    style="height: 200px; object-fit: cover;">
-                                                <% } else { %>
-                                                    <img src="/admin/img/default-image.png"
-                                                        class="img-fluid w-100 rounded-top" alt="No Image"
-                                                        style="height: 200px; object-fit: cover;">
-                                                    <% } %>
-                                        </div>
-                                        <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                            <h5><a href="/shop_detail/<%= relatedProduct._id %>">
-                                                    <%= relatedProduct.name %>
-                                                </a></h5>
-                                            <div class="d-flex flex-lg-wrap justify-content-center">
-                                                <p class="text-dark fs-5 fw-bold mb-3"
-                                                    style="font-size: 15px; width: 100%; text-align: center;">
-                                                    <% if (relatedProduct.price> 0) { %>
-                                                        <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
-                                                            currency: 'VND' }).format(relatedProduct.price) %>
-                                                            <% } else { %>
-                                                                Liên hệ
-                                                                <% } %>
-                                                </p>
-                                                <a href="/shop_detail/<%= relatedProduct._id %>"
-                                                    class="btn border border-secondary rounded-pill px-3 text-primary mx-auto"><i
-                                                        class="fa fa-shopping-bag me-2 text-primary"></i>
-                                                    Xem chi tiết
-                                                </a>
+                                    <a href="/shop-detail/<%= relatedProduct._id %>" class="product-card-link">
+                                        <div class="rounded position-relative fruite-item border border-light-subtle rounded-bottom">
+                                            <div class="product-image-container">
+                                                <% if (relatedProduct.thumbnail && relatedProduct.thumbnail.data) { %>
+                                                    <img src="data:<%= relatedProduct.thumbnail.contentType %>;base64,<%= relatedProduct.thumbnail.data.toString('base64') %>"
+                                                        class="img-fluid" alt="<%= relatedProduct.name %>"
+                                                        style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                                    <% } else { %>
+                                                        <img src="/admin/img/default-image.png" class="img-fluid" alt="No Image"
+                                                            style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                                        <% } %>
+                                            </div>
+                                            <div class="p-4">
+                                                <h4>
+                                                    <p style="font-size: 15px;">
+                                                        <%= relatedProduct.name %>
+                                                    </p>
+                                                </h4>
+                                                <div class="d-flex flex-lg-wrap">
+                                                    <p class="text-dark fs-5 fw-bold mb-3" style="font-size: 15px; text-align: center; width: 100%;">
+                                                        <% if (relatedProduct.price > 0) { %>
+                                                            <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND' }).format(relatedProduct.price) %>
+                                                        <% } else { %>
+                                                            Liên hệ
+                                                        <% } %>
+                                                    </p>
+                                                    <a href="/shop-detail/<%= relatedProduct._id %>" class="btn border border-secondary rounded-pill px-3 text-primary mx-auto">
+                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Xem chi tiết
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                                 <% }); %>
                         </div>
@@ -282,6 +296,22 @@
             </div>
         </div>
         <%- include('../layout/footer'); -%>
+
+        <!-- 3D Model Viewer Modal -->
+        <div class="modal fade modal-3d-viewer" id="model3dModal" tabindex="-1" aria-labelledby="model3dModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="model3dModalLabel">Trình xem mô hình 3D</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <iframe id="model3d-iframe" src="" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
 
             <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
@@ -300,10 +330,27 @@
             <script>
                 // Logic JS đơn giản để làm nổi bật biến thể đã chọn
                 document.addEventListener('DOMContentLoaded', function () {
+                    // Lightbox2 options
+                    lightbox.option({
+                        'resizeDuration': 200,
+                        'wrapAround': true
+                    });
+
+                    // Mở lightbox khi click vào ảnh chính
+                    const mainImage = document.getElementById('main-product-image');
+                    if (mainImage) {
+                        mainImage.addEventListener('click', function() {
+                            const firstGalleryImage = document.querySelector('a[data-lightbox="product-gallery"]');
+                            if (firstGalleryImage) {
+                                firstGalleryImage.click();
+                            }
+                        });
+                    }
+
                     const variantButtons = document.querySelectorAll('.variant-selection');
                     const priceDisplay = document.getElementById('variant-price-display');
+                    const view3dBtn = document.getElementById('view-3d-btn');
 
-                    // Hàm định dạng tiền tệ
                     const formatCurrency = (price) => {
                         if (price <= 0 || isNaN(price)) {
                             return 'Giá: Liên hệ';
@@ -314,22 +361,34 @@
                         }).format(price);
                     };
 
+                    const update3dButton = (button) => {
+                        const modelUrl = button.getAttribute('data-model-url');
+                        if (modelUrl && view3dBtn) {
+                            view3dBtn.setAttribute('data-model-src', modelUrl);
+                            view3dBtn.style.display = 'inline-block';
+                        } else if (view3dBtn) {
+                            view3dBtn.style.display = 'none';
+                        }
+                    }
+
                     // Mặc định chọn biến thể đầu tiên (nếu có)
                     if (variantButtons.length > 0) {
                         let isInitiallySelected = Array.from(variantButtons).some(btn => btn.classList.contains('btn-primary'));
 
                         if (!isInitiallySelected) {
-                            variantButtons[0].classList.remove('btn-outline-secondary');
-                            variantButtons[0].classList.add('btn-primary');
+                            const firstButton = variantButtons[0];
+                            firstButton.classList.remove('btn-outline-secondary');
+                            firstButton.classList.add('btn-primary');
 
-                            const initialPrice = parseFloat(variantButtons[0].getAttribute('data-price'));
+                            const initialPrice = parseFloat(firstButton.getAttribute('data-price'));
                             if (priceDisplay) {
                                 priceDisplay.textContent = formatCurrency(initialPrice);
                             }
+                            update3dButton(firstButton);
                         }
                     }
 
-
+                    // Xử lý sự kiện click cho các nút biến thể
                     variantButtons.forEach(button => {
                         button.addEventListener('click', function (e) {
                             e.preventDefault();
@@ -346,27 +405,24 @@
                             if (priceDisplay) {
                                 priceDisplay.textContent = formatCurrency(selectedPrice);
                             }
+
+                            update3dButton(this);
                         });
                     });
 
-                    // Logic tăng/giảm số lượng (từ template gốc)
-                    const btnPlus = document.querySelector('.btn-plus');
-                    const btnMinus = document.querySelector('.btn-minus');
-                    const quantityInput = document.getElementById('quantityInput');
-
-                    if (btnPlus && quantityInput) {
-                        btnPlus.addEventListener('click', function () {
-                            let value = parseInt(quantityInput.value);
-                            quantityInput.value = value + 1;
+                    // Xử lý modal 3D
+                    const model3dModal = document.getElementById('model3dModal');
+                    if (model3dModal) {
+                        model3dModal.addEventListener('show.bs.modal', function (event) {
+                            const button = event.relatedTarget;
+                            const modelSrc = button.getAttribute('data-model-src');
+                            const iframe = document.getElementById('model3d-iframe');
+                            iframe.setAttribute('src', modelSrc);
                         });
-                    }
 
-                    if (btnMinus && quantityInput) {
-                        btnMinus.addEventListener('click', function () {
-                            let value = parseInt(quantityInput.value);
-                            if (value > 1) {
-                                quantityInput.value = value - 1;
-                            }
+                        model3dModal.addEventListener('hide.bs.modal', function () {
+                            const iframe = document.getElementById('model3d-iframe');
+                            iframe.setAttribute('src', ''); // Dừng load iframe khi đóng modal
                         });
                     }
                 });
