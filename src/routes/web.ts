@@ -3,15 +3,15 @@ import { getBrandPage, getCreateBrandPage, getViewBrandPage, postCreateBrand, po
 import { getCategoryPage, getCreateCategoryPage, getViewCategoryPage, postCreateCategory, postDeleteCategory, postUpdateCategory } from 'controllers/admin/admin.category.controller';
 import { getAdminPage } from 'controllers/admin/admin.dashboard.controller';
 import { getCreateDevicePage, getCreateVariantPage, getDevicePage, getViewDevicePage, getViewVariantPage, postCreateDevice, postCreateVariant, postDeleteDevice, postDeleteVariant, postUpdateDevice, postUpdateVariant } from 'controllers/admin/admin.device.controller';
-import { getUserPage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUserPage, postUpdateUser } from 'controllers/admin/admin.user.controller';
+import { getUserPage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUserPage, postUpdateUser, } from 'controllers/admin/admin.user.controller';
 import { getLoginPage, getRegisterPage, getSuccessRedirectPage, postLogout, postRegisterPage } from 'controllers/client/auth.controller';
-import { getHomePage } from 'controllers/client/user.controller';
+import { getHomePage, getUserInfoPage, postUpdateUserInfo } from 'controllers/client/user.controller';
 import express, { Express } from 'express';
 import passport from 'passport';
 import { isAdmin, isLogin } from 'src/middleware/auth';
 import { fileUploadMiddleware } from 'src/middleware/multer';
 import { getShopPage } from 'controllers/client/user.controller';
-import { getShopDetailPage } from 'controllers/client/user.controller';
+import { getShopDetailPage, postCreateReview } from 'controllers/client/user.controller';
 // import { getCartPage } from 'controllers/client/user.controller';
 const router = express.Router();
 
@@ -21,9 +21,12 @@ const webRoutes = (app: Express) => {
     // Shop routes
     router.get('/shop', getShopPage);
     router.get('/shop-detail/:id', getShopDetailPage);
+    router.post('/shop-detail/:id/reviews', postCreateReview);
     // router.get('/cart', getCartPage);
-    // User routes
- 
+    // User info routes
+    router.get('/user-info', getUserInfoPage);
+    router.post('/user-info', postUpdateUserInfo);
+
     router.get('/', getHomePage);
     router.get("/success-redirect", getSuccessRedirectPage);
     router.get('/login', isLogin, getLoginPage);

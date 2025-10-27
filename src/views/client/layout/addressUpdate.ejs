@@ -1,0 +1,69 @@
+<div class="row">
+    <div class="col-6 mb-3">
+        <label for="provinceSelect" class="form-label">Tỉnh / Thành phố</label>
+        <select id="provinceSelect" class="form-select" name="province">
+            <option value="">-- Chọn tỉnh/thành --</option>
+        </select>
+    </div>
+    <div class="col-6 mb-3">
+        <label for="communeSelect" class="form-label">Xã / Phường</label>
+        <select id="communeSelect" class="form-select" name="commune">
+            <option value="">-- Chọn xã/phường --</option>
+        </select>
+    </div>
+</div>
+
+<script type="module">
+    const data = await fetch("/data/vn_admin_2025.all.json").then(res => res.json());
+
+    const provinceSelect = document.getElementById("provinceSelect");
+    const communeSelect = document.getElementById("communeSelect");
+
+    // Lấy dữ liệu user từ EJS (giờ là name_vi)
+    const userProvince = "<%= user.province %>"; // ví dụ: "Thành phố Hà Nội"
+    const userCommune = "<%= user.commune %>";   // ví dụ: "Phường Trúc Bạch"
+
+    // 1. Load danh sách tỉnh
+    data.provinces.forEach(prov => {
+        const option = document.createElement("option");
+        option.value = prov.name_vi; // dùng name_vi làm value
+        option.textContent = prov.name_vi;
+
+        if (prov.name_vi === userProvince) {
+            option.selected = true;
+        }
+        provinceSelect.appendChild(option);
+    });
+
+    // 2. Hàm load xã theo tỉnh
+    function loadCommunes(provinceName) {
+        communeSelect.innerHTML = '<option value="">-- Chọn xã/phường --</option>';
+
+        const province = data.provinces.find(p => p.name_vi === provinceName);
+        if (!province) return;
+
+        const provinceCode = province.code;
+        if (provinceCode && data.communes_by_province[provinceCode]) {
+            data.communes_by_province[provinceCode].forEach(commune => {
+                const option = document.createElement("option");
+                option.value = commune.name_vi; // dùng name_vi làm value
+                option.textContent = commune.name_vi;
+
+                if (commune.name_vi === userCommune) {
+                    option.selected = true;
+                }
+                communeSelect.appendChild(option);
+            });
+        }
+    }
+
+    // 3. Khi chọn tỉnh thì load xã
+    provinceSelect.addEventListener("change", e => {
+        loadCommunes(e.target.value);
+    });
+
+    // 4. Nếu user đã có sẵn tỉnh -> tự động load xã khi vào trang
+    if (userProvince) {
+        loadCommunes(userProvince);
+    }
+</script>

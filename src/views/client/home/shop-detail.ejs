@@ -16,121 +16,185 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <link href="/client/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="/client/lib/lightbox/css/lightbox.min.css" rel="stylesheet">
 
     <link href="/client/css/bootstrap.min.css" rel="stylesheet">
 
     <link href="/client/css/style.css" rel="stylesheet">
 
-<style>
-    #shop-detail-page {
-        background-color: #f8f9fa;
-    }
+    <style>
+        #shop-detail-page {
+            background-color: #f8f9fa;
+        }
 
-    /* KHẮC PHỤC BỐ CỤC CỘT QUAN TRỌNG START */
-    /* Đảm bảo hàng chính là Flexbox container */
-    #shop-detail-page .row.g-4.mb-5 {
-        display: flex;
-        flex-wrap: wrap;
-        /* Cho phép các cột xuống dòng nếu cần */
-        align-items: flex-start;
-        /* Căn chỉnh các cột lên trên cùng */
-        margin: 0 -15px;
-        /* Sửa lỗi margin âm của row */
-    }
+        /* KHẮC PHỤC BỐ CỤC CỘT QUAN TRỌNG START */
+        /* Đảm bảo hàng chính là Flexbox container */
+        #shop-detail-page .row.g-4.mb-5 {
+            display: flex;
+            flex-wrap: wrap;
+            /* Cho phép các cột xuống dòng nếu cần */
+            align-items: flex-start;
+            /* Căn chỉnh các cột lên trên cùng */
+            margin: 0 -15px;
+            /* Sửa lỗi margin âm của row */
+        }
 
-    /* Cột ảnh (col-xl-4) */
-    #shop-detail-page .col-xl-4 {
-        flex: 0 0 33.333333%;
-        max-width: 33.333333%;
-        padding: 15px;
-    }
+        /* Cột ảnh (col-xl-4) */
+        #shop-detail-page .col-xl-4 {
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;
+            padding: 15px;
+        }
 
-    /* Cột thông tin sản phẩm (col-xl-5) */
-    #shop-detail-page .col-xl-5 {
-        flex: 0 0 41.666667%;
-        max-width: 41.666667%;
-        padding: 15px 20px;
-    }
+        /* Cột thông tin sản phẩm (col-xl-5) */
+        #shop-detail-page .col-xl-5 {
+            flex: 0 0 41.666667%;
+            max-width: 41.666667%;
+            padding: 15px 20px;
+        }
 
-    /* Cột thông số kỹ thuật (col-xl-3) */
-    #shop-detail-page .col-xl-3 {
-        flex: 0 0 25%;
-        max-width: 25%;
-        padding: 25px;
-        background: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        font-size: 0.9rem;
-    }
+        /* Cột thông số kỹ thuật (col-xl-3) */
+        #shop-detail-page .col-xl-3 {
+            flex: 0 0 25%;
+            max-width: 25%;
+            padding: 25px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            font-size: 0.9rem;
+        }
 
-    /* KHẮC PHỤC BỐ CỤC CỘT QUAN TRỌNG END */
+        /* KHẮC PHỤC BỐ CỤC CỘT QUAN TRỌNG END */
 
-    /* Cải thiện hiển thị văn bản tràn */
-    #shop-detail-page h1,
-    #shop-detail-page h5 {
-        white-space: normal;
-        /* Cho phép tiêu đề xuống dòng */
-        word-break: break-word;
-    }
+        /* Cải thiện hiển thị văn bản tràn */
+        #shop-detail-page h1,
+        #shop-detail-page h5 {
+            white-space: normal;
+            /* Cho phép tiêu đề xuống dòng */
+            word-break: break-word;
+        }
 
-    /* Cải thiện các thành phần nhỏ */
+        /* Cải thiện các thành phần nhỏ */
 
-    #shop-detail-page h1 {
-        font-size: 2.5rem;
-        /* Giảm nhẹ kích thước */
-        font-weight: 800 !important;
-        color: #333;
-        margin-top: 0;
-    }
+        #shop-detail-page h1 {
+            font-size: 2.5rem;
+            /* Giảm nhẹ kích thước */
+            font-weight: 800 !important;
+            color: #333;
+            margin-top: 0;
+        }
 
-    #shop-detail-page #variant-price-display {
-        font-size: 1.8rem;
-        color: #d63384 !important;
-        margin-bottom: 20px !important;
-        padding-bottom: 5px;
-        border-bottom: 2px solid #eee;
-    }
+        #shop-detail-page #variant-price-display {
+            font-size: 1.8rem;
+            color: #d63384 !important;
+            margin-bottom: 20px !important;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #eee;
+        }
 
-    #shop-detail-page .variant-selection {
-        font-size: 0.9rem;
-        padding: 10px 18px;
-        transition: all 0.3s ease;
-        font-weight: 600;
-        border-color: #ced4da !important;
-    }
+        #shop-detail-page .variant-selection {
+            font-size: 0.9rem;
+            padding: 10px 18px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            border-color: #ced4da !important;
+        }
 
-    #shop-detail-page .variant-selection:hover,
-    #shop-detail-page .btn-primary,
-    #shop-detail-page .variant-selection.btn-primary {
-        background-color: #007bff !important;
-        border-color: #007bff !important;
-        color: white !important;
-    }
+        #shop-detail-page .variant-selection:hover,
+        #shop-detail-page .btn-primary,
+        #shop-detail-page .variant-selection.btn-primary {
+            background-color: #007bff !important;
+            border-color: #007bff !important;
+            color: white !important;
+        }
 
-    #shop-detail-page .d-flex.mb-4 small {
-        /* Sửa lỗi tràn dòng thương hiệu/danh mục */
-        line-height: 1.4;
-    }
+        #shop-detail-page .d-flex.mb-4 small {
+            /* Sửa lỗi tràn dòng thương hiệu/danh mục */
+            line-height: 1.4;
+        }
 
-    #shop-detail-page .list-unstyled li {
-        padding: 5px 0;
-        border-bottom: 1px dashed #eee;
-    }
+        #shop-detail-page .list-unstyled li {
+            padding: 5px 0;
+            border-bottom: 1px dashed #eee;
+        }
 
-    #shop-detail-page .list-unstyled li i {
-        color: #007bff !important;
-    }
+        #shop-detail-page .list-unstyled li i {
+            color: #007bff !important;
+        }
 
-    #shop-detail-page .rounded {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+        #shop-detail-page .rounded {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-    #shop-detail-page .container-fluid.py-5.mt-5 {
-        margin-top: 5rem !important;
-        padding-top: 4rem !important;
-    }
-</style>
+        #shop-detail-page .container-fluid.py-5.mt-5 {
+            margin-top: 5rem !important;
+            padding-top: 4rem !important;
+        }
+
+        /* === REVIEW SECTION STYLES === */
+        .review-section {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .review-form .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .review-form .star-rating input[type="radio"] {
+            display: none;
+        }
+
+        .review-form .star-rating label {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .review-form .star-rating input[type="radio"]:checked~label,
+        .review-form .star-rating label:hover,
+        .review-form .star-rating label:hover~label {
+            color: #ffc107;
+        }
+
+        .review-list .review-item {
+            border-bottom: 1px solid #eee;
+            padding: 20px 0;
+        }
+
+        .review-list .review-item:last-child {
+            border-bottom: none;
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .review-header .avatar {
+            width: 40px;
+            height: 40px;
+            background-color: var(--bs-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .review-stars {
+            color: #ffc107;
+        }
+    </style>
 </head>
 
 <body id="shop-detail-page">
@@ -138,30 +202,39 @@
 
         <div class="container-fluid ">
             <div class="container py-5">
-                <div class="row g-4 mb-5">
+                <div class="row g-4">
                     <div class="col-lg-8 col-xl-4">
                         <div class="image-gallery">
                             <div class="main-image position-relative overflow-hidden rounded">
-                                <% const mainImageUrl = (product.thumbnail && product.thumbnail.data) ? `data:${product.thumbnail.contentType};base64,${product.thumbnail.data.toString('base64')}` : '/admin/img/default-image.png'; %>
-                                <img src="<%= mainImageUrl %>" class="img-fluid w-100" alt="<%= product.name %>" id="main-product-image" style="height: 450px; object-fit: contain; cursor: pointer;">
+                                <% const mainImageUrl=(product.thumbnail && product.thumbnail.data) ?
+                                    `data:${product.thumbnail.contentType};base64,${product.thumbnail.data.toString('base64')}`
+                                    : '/admin/img/default-image.png' ; %>
+                                    <img src="<%= mainImageUrl %>" class="img-fluid w-100" alt="<%= product.name %>"
+                                        id="main-product-image"
+                                        style="height: 250px; object-fit: contain; cursor: pointer;"
+                                        data-bs-toggle="modal" data-bs-target="#imageModal"
+                                        data-image-src="<%= mainImageUrl %>">
                             </div>
                             <div class="image-gallery-thumbnails">
                                 <!-- Main Thumbnail -->
                                 <div class="thumbnail-item active">
-                                    <img src="<%= mainImageUrl %>" alt="Thumbnail 0" onclick="document.getElementById('main-product-image').src='<%= mainImageUrl %>'; document.querySelector('.thumbnail-item.active').classList.remove('active'); this.parentElement.classList.add('active');">
+                                    <img src="<%= mainImageUrl %>" alt="Thumbnail 0" data-bs-toggle="modal"
+                                        data-bs-target="#imageModal" data-image-src="<%= mainImageUrl %>">
                                 </div>
                                 <!-- Additional Images -->
-                                <% if (product.images && product.images.length > 0) { %>
+                                <% if (product.images && product.images.length> 0) { %>
                                     <% product.images.forEach(function(image, index) { %>
-                                        <% const imageUrl = `data:${image.contentType};base64,${image.data.toString('base64')}`; %>
-                                        <div class="thumbnail-item">
-                                            <!-- Hidden link for lightbox gallery -->
-                                            <a href="<%= imageUrl %>" data-lightbox="product-gallery" data-title="<%= product.name %> - Ảnh <%= index + 1 %>" style="display:none;"></a>
-                                            <!-- Visible thumbnail -->
-                                            <img src="<%= imageUrl %>" alt="Thumbnail <%= index + 1 %>" onclick="document.getElementById('main-product-image').src='<%= imageUrl %>'; document.querySelector('.thumbnail-item.active').classList.remove('active'); this.parentElement.classList.add('active');">
-                                        </div>
-                                    <% }); %>
-                                <% } %>
+                                        <% const
+                                            imageUrl=`data:${image.contentType};base64,${image.data.toString('base64')}`;
+                                            %>
+                                            <div class="thumbnail-item">
+                                                <!-- Visible thumbnail -->
+                                                <img src="<%= imageUrl %>" alt="Thumbnail <%= index + 1 %>"
+                                                    data-bs-toggle="modal" data-bs-target="#imageModal"
+                                                    data-image-src="<%= imageUrl %>">
+                                            </div>
+                                            <% }); %>
+                                                <% } %>
                             </div>
                         </div>
                     </div>
@@ -188,19 +261,17 @@
                                 <h4 class="fw-bold text-primary mb-4" id="variant-price-display">Giá: Liên hệ</h4>
                                 <% } %>
 
-                                <p class="mb-4">
-                                    <strong>Mô tả ngắn:</strong>
-                                    <%= product.description %>
-                                </p>
+
 
                                     <h5 class="fw-bold mt-4">Chọn Phiên bản:</h5>
                                     <div class="d-flex flex-wrap mb-4">
                                         <% variants.forEach(function(variant){ %>
                                             <a href="#"
-                                                class="btn btn-outline-secondary rounded-pill me-2 mb-2 variant-selection" data-model-url="<%= variant.model3d %>"
-                                                data-color="<%= variant.color %>" data-ram="<%= variant.RAM %>"
+                                                class="btn btn-outline-secondary rounded-pill me-2 mb-2 variant-selection"
+                                                data-model-url="<%= variant.model3d %>"
+                                                data-color="<%= variant.color %>" data-ram="<%= variant.ram %>"
                                                 data-storage="<%= variant.storage %>" data-price="<%= variant.price %>">
-                                                <%= variant.color %> | 8GB/<%= variant.storage %>
+                                                <%= variant.color %> | <%= variant.ram %>/<%= variant.storage %>
                                             </a>
                                             <% }); %>
                                     </div>
@@ -219,7 +290,9 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <a href="#" id="view-3d-btn" class="btn btn-warning rounded-pill px-4 py-2 me-3" data-bs-toggle="modal" data-bs-target="#model3dModal" style="display: none;">
+                                        <a href="#" id="view-3d-btn" class="btn btn-warning rounded-pill px-4 py-2 me-3"
+                                            data-bs-toggle="modal" data-bs-target="#model3dModal"
+                                            style="display: none;">
                                             <i class="fas fa-cube me-2"></i> Xem 3D
                                         </a>
                                         <a href="#"
@@ -230,40 +303,60 @@
                     </div>
 
                     <div class="col-lg-12 col-xl-3">
-                        <h5 class="fw-bold mb-4">Chi tiết sản phẩm</h5>
+                        <h5 class="fw-bold mb-4">Mô tả sản phẩm</h5>
                         <p>
-                            <%= product.detail %>
+                            <%= product.description %>
                         </p>
 
                         <h5 class="fw-bold mt-4">Thông số kỹ thuật chính:</h5>
                         <ul class="list-unstyled">
-                            <% if (product.variants && product.variants.length> 0) { %>
-                                <li><i class="fas fa-check text-success me-2"></i>RAM: <strong><%= product.variants[0].RAM %></strong>
-                                        trở lên</li>
-                                <li><i class="fas fa-check text-success me-2"></i>Bộ nhớ: <strong><%=
-                                        product.variants[0].storage %></strong> trở lên</li>
+                            <% if (variants && variants.length> 0) { %>
+                                <li><i class="fas fa-check text-success me-2"></i>RAM: <strong id="spec-ram">
+                                        <%= variants[0].ram %>
+                                    </strong>
+                                </li>
+                                <li><i class="fas fa-check text-success me-2"></i>Bộ nhớ: <strong id="spec-storage">
+                                        <%= variants[0].storage %>
+                                    </strong></li>
                                 <% } %>
-                                    <li><i class="fas fa-check text-success me-2"></i>Thương hiệu: <strong><%= product.brand ?
-                                            product.brand.name : 'N/A' %></strong></li>
+
+                                    <li><i class="fas fa-check text-success me-2"></i>Màn hình: <strong>
+                                            <%= product.specs.screen || 'N/A' %>
+                                        </strong></li>
+                                    <li><i class="fas fa-check text-success me-2"></i>CPU: <strong>
+                                            <%= product.specs.cpu || 'N/A' %>
+                                        </strong></li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Pin: <strong>
+                                            <%= product.specs.battery || 'N/A' %>
+                                        </strong></li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Camera: <strong>
+                                            <%= product.specs.camera || 'N/A' %>
+                                        </strong></li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Hệ điều hành: <strong>
+                                            <%= product.specs.os || 'N/A' %>
+                                        </strong></li>
+
                         </ul>
                     </div>
                 </div>
 
-                <div class="container-fluid fruite py-5">
+                <div class="container-fluid fruite">
                     <div class="container py-5 fruite">
                         <h1 class="fw-bold mb-4">Sản phẩm liên quan</h1>
                         <div class="row g-4">
                             <% relatedProducts.forEach(function(relatedProduct){ %>
                                 <div class="col-md-6 col-lg-4 col-xl-3">
                                     <a href="/shop-detail/<%= relatedProduct._id %>" class="product-card-link">
-                                        <div class="rounded position-relative fruite-item border border-light-subtle rounded-bottom">
+                                        <div
+                                            class="rounded position-relative fruite-item border border-light-subtle rounded-bottom">
                                             <div class="product-image-container">
                                                 <% if (relatedProduct.thumbnail && relatedProduct.thumbnail.data) { %>
                                                     <img src="data:<%= relatedProduct.thumbnail.contentType %>;base64,<%= relatedProduct.thumbnail.data.toString('base64') %>"
                                                         class="img-fluid" alt="<%= relatedProduct.name %>"
                                                         style="max-height: 100%; max-width: 100%; object-fit: contain;">
                                                     <% } else { %>
-                                                        <img src="/admin/img/default-image.png" class="img-fluid" alt="No Image"
+                                                        <img src="/admin/img/default-image.png" class="img-fluid"
+                                                            alt="No Image"
                                                             style="max-height: 100%; max-width: 100%; object-fit: contain;">
                                                         <% } %>
                                             </div>
@@ -274,15 +367,19 @@
                                                     </p>
                                                 </h4>
                                                 <div class="d-flex flex-lg-wrap">
-                                                    <p class="text-dark fs-5 fw-bold mb-3" style="font-size: 15px; text-align: center; width: 100%;">
-                                                        <% if (relatedProduct.price > 0) { %>
-                                                            <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND' }).format(relatedProduct.price) %>
-                                                        <% } else { %>
-                                                            Liên hệ
-                                                        <% } %>
+                                                    <p class="text-dark fs-5 fw-bold mb-3"
+                                                        style="font-size: 15px; text-align: center; width: 100%;">
+                                                        <% if (relatedProduct.price> 0) { %>
+                                                            <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
+                                                                currency: 'VND' }).format(relatedProduct.price) %>
+                                                                <% } else { %>
+                                                                    Liên hệ
+                                                                    <% } %>
                                                     </p>
-                                                    <a href="/shop-detail/<%= relatedProduct._id %>" class="btn border border-secondary rounded-pill px-3 text-primary mx-auto">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Xem chi tiết
+                                                    <a href="/shop-detail/<%= relatedProduct._id %>"
+                                                        class="btn border border-secondary rounded-pill px-3 text-primary mx-auto">
+                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Xem chi
+                                                        tiết
                                                     </a>
                                                 </div>
                                             </div>
@@ -293,24 +390,130 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- ========================================================== -->
+                <!-- START: REVIEW SECTION - PHẦN ĐÁNH GIÁ -->
+                <!-- ========================================================== -->
+                <div class="row g-4 mt-4">
+                    <div class="col-lg-12">
+                        <div class="review-section">
+                            <h2 class="fw-bold mb-4">Đánh giá sản phẩm</h2>
+
+                            <!-- Form để lại đánh giá (chỉ hiện khi đã đăng nhập) -->
+                            <% if (user) { %>
+                                <div class="review-form mb-5">
+                                    <h4 class="mb-3">Để lại đánh giá của bạn</h4>
+                                    <form action="/shop-detail/<%= product._id %>/reviews" method="POST">
+                                        <div class="mb-3">
+                                            <label class="form-label">Xếp hạng:</label>
+                                            <div class="star-rating">
+                                                <input type="radio" id="5-stars" name="rating" value="5"
+                                                    required /><label for="5-stars" class="fas fa-star"></label>
+                                                <input type="radio" id="4-stars" name="rating" value="4" /><label
+                                                    for="4-stars" class="fas fa-star"></label>
+                                                <input type="radio" id="3-stars" name="rating" value="3" /><label
+                                                    for="3-stars" class="fas fa-star"></label>
+                                                <input type="radio" id="2-stars" name="rating" value="2" /><label
+                                                    for="2-stars" class="fas fa-star"></label>
+                                                <input type="radio" id="1-star" name="rating" value="1" /><label
+                                                    for="1-star" class="fas fa-star"></label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="comment" class="form-label">Bình luận của bạn:</label>
+                                            <textarea class="form-control" id="comment" name="comment" rows="4"
+                                                required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary rounded-pill">Gửi đánh giá</button>
+                                    </form>
+                                </div>
+                                <% } else { %>
+                                    <div class="alert alert-info" role="alert">
+                                        Vui lòng <a href="/login" class="alert-link">đăng nhập</a> để để lại đánh giá.
+                                    </div>
+                                    <% } %>
+
+                                        <!-- Danh sách các đánh giá đã có -->
+                                        <div class="review-list">
+                                            <h4 class="mb-3">Các đánh giá trước đây</h4>
+                                            <% if (reviews && reviews.length> 0) { %>
+                                                <% reviews.forEach(function(review) { %>
+                                                    <div class="review-item">
+                                                        <div class="review-header">
+                                                            <div class="avatar">
+                                                                <%= review.user.name.charAt(0).toUpperCase() %>
+                                                            </div>
+                                                            <div>
+                                                                <h6 class="mb-0 fw-bold">
+                                                                    <%= review.user.name %>
+                                                                </h6>
+
+                                                                <small class="text-muted">
+                                                                    <%= new
+                                                                        Date(review.createdAt).toLocaleDateString('vi-VN')
+                                                                        %>
+                                                                </small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="review-body">
+                                                            <div class="review-stars mb-2">
+                                                                <% for(let i=0; i < 5; i++) { %>
+                                                                    <i
+                                                                        class="fas fa-star<%= i < review.rating ? '' : '-o' %>"></i>
+                                                                    <% } %>
+                                                            </div>
+                                                            <p>
+                                                                <%= review.comment %>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <% }); %>
+                                                        <% } else { %>
+                                                            <p>Chưa có đánh giá nào cho sản phẩm này. Hãy là người đầu
+                                                                tiên đánh giá!</p>
+                                                            <% } %>
+                                        </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END: REVIEW SECTION -->
             </div>
         </div>
         <%- include('../layout/footer'); -%>
 
-        <!-- 3D Model Viewer Modal -->
-        <div class="modal fade modal-3d-viewer" id="model3dModal" tabindex="-1" aria-labelledby="model3dModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="model3dModalLabel">Trình xem mô hình 3D</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <iframe id="model3d-iframe" src="" allowfullscreen></iframe>
+            <!-- 3D Model Viewer Modal -->
+            <div class="modal fade modal-3d-viewer" id="model3dModal" tabindex="-1" aria-labelledby="model3dModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="model3dModalLabel">Vuốt hoặc kéo thả để xoay mô hình 3D</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <iframe id="model3d-iframe" src="" allowfullscreen></iframe>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <!-- Image Viewer Modal -->
+            <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-centered">
+                    <div class="modal-content bg-transparent border-0">
+                        <div class="modal-header border-0">
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-0 text-center">
+                            <img id="modal-image-content" src="" class="img-fluid" alt="Product Image"
+                                style="max-height: 80vh;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
 
 
 
@@ -322,7 +525,6 @@
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
             <script src="/client/lib/easing/easing.min.js"></script>
             <script src="/client/lib/waypoints/waypoints.min.js"></script>
-            <script src="/client/lib/lightbox/js/lightbox.min.js"></script>
             <script src="/client/lib/owlcarousel/owl.carousel.min.js"></script>
 
             <script src="/client/js/main.js"></script>
@@ -330,26 +532,22 @@
             <script>
                 // Logic JS đơn giản để làm nổi bật biến thể đã chọn
                 document.addEventListener('DOMContentLoaded', function () {
-                    // Lightbox2 options
-                    lightbox.option({
-                        'resizeDuration': 200,
-                        'wrapAround': true
-                    });
-
-                    // Mở lightbox khi click vào ảnh chính
-                    const mainImage = document.getElementById('main-product-image');
-                    if (mainImage) {
-                        mainImage.addEventListener('click', function() {
-                            const firstGalleryImage = document.querySelector('a[data-lightbox="product-gallery"]');
-                            if (firstGalleryImage) {
-                                firstGalleryImage.click();
-                            }
+                    // Xử lý modal xem ảnh
+                    const imageModal = document.getElementById('imageModal');
+                    if (imageModal) {
+                        imageModal.addEventListener('show.bs.modal', function (event) {
+                            const triggerElement = event.relatedTarget;
+                            const imageSrc = triggerElement.getAttribute('data-image-src');
+                            const modalImage = document.getElementById('modal-image-content');
+                            modalImage.src = imageSrc;
                         });
                     }
 
                     const variantButtons = document.querySelectorAll('.variant-selection');
                     const priceDisplay = document.getElementById('variant-price-display');
                     const view3dBtn = document.getElementById('view-3d-btn');
+                    const specRam = document.getElementById('spec-ram');
+                    const specStorage = document.getElementById('spec-storage');
 
                     const formatCurrency = (price) => {
                         if (price <= 0 || isNaN(price)) {
@@ -371,6 +569,18 @@
                         }
                     }
 
+                    const updateSpecs = (button) => {
+                        const ram = button.getAttribute('data-ram');
+                        const storage = button.getAttribute('data-storage');
+
+                        if (specRam) {
+                            specRam.textContent = ram;
+                        }
+                        if (specStorage) {
+                            specStorage.textContent = storage;
+                        }
+                    }
+
                     // Mặc định chọn biến thể đầu tiên (nếu có)
                     if (variantButtons.length > 0) {
                         let isInitiallySelected = Array.from(variantButtons).some(btn => btn.classList.contains('btn-primary'));
@@ -385,6 +595,7 @@
                                 priceDisplay.textContent = formatCurrency(initialPrice);
                             }
                             update3dButton(firstButton);
+                            updateSpecs(firstButton);
                         }
                     }
 
@@ -407,6 +618,7 @@
                             }
 
                             update3dButton(this);
+                            updateSpecs(this);
                         });
                     });
 
@@ -427,6 +639,7 @@
                     }
                 });
             </script>
+
 </body>
 
 </html>

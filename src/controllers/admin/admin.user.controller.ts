@@ -42,18 +42,18 @@ const getViewUserPage = async (req: Request, res: Response) => {
 
 const postUpdateUser = async (req: Request, res: Response) => {
     try {
-        let newPassword;
+
         const { id, name, email, password, role, phone, province, commune, street, isActive } = req.body;
-        if (password.trim() === '') {
-            const user = await getUserById(id);
-            newPassword = user.password
-        } else {
-            newPassword = password;
+        let newPassword = password;
+        const user = await getUserById(id);
+        if (password && password.trim() !== '') {
+            newPassword = user.password;
         }
         await updateUser(id, name, email, newPassword, role, phone, province, commune, street, isActive === 'on');
         res.redirect('/admin/user');
     } catch (error) {
         res.status(500).send("Error updating user");
+        console.log(error);
     }
 }
 export { getUserPage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUserPage, postUpdateUser };
