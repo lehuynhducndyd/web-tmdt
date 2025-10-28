@@ -63,15 +63,15 @@
                         </div>
 
                     </div>
-                    <div class="mb-3">
-                        <%- include('../layout/addressUpdate'); -%>
+                    <%- include('../layout/addressUpdate'); -%>
+                        <div class="mb-3">
                             <label class="form-label">Địa chỉ:</label>
-                            <textarea class="form-control" rows="3" name="address"><%= userInfo.street %> </textarea>
-                    </div>
+                            <textarea class="form-control" rows="3" name="street"><%= userInfo.street %> </textarea>
+                        </div>
 
-                    <div class="mb-3">
-                        <button type="submit" class="btn btn-primary">Cập nhật</button>
-                    </div>
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                        </div>
                 </form>
             </div>
 

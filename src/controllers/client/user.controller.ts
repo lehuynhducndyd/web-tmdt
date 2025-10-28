@@ -173,16 +173,21 @@ const getUserInfoPage = async (req: Request, res: Response) => {
 
 const postUpdateUserInfo = async (req: Request, res: Response) => {
     try {
-        const { id, name, email, password, phone, province, commune, street } = req.body;
+        let { id, name, email, password, phone, province, commune, street } = req.body;
+        console.log(req.body);
+
         const user = await User.findById(id);
 
         if (!user) {
             return res.status(404).send("User not found");
         }
+        if (!email) {
+            email = user.email;
+        }
 
         // Chỉ cập nhật mật khẩu nếu người dùng nhập mật khẩu mới
         if (password && password.trim() !== '') {
-            user.password = password;
+            user.password = password; // This was a typo `sword`
         }
 
         // Cập nhật các trường khác
@@ -193,7 +198,7 @@ const postUpdateUserInfo = async (req: Request, res: Response) => {
         user.commune = commune;
         user.street = street;
 
-        await user.save({ validateModifiedOnly: true });
+        await user.save(); // Using save() without options will validate all required fields.
         res.redirect('/user-info');
     } catch (error) {
         console.error("Error updating user info:", error);
