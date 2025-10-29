@@ -3,9 +3,10 @@ import { Device, Variant, AccessoriesVariant, Accessory } from 'models/product';
 import { Category } from 'models/category';
 import User from 'models/user';
 import Cart from 'models/cart';
-import Review from 'models/review';
 import { getDeviceById } from 'services/admin/product.service';
 import { getUserById } from 'services/admin/user.service';
+import { ReviewDevice } from 'models/review';
+
 
 const getHomePage = async (req: Request, res: Response) => {
     try {
@@ -37,8 +38,34 @@ const getHomePage = async (req: Request, res: Response) => {
             (device as any).price = variants.length > 0 ? variants[0].price : 0;
         });
 
+        // Lấy phụ kiện mới nhất
+        let latestAccessories = await Accessory.find()
+            .sort({ createdAt: -1 })
+            .limit(10)
+            .populate('brand category')
+            .lean();
+
+        // Lấy variants và giá thấp nhất cho phụ kiện
+        const accessoryIds = latestAccessories.map(a => a._id);
+        const allAccessoryVariants = await AccessoriesVariant.find({ accessoryId: { $in: accessoryIds } }).sort({ price: 1 }).lean();
+
+        const variantsByAccessoryId = allAccessoryVariants.reduce((acc, variant) => {
+            const accessoryId = variant.accessoryId.toString();
+            if (!acc[accessoryId]) {
+                acc[accessoryId] = [];
+            }
+            acc[accessoryId].push(variant);
+            return acc;
+        }, {} as Record<string, any[]>);
+
+        latestAccessories.forEach(accessory => {
+            const variants = variantsByAccessoryId[accessory._id.toString()] || [];
+            (accessory as any).price = variants.length > 0 ? variants[0].price : 0;
+        });
+
         return res.render("client/home/show.ejs", {
-            products: latestDevices
+            products: latestDevices,
+            accessories: latestAccessories
         });
 
     } catch (error) {
@@ -97,7 +124,7 @@ const getShopDetailPage = async (req: Request, res: Response) => {
 
         const variants = await Variant.find({ deviceId: id }).sort({ price: 1 }).lean();
 
-        const reviews = await Review.find({ product: id })
+        const reviews = await ReviewDevice.find({ product: id })
             .populate('user', 'name') // Chỉ lấy trường 'name' của user
             .sort({ createdAt: -1 })
             .lean();
@@ -145,7 +172,7 @@ const postCreateReview = async (req: Request, res: Response) => {
             return res.status(401).send("Bạn cần đăng nhập để bình luận.");
         }
 
-        const newReview = new Review({
+        const newReview = new ReviewDevice({
             product: productId,
             user: user._id,
             rating: Number(rating),

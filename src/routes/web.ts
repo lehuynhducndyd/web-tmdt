@@ -12,6 +12,7 @@ import { isAdmin, isLogin } from 'src/middleware/auth';
 import { fileUploadMiddleware } from 'src/middleware/multer';
 import { getShopPage } from 'controllers/client/user.controller';
 import { getShopDetailPage, postCreateReview } from 'controllers/client/user.controller';
+import { getProductReviewPage, postDeleteReview } from 'controllers/admin/admin.review.controller';
 // import { getCartPage } from 'controllers/client/user.controller';
 const router = express.Router();
 
@@ -109,27 +110,11 @@ const webRoutes = (app: Express) => {
     router.post('/admin/update-brand', fileUploadMiddleware.single("logo"), postUpdateBrand);
     router.post('/admin/delete-brand/:id', postDeleteBrand);
 
+    router.get("/admin/review/:id", getProductReviewPage);
+    router.post("/admin/delete-review/:pid/:id", postDeleteReview);
 
 
 
-
-    // other
-    // router.get("/create-user", getCreateUserPage);
-    // router.post("/create-user", fileUploadMiddleware("avatar"), postCreateUser);
-    // router.get("/update-user/:id", getUpdateUserPage);
-    // router.post("/update-user", fileUploadMiddleware("avatar"), postUpdateUser);
-    // router.post("/delete-user/:id", deleteUser);
-    // router.get("/user/:id/avatar", async (req, res) => {
-    //     try {
-    //         const kitty = await User.findById(req.params.id);
-    //         if (!kitty || !kitty.avatar) return res.status(404).send("No avatar found");
-
-    //         res.set("Content-Type", kitty.avatarType);
-    //         res.send(kitty.avatar);
-    //     } catch (err) {
-    //         res.status(500).send("Error fetching avatar");
-    //     }
-    // });
 
     app.use('/', isAdmin, router);
 }

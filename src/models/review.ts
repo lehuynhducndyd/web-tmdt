@@ -1,14 +1,14 @@
 import mongoose, { Schema } from 'mongoose';
 
-const reviewSchema = new Schema({
+const reviewDeviceSchema = new Schema({
   product: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Device', // Tham chiếu đến model Device
+    ref: 'Device',
     required: true
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user', // Tham chiếu đến model User
+    ref: 'user',
     required: true
   },
   rating: {
@@ -24,6 +24,33 @@ const reviewSchema = new Schema({
   }
 }, { timestamps: true });
 
-const Review = mongoose.model('Review', reviewSchema);
+const reviewAccSchema = new Schema({
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Accessory',
+    required: true
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+    required: true
+  },
+  rating: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 5
+  },
+  comment: {
+    type: String,
+    required: true,
+    trim: true
+  }
+}, { timestamps: true });
 
-export default Review;
+
+
+const ReviewDevice = mongoose.model('ReviewDevice', reviewDeviceSchema);
+const ReviewAcc = mongoose.model('ReviewAcc', reviewAccSchema);
+
+export { ReviewDevice, ReviewAcc };

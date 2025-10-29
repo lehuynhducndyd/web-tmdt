@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" />
+    <title>Quản lý đánh giá</title>
+    <link href="/admin/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+    <%- include('../layout/header'); -%>
+        <div id="layoutSidenav">
+            <%- include('../layout/sidenav'); -%>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+                            <h1 class="mt-4">Quản lý đánh giá</h1>
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
+                                <% if (product && product.specs) { %>
+                                    <li class="breadcrumb-item"><a href="/admin/device">Thiết bị</a></li>
+                                    <li class="breadcrumb-item"><a href="/admin/view-device/<%= product._id %>">
+                                            <%= product.name %>
+                                        </a></li>
+                                    <% } else if (product) { %>
+                                        <li class="breadcrumb-item"><a href="/admin/accessory">Phụ kiện</a></li>
+                                        <li class="breadcrumb-item"><a href="/admin/view-accessory/<%= product._id %>">
+                                                <%= product.name %>
+                                            </a></li>
+                                        <% } %>
+                                            <li class="breadcrumb-item active">Đánh giá</li>
+                            </ol>
+                            <hr>
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Tên người dùng</th>
+                                        <th>Star-rating</th>
+                                        <th>Ngày đánh giá</th>
+                                        <th>Nội dung đánh giá</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (reviews && reviews.length> 0) { %>
+                                        <% reviews.forEach(function(review){ %>
+                                            <tr>
+                                                <td>
+                                                    <%= review.user.name %>
+                                                        <br>
+                                                        <%= review.user.email %>
+
+                                                </td>
+                                                <td>
+                                                    <%= review.rating %>
+                                                </td>
+                                                <td>
+                                                    <%= new Date(review.createdAt).toLocaleDateString('vi-VN') %>
+                                                </td>
+                                                <td>
+                                                    <%= review.comment %>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex gap-2">
+                                                        <form
+                                                            action="/admin/delete-review/<%= product.id %>/<%= review._id %>"
+                                                            method="post">
+                                                            <button class="btn btn-danger btn-sm" type="submit"
+                                                                onclick="return confirm('Bạn có chắc chắn muốn xóa đánh giá của  <%= review.user.name %> không?')">
+                                                                Xóa
+                                                            </button>
+                                                        </form>
+
+                                                        <a href="/shop-detail/<%= review.product %>"
+                                                            class="btn btn-primary btn-sm" target="_blank">Đi đến</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="7" class="text-center text-muted">Không có đánh
+                                                            giá nào
+                                                        </td>
+                                                    </tr>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </main>
+                    <%- include('../layout/footer'); -%>
+                </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
+        <script src="/admin/js/scripts.js"></script>
+
+</body>
+
+</html>

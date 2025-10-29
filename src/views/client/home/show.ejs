@@ -78,49 +78,49 @@
 
 
         <!-- Featurs Section Start -->
-         <section class="khung-uu-dai-dich-vu main-container">
-                <div class="row">
+        <section class="khung-uu-dai-dich-vu main-container">
+            <div class="row">
 
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="uu-dai-item">
-                            <div class="uu-dai-item-icon"><i class="fas fa-shipping-fast"></i></div>
-                            <h4>Free Shipping</h4>
-                            <p>Miễn phí với hóa đơn từ 10.000.000 VNĐ</p>
-                        </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="uu-dai-item">
+                        <div class="uu-dai-item-icon"><i class="fas fa-shipping-fast"></i></div>
+                        <h4>Free Shipping</h4>
+                        <p>Miễn phí với hóa đơn từ 10.000.000 VNĐ</p>
                     </div>
-
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="uu-dai-item">
-                            <div class="uu-dai-item-icon"><i class="fas fa-shield-alt"></i></div>
-                            <h4>Bảo mật thanh toán</h4>
-                            <p>100% bảo mật thanh toán tuyệt đối</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="uu-dai-item">
-                            <div class="uu-dai-item-icon"><i class="fas fa-sync-alt"></i></div>
-                            <h4>Miễn phí đổi trả 30 ngày</h4>
-                            <p>30 ngày hoàn tiền nếu sản phẩm lỗi</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="uu-dai-item">
-                            <div class="uu-dai-item-icon"><i class="fas fa-headset"></i></div>
-                            <h4>Hỗ trợ 24/7</h4>
-                            <p>Hỗ trợ mọi lúc mọi nơi từ đội ngũ chuyên gia</p>
-                        </div>
-                    </div>
-
                 </div>
-            </section>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="uu-dai-item">
+                        <div class="uu-dai-item-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h4>Bảo mật thanh toán</h4>
+                        <p>100% bảo mật thanh toán tuyệt đối</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="uu-dai-item">
+                        <div class="uu-dai-item-icon"><i class="fas fa-sync-alt"></i></div>
+                        <h4>Miễn phí đổi trả 30 ngày</h4>
+                        <p>30 ngày hoàn tiền nếu sản phẩm lỗi</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="uu-dai-item">
+                        <div class="uu-dai-item-icon"><i class="fas fa-headset"></i></div>
+                        <h4>Hỗ trợ 24/7</h4>
+                        <p>Hỗ trợ mọi lúc mọi nơi từ đội ngũ chuyên gia</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
 
 
         <!-- Featurs Section End -->
 
 
-        <!-- Fruits Shop Start-->
+        <!-- Phone Shop Start-->
         <div class="container-fluid fruite py-5">
             <div class="container py-5">
                 <div class="tab-class text-center">
@@ -131,26 +131,20 @@
                         <div class="col-lg-6 text-end">
                             <ul class="nav nav-pills d-inline-flex text-center mb-5">
                                 <li class="nav-item">
-                                    <a class="d-flex m-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill"
-                                        href="#tab-1">
-                                        <span class="text-dark" style="width: 130px;">Tất cả</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
                                     <a class="d-flex py-2 m-2 bg-light rounded-pill" data-bs-toggle="pill"
-                                        href="#tab-2">
+                                        href="#tab-1">
                                         <span class="text-dark" style="width: 130px;">Điện thoại</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill"
-                                        href="#tab-3">
+                                        href="#tab-2">
                                         <span class="text-dark" style="width: 130px;">Phụ kiện</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill"
-                                        href="#tab-4">
+                                        href="#tab-3">
                                         <span class="text-dark" style="width: 130px;">Khác</span>
                                     </a>
                                 </li>
@@ -166,15 +160,15 @@
                                     <div class="row g-4">
 
                                         <% products.forEach(function(product){ %>
-                                            
+
                                             <div class="col-md-6 col-lg-4 col-xl-3 ">
                                                 <a href="/shop-detail/<%= product._id %>" class="product-card-link">
-                                                    <div class="rounded position-relative fruite-item border border-light-subtle rounded-bottom">
+                                                    <div
+                                                        class="rounded position-relative fruite-item border border-light-subtle rounded-bottom">
                                                         <div class="product-image-container">
                                                             <% if (product.thumbnail && product.thumbnail.data) { %>
                                                                 <img src="data:<%= product.thumbnail.contentType %>;base64,<%= product.thumbnail.data.toString('base64') %>"
-                                                                    class="img-fluid"
-                                                                    alt="<%= product.name %>"
+                                                                    class="img-fluid" alt="<%= product.name %>"
                                                                     style="max-height: 100%; max-width: 100%; object-fit: contain;">
                                                                 <% } else { %>
                                                                     <img src="/admin/img/default-image.png"
@@ -188,7 +182,7 @@
                                                                     <%=product.name%>
                                                                 </p>
                                                             </h4>
-                                                           
+
                                                             <div class="d-flex flex-lg-wrap">
                                                                 <p class="text-dark fs-5 fw-bold mb-3"
                                                                     style="font-size: 15px; text-align: center; width: 100%;">
@@ -210,6 +204,77 @@
                                                 </a>
                                             </div>
                                             <% }); %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab-2" class="tab-pane fade show p-0">
+                            <div class="row g-4">
+                                <div class="col">
+                                    <div class="row g-4">
+                                        <% if (accessories && accessories.length> 0) { %>
+                                            <% accessories.forEach(function(accessory){ %>
+                                                <div class="col-md-6 col-lg-4 col-xl-3 ">
+                                                    <a href="/shop-detail/<%= accessory._id %>"
+                                                        class="product-card-link">
+                                                        <div
+                                                            class="rounded position-relative fruite-item border border-light-subtle rounded-bottom">
+                                                            <div class="product-image-container">
+                                                                <% if (accessory.thumbnail && accessory.thumbnail.data)
+                                                                    { %>
+                                                                    <img src="data:<%= accessory.thumbnail.contentType %>;base64,<%= accessory.thumbnail.data.toString('base64') %>"
+                                                                        class="img-fluid" alt="<%= accessory.name %>"
+                                                                        style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                                                    <% } else { %>
+                                                                        <img src="/admin/img/default-image.png"
+                                                                            class="img-fluid" alt="No Image"
+                                                                            style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                                                        <% } %>
+                                                            </div>
+                                                            <div class="p-4">
+                                                                <h4>
+                                                                    <p style="font-size: 15px;">
+                                                                        <%= accessory.name %>
+                                                                    </p>
+                                                                </h4>
+
+                                                                <div class="d-flex flex-lg-wrap">
+                                                                    <p class="text-dark fs-5 fw-bold mb-3"
+                                                                        style="font-size: 15px; text-align: center; width: 100%;">
+                                                                        <% if (accessory.price> 0) { %>
+                                                                            <%= new Intl.NumberFormat('vi-VN', {
+                                                                                style: 'currency' , currency: 'VND'
+                                                                                }).format(accessory.price) %>
+                                                                                <% } else { %>
+                                                                                    Liên hệ <% } %>
+                                                                    </p>
+                                                                    <button
+                                                                        class="btn border border-secondary rounded-pill px-3 text-primary mx-auto"><i
+                                                                            class="fa fa-shopping-bag me-2 text-primary"></i>
+                                                                        Add to
+                                                                        cart</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <% }); %>
+                                                    <% } else { %>
+                                                        <div class="col-12">
+                                                            <p class="text-center text-muted">Chưa có phụ kiện nào.</p>
+                                                        </div>
+                                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab-3" class="tab-pane fade show p-0">
+                            <div class="row g-4">
+                                <div class="col">
+                                    <div class="row g-4">
+                                        <div class="col-12">
+                                            <p class="text-center text-muted">Chưa có sản phẩm nào trong mục này.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
