@@ -4,8 +4,8 @@ export const ACCOUNT_TYPE = {
 }
 
 export const CATEGORY_TYPES = {
-    DEVICE: { value: 'Device', label: 'Thiết bị' },
-    ACCESSORY: { value: 'Accessory', label: 'Phụ kiện' },
+    DEVICE: { value: 'device', label: 'Thiết bị' },
+    ACCESSORY: { value: 'accessory', label: 'Phụ kiện' },
 };
 
 
