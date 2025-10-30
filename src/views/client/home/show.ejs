@@ -272,9 +272,58 @@
                             <div class="row g-4">
                                 <div class="col">
                                     <div class="row g-4">
-                                        <div class="col-12">
-                                            <p class="text-center text-muted">Chưa có sản phẩm nào trong mục này.</p>
-                                        </div>
+                                        <% if (otherDevices && otherDevices.length> 0) { %>
+                                            <% otherDevices.forEach(function(device){ %>
+                                                <div class="col-md-6 col-lg-4 col-xl-3 ">
+                                                    <a href="/shop-detail/<%= device._id %>" class="product-card-link">
+                                                        <div
+                                                            class="rounded position-relative fruite-item border border-light-subtle rounded-bottom">
+                                                            <div class="product-image-container">
+                                                                <% if (device.thumbnail && device.thumbnail.data) { %>
+                                                                    <img src="data:<%= device.thumbnail.contentType %>;base64,<%= device.thumbnail.data.toString('base64') %>"
+                                                                        class="img-fluid" alt="<%= device.name %>"
+                                                                        style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                                                    <% } else { %>
+                                                                        <img src="/admin/img/default-image.png"
+                                                                            class="img-fluid" alt="No Image"
+                                                                            style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                                                        <% } %>
+                                                            </div>
+                                                            <div class="p-4">
+                                                                <h4>
+                                                                    <p style="font-size: 15px;">
+                                                                        <%= device.name %>
+                                                                    </p>
+                                                                </h4>
+                                                                <div class="d-flex flex-lg-wrap">
+                                                                    <p class="text-dark fs-5 fw-bold mb-3"
+                                                                        style="font-size: 15px; text-align: center; width: 100%;">
+                                                                        <% if (device.price> 0) { %>
+                                                                            <%= new Intl.NumberFormat('vi-VN', {
+                                                                                style: 'currency' , currency: 'VND'
+                                                                                }).format(device.price) %>
+                                                                                <% } else { %>
+                                                                                    Liên hệ
+                                                                                    <% } %>
+                                                                    </p>
+                                                                    <button
+                                                                        class="btn border border-secondary rounded-pill px-3 text-primary mx-auto">
+                                                                        <i
+                                                                            class="fa fa-shopping-bag me-2 text-primary"></i>
+                                                                        Add to cart
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <% }); %>
+                                                    <% } else { %>
+                                                        <div class="col-12">
+                                                            <p class="text-center text-muted">Chưa có sản phẩm nào trong
+                                                                mục này.</p>
+                                                        </div>
+                                                        <% } %>
                                     </div>
                                 </div>
                             </div>

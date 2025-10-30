@@ -268,10 +268,18 @@
                                         <% variants.forEach(function(variant){ %>
                                             <a href="#"
                                                 class="btn btn-outline-secondary rounded-pill me-2 mb-2 variant-selection"
+                                                data-color="<%= variant.color %>" data-price="<%= variant.price %>" <%
+                                                if (isDevice) { %>
                                                 data-model-url="<%= variant.model3d %>"
-                                                data-color="<%= variant.color %>" data-ram="<%= variant.ram %>"
-                                                data-storage="<%= variant.storage %>" data-price="<%= variant.price %>">
-                                                <%= variant.color %> | <%= variant.ram %>/<%= variant.storage %>
+                                                    data-ram="<%= variant.ram %>"
+                                                        data-storage="<%= variant.storage %>"
+                                                            <% } %>>
+                                                                <% if (isDevice) { %>
+                                                                    <%= variant.color %> | <%= variant.ram %>/<%=
+                                                                                variant.storage %>
+                                                                                <% } else { %>
+                                                                                    <%= variant.color %>
+                                                                                        <% } %>
                                             </a>
                                             <% }); %>
                                     </div>
@@ -308,35 +316,38 @@
                             <%= product.description %>
                         </p>
 
-                        <h5 class="fw-bold mt-4">Thông số kỹ thuật chính:</h5>
-                        <ul class="list-unstyled">
-                            <% if (variants && variants.length> 0) { %>
-                                <li><i class="fas fa-check text-success me-2"></i>RAM: <strong id="spec-ram">
-                                        <%= variants[0].ram %>
-                                    </strong>
-                                </li>
-                                <li><i class="fas fa-check text-success me-2"></i>Bộ nhớ: <strong id="spec-storage">
-                                        <%= variants[0].storage %>
-                                    </strong></li>
-                                <% } %>
+                        <% if (isDevice) { %>
+                            <h5 class="fw-bold mt-4">Thông số kỹ thuật chính:</h5>
+                            <ul class="list-unstyled">
+                                <% if (variants && variants.length> 0) { %>
+                                    <li><i class="fas fa-check text-success me-2"></i>RAM: <strong id="spec-ram">
+                                            <%= variants[0].ram %>
+                                        </strong>
+                                    </li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Bộ nhớ: <strong id="spec-storage">
+                                            <%= variants[0].storage %>
+                                        </strong></li>
+                                    <% } %>
 
-                                    <li><i class="fas fa-check text-success me-2"></i>Màn hình: <strong>
-                                            <%= product.specs.screen || 'N/A' %>
-                                        </strong></li>
-                                    <li><i class="fas fa-check text-success me-2"></i>CPU: <strong>
-                                            <%= product.specs.cpu || 'N/A' %>
-                                        </strong></li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Pin: <strong>
-                                            <%= product.specs.battery || 'N/A' %>
-                                        </strong></li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Camera: <strong>
-                                            <%= product.specs.camera || 'N/A' %>
-                                        </strong></li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Hệ điều hành: <strong>
-                                            <%= product.specs.os || 'N/A' %>
-                                        </strong></li>
-
-                        </ul>
+                                        <% if (product.specs) { %>
+                                            <li><i class="fas fa-check text-success me-2"></i>Màn hình: <strong>
+                                                    <%= product.specs.screen || 'N/A' %>
+                                                </strong></li>
+                                            <li><i class="fas fa-check text-success me-2"></i>CPU: <strong>
+                                                    <%= product.specs.cpu || 'N/A' %>
+                                                </strong></li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Pin: <strong>
+                                                    <%= product.specs.battery || 'N/A' %>
+                                                </strong></li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Camera: <strong>
+                                                    <%= product.specs.camera || 'N/A' %>
+                                                </strong></li>
+                                            <li><i class="fas fa-check text-success me-2"></i>Hệ điều hành: <strong>
+                                                    <%= product.specs.os || 'N/A' %>
+                                                </strong></li>
+                                            <% } %>
+                            </ul>
+                            <% } %>
                     </div>
                 </div>
 

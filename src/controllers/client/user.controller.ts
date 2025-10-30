@@ -5,7 +5,28 @@ import User from 'models/user';
 import Cart from 'models/cart';
 import { getDeviceById } from 'services/admin/product.service';
 import { getUserById } from 'services/admin/user.service';
-import { ReviewDevice } from 'models/review';
+import { ReviewDevice, ReviewAcc } from 'models/review';
+
+// Helper function to process variants and assign prices
+const processProductVariants = async (products: any[], variantModel: any, productIdField: string) => {
+    const productIds = products.map(p => p._id);
+    if (productIds.length === 0) return products;
+
+    const allVariants = await variantModel.find({ [productIdField]: { $in: productIds } }).sort({ price: 1 }).lean();
+
+    const variantsByProductId = allVariants.reduce((acc: Record<string, any[]>, variant: any) => {
+        const id = variant[productIdField].toString();
+        if (!acc[id]) acc[id] = [];
+        acc[id].push(variant);
+        return acc;
+    }, {});
+
+    products.forEach(p => {
+        const productVariants = variantsByProductId[p._id.toString()] || [];
+        (p as any).price = productVariants.length > 0 ? productVariants[0].price : 0;
+    });
+    return products;
+};
 
 
 const getHomePage = async (req: Request, res: Response) => {
@@ -15,6 +36,10 @@ const getHomePage = async (req: Request, res: Response) => {
             .limit(10) // Giới hạn 10 sản phẩm
             .populate('brand category') // Lấy thêm thông tin brand và category
             .lean();
+
+        // Phân loại thiết bị: điện thoại và các thiết bị khác (máy tính bảng,...)
+        const phones = latestDevices.filter(d => (d.category as any)?.name === 'Điện thoại');
+        const otherDevices = latestDevices.filter(d => (d.category as any)?.name !== 'Điện thoại');
 
         // Tối ưu: Lấy tất cả variants cho các devices trên bằng một query duy nhất
         const deviceIds = latestDevices.map(d => d._id);
@@ -64,8 +89,9 @@ const getHomePage = async (req: Request, res: Response) => {
         });
 
         return res.render("client/home/show.ejs", {
-            products: latestDevices,
-            accessories: latestAccessories
+            products: phones, // Chỉ truyền điện thoại vào biến products
+            accessories: latestAccessories,
+            otherDevices: otherDevices // Truyền các thiết bị khác vào biến mới
         });
 
     } catch (error) {
@@ -116,45 +142,60 @@ const getShopPage = async (req: Request, res: Response) => {
 const getShopDetailPage = async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
-        const product = await Device.findById(id).populate('brand category').lean();
+        let product: any = null;
+        let variants: any[] = [];
+        let reviews: any[] = [];
+        let relatedProducts: any[] = [];
+        let isDevice = false;
+
+        // Try to find as Device
+        product = await Device.findById(id).populate('brand category').lean();
+        if (product) {
+            isDevice = true;
+        } else {
+            // If not a Device, try to find as Accessory
+            product = await Accessory.findById(id).populate('brand category').lean();
+        }
 
         if (!product) {
             return res.status(404).send("Product not found");
         }
 
-        const variants = await Variant.find({ deviceId: id }).sort({ price: 1 }).lean();
+        if (isDevice) {
+            variants = await Variant.find({ deviceId: id }).sort({ price: 1 }).lean();
+            reviews = await ReviewDevice.find({ product: id })
+                .populate('user', 'name')
+                .sort({ createdAt: -1 })
+                .lean();
 
-        const reviews = await ReviewDevice.find({ product: id })
-            .populate('user', 'name') // Chỉ lấy trường 'name' của user
-            .sort({ createdAt: -1 })
-            .lean();
+            relatedProducts = await Device.find({
+                brand: product.brand,
+                _id: { $ne: id }
+            }).limit(4).populate('brand category').lean({ virtuals: true });
 
-        // Lấy sản phẩm cùng hãng
-        const relatedProducts = await Device.find({
-            brand: product.brand,
-            _id: { $ne: id } // Loại trừ sản phẩm hiện tại
-        }).limit(4).populate('brand category').lean({ virtuals: true });
+            relatedProducts = await processProductVariants(relatedProducts, Variant, 'deviceId');
 
-        // Lấy variants cho các sản phẩm liên quan
-        const relatedProductIds = relatedProducts.map(p => p._id);
-        const allRelatedVariants = await Variant.find({ deviceId: { $in: relatedProductIds } }).sort({ price: 1 }).lean();
-        const variantsByRelatedDeviceId = allRelatedVariants.reduce((acc, variant) => {
-            const deviceId = variant.deviceId.toString();
-            if (!acc[deviceId]) acc[deviceId] = [];
-            acc[deviceId].push(variant);
-            return acc;
-        }, {} as Record<string, any[]>);
+        } else { // It's an Accessory
+            variants = await AccessoriesVariant.find({ accessoryId: id }).sort({ price: 1 }).lean();
+            reviews = await ReviewAcc.find({ product: id })
+                .populate('user', 'name')
+                .sort({ createdAt: -1 })
+                .lean();
 
-        relatedProducts.forEach(p => {
-            const variants = variantsByRelatedDeviceId[p._id.toString()] || [];
-            (p as any).price = variants.length > 0 ? variants[0].price : 0;
-        });
+            relatedProducts = await Accessory.find({
+                brand: product.brand,
+                _id: { $ne: id }
+            }).limit(4).populate('brand category').lean({ virtuals: true });
+
+            relatedProducts = await processProductVariants(relatedProducts, AccessoriesVariant, 'accessoryId');
+        }
 
         res.render("client/home/shop-detail.ejs", {
             product,
             variants,
             relatedProducts,
-            reviews
+            reviews,
+            isDevice
         });
     } catch (error) {
         console.error("Error getting shop detail page:", error);
@@ -172,7 +213,22 @@ const postCreateReview = async (req: Request, res: Response) => {
             return res.status(401).send("Bạn cần đăng nhập để bình luận.");
         }
 
-        const newReview = new ReviewDevice({
+        // Determine if it's a Device or an Accessory
+        let product = await Device.findById(productId);
+        let reviewModel;
+
+        if (product) {
+            reviewModel = ReviewDevice;
+        } else {
+            product = await Accessory.findById(productId);
+            if (product) {
+                reviewModel = ReviewAcc;
+            } else {
+                return res.status(404).send("Product not found for review.");
+            }
+        }
+
+        const newReview = new reviewModel({
             product: productId,
             user: user._id,
             rating: Number(rating),
