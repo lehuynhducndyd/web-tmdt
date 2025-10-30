@@ -1,11 +1,21 @@
 import mongoose from "mongoose";
 
 const cartItemSchema = new mongoose.Schema({
-  device: { type: mongoose.Schema.Types.ObjectId, ref: "Device" },
-  accessory: { type: mongoose.Schema.Types.ObjectId, ref: "Accessory" },
-  variantId: { type: mongoose.Schema.Types.ObjectId, required: true }, // trỏ đến Product.variants._id
+  // Xác định loại sản phẩm là 'Device' hay 'Accessory'
+  productType: {
+    type: String,
+    required: true,
+    enum: ['Device', 'Accessory']
+  },
+  // Tham chiếu động đến collection 'Device' hoặc 'Accessory' dựa trên productType
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    refPath: 'items.productType'
+  },
+  variantId: { type: mongoose.Schema.Types.ObjectId, required: true },
   quantity: { type: Number, default: 1, min: 1 },
-  priceAtAdd: { type: Number, required: true } // giá tại thời điểm thêm
+  priceAtAdd: { type: Number, required: true }
 }, { _id: false });
 
 const cartSchema = new mongoose.Schema({

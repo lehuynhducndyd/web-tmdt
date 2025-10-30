@@ -23,6 +23,9 @@
                             <button class="btn btn-danger btn-sm" type="submit"
                                 onclick="return confirm('Bạn có chắc chắn muốn xóa phụ kiện <%= accessory.name %> không?')">Xóa</button>
                         </form>
+                        <form action="/admin/review/<%= accessory.id %>" method="get">
+                            <button class="btn btn-primary btn-sm" type="submit">Xem đánh giá</button>
+                        </form>
                     </td>
                 </tr>
                 <% }) %>

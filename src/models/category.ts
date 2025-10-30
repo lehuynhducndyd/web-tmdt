@@ -1,4 +1,4 @@
-import { CATEGORY_TYPES } from "config/constant";
+
 import mongoose from "mongoose";
 
 const categorySchema = new mongoose.Schema({

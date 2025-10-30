@@ -43,7 +43,7 @@
             </section>
 
 
-            
+
             <section class="khung-uu-dai-dich-vu main-container">
                 <div class="row">
 
@@ -233,51 +233,54 @@
                         </div>
                     </div>
                 </div>
-            <div class="fruite">
-                <div class="row g-4">
-                
-                    <% products.forEach(function(product){ %>
-                
-                        <div class="col-md-6 col-lg-4 col-xl-3 ">
-                            <a href="/shop-detail/<%= product._id %>" class="product-card-link">
-                                <div class="rounded position-relative fruite-item border border-light-subtle rounded-bottom">
-                                    <div class="product-image-container">
-                                        <% if (product.thumbnail && product.thumbnail.data) { %>
-                                            <img src="data:<%= product.thumbnail.contentType %>;base64,<%= product.thumbnail.data.toString('base64') %>"
-                                                class="img-fluid" alt="<%= product.name %>"
-                                                style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                                            <% } else { %>
-                                                <img src="/admin/img/default-image.png" class="img-fluid" alt="No Image"
+                <div class="fruite">
+                    <div class="row g-4">
+
+                        <% products.forEach(function(product){ %>
+
+                            <div class="col-md-6 col-lg-4 col-xl-3 ">
+                                <a href="/shop-detail/<%= product._id %>" class="product-card-link">
+                                    <div
+                                        class="rounded position-relative fruite-item border border-light-subtle rounded-bottom">
+                                        <div class="product-image-container">
+                                            <% if (product.thumbnail && product.thumbnail.data) { %>
+                                                <img src="data:<%= product.thumbnail.contentType %>;base64,<%= product.thumbnail.data.toString('base64') %>"
+                                                    class="img-fluid" alt="<%= product.name %>"
                                                     style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                                                <% } %>
-                                    </div>
-                                    <div class="p-4">
-                                        <h4>
-                                            <p style="font-size: 15px;">
-                                                <%=product.name%>
-                                            </p>
-                                        </h4>
-                                        
-                                        <div class="d-flex flex-lg-wrap">
-                                            <p class="text-dark fs-5 fw-bold mb-3" style="font-size: 15px; text-align: center; width: 100%;">
-                                                <% if (product.price> 0) { %>
-                                                    <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
-                                                        }).format(product.price) %>
-                                                        <% } else { %>
-                                                            Liên hệ <% } %>
-                                            </p>
-                                            <button class="btn border border-secondary rounded-pill px-3 text-primary mx-auto"><i
-                                                    class="fa fa-shopping-bag me-2 text-primary"></i>
-                                                Add to
-                                                cart</button>
+                                                <% } else { %>
+                                                    <img src="/admin/img/default-image.png" class="img-fluid"
+                                                        alt="No Image"
+                                                        style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                                    <% } %>
+                                        </div>
+                                        <div class="p-4">
+                                            <h4>
+                                                <p style="font-size: 15px;">
+                                                    <%=product.name%>
+                                                </p>
+                                            </h4>
+
+                                            <div class="d-flex flex-lg-wrap">
+                                                <p class="text-dark fs-5 fw-bold mb-3"
+                                                    style="font-size: 15px; text-align: center; width: 100%;">
+                                                    <% if (product.price> 0) { %>
+                                                        <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
+                                                            currency: 'VND' }).format(product.price) %>
+                                                            <% } else { %>
+                                                                Liên hệ <% } %>
+                                                </p>
+                                                <button
+                                                    class="btn border border-secondary rounded-pill px-3 text-primary mx-auto"><i
+                                                        class="fa fa-shopping-bag me-2 text-primary"></i>
+                                                    Xem chi tiết</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </a>
-                        </div>
-                        <% }); %>
+                                </a>
+                            </div>
+                            <% }); %>
+                    </div>
                 </div>
-            </div>
             </section>
         </main>
         <%- include('../layout/footer'); -%>
@@ -333,5 +336,5 @@
                 });
             </script>
 </body>
-    
+
 </html>
