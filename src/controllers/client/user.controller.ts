@@ -6,6 +6,7 @@ import Cart from 'models/cart';
 import { getDeviceById } from 'services/admin/product.service';
 import { getUserById } from 'services/admin/user.service';
 import { ReviewDevice, ReviewAcc } from 'models/review';
+import { ca } from 'zod/v4/locales';
 
 // Helper function to process variants and assign prices
 const processProductVariants = async (products: any[], variantModel: any, productIdField: string) => {
@@ -23,7 +24,15 @@ const processProductVariants = async (products: any[], variantModel: any, produc
 
     products.forEach(p => {
         const productVariants = variantsByProductId[p._id.toString()] || [];
-        (p as any).price = productVariants.length > 0 ? productVariants[0].price : 0;
+        if (productVariants.length > 0) {
+            const lowestPriceVariant = productVariants[0];
+            const discount = lowestPriceVariant.discount || 0;
+            (p as any).originalPrice = lowestPriceVariant.price;
+            (p as any).price = lowestPriceVariant.price * (1 - discount / 100);
+            (p as any).hasDiscount = discount > 0;
+        } else {
+            (p as any).price = 0;
+        }
     });
     return products;
 };
@@ -59,8 +68,16 @@ const getHomePage = async (req: Request, res: Response) => {
         latestDevices.forEach(device => {
             const deviceId = device._id.toString();
             const variants = variantsByDeviceId[deviceId] || [];
-            (device as any).variants = variants;
-            (device as any).price = variants.length > 0 ? variants[0].price : 0;
+            (device as any).variants = variants; // Gán variants để có thể dùng ở nơi khác nếu cần
+            if (variants.length > 0) {
+                const lowestPriceVariant = variants[0];
+                const discount = lowestPriceVariant.discount || 0;
+                (device as any).originalPrice = lowestPriceVariant.price;
+                (device as any).price = lowestPriceVariant.price * (1 - discount / 100);
+                (device as any).hasDiscount = discount > 0;
+            } else {
+                (device as any).price = 0;
+            }
         });
 
         // Lấy phụ kiện mới nhất
@@ -85,7 +102,15 @@ const getHomePage = async (req: Request, res: Response) => {
 
         latestAccessories.forEach(accessory => {
             const variants = variantsByAccessoryId[accessory._id.toString()] || [];
-            (accessory as any).price = variants.length > 0 ? variants[0].price : 0;
+            if (variants.length > 0) {
+                const lowestPriceVariant = variants[0];
+                const discount = lowestPriceVariant.discount || 0;
+                (accessory as any).originalPrice = lowestPriceVariant.price;
+                (accessory as any).price = lowestPriceVariant.price * (1 - discount / 100);
+                (accessory as any).hasDiscount = discount > 0;
+            } else {
+                (accessory as any).price = 0;
+            }
         });
 
         return res.render("client/home/show.ejs", {
@@ -117,8 +142,16 @@ const getShopPage = async (req: Request, res: Response) => {
 
         products.forEach(product => {
             const variants = variantsByDeviceId[product._id.toString()] || [];
-            (product as any).variants = variants;
-            (product as any).price = variants.length > 0 ? variants[0].price : 0;
+            (product as any).variants = variants; // Gán variants để có thể dùng ở nơi khác nếu cần
+            if (variants.length > 0) {
+                const lowestPriceVariant = variants[0];
+                const discount = lowestPriceVariant.discount || 0;
+                (product as any).originalPrice = lowestPriceVariant.price;
+                (product as any).price = lowestPriceVariant.price * (1 - discount / 100);
+                (product as any).hasDiscount = discount > 0;
+            } else {
+                (product as any).price = 0;
+            }
         });
 
         const pagination = {
@@ -188,6 +221,19 @@ const getShopDetailPage = async (req: Request, res: Response) => {
             }).limit(4).populate('brand category').lean({ virtuals: true });
 
             relatedProducts = await processProductVariants(relatedProducts, AccessoriesVariant, 'accessoryId');
+        }
+
+        // Tính giá ban đầu (sau giảm giá) để hiển thị
+        if (variants.length > 0) {
+            const firstVariant = variants[0];
+            const discount = firstVariant.discount || 0;
+            (product as any).originalPrice = firstVariant.price;
+            (product as any).price = firstVariant.price * (1 - discount / 100);
+            (product as any).hasDiscount = discount > 0;
+        } else {
+            (product as any).originalPrice = 0;
+            (product as any).price = 0;
+            (product as any).hasDiscount = false;
         }
 
         res.render("client/home/shop-detail.ejs", {
@@ -288,57 +334,76 @@ const postUpdateUserInfo = async (req: Request, res: Response) => {
         res.status(500).send("Error updating user information.");
     }
 }
-// const getCartPage = async (req: Request, res: Response) => {
-//     try {
-//         const user = req.user as any;
-//         if (!user) {
-//             // Nếu người dùng chưa đăng nhập, có thể chuyển hướng đến trang đăng nhập
-//             // hoặc hiển thị giỏ hàng trống/giỏ hàng từ session
-//             return res.render("client/home/cart.ejs", {
-//                 cartItems: [],
-//                 subtotal: (0).toFixed(2),
-//                 shippingFee: (0).toFixed(2),
-//                 total: (0).toFixed(2),
-//             });
-//         }
 
-//         // 1. Lấy giỏ hàng của người dùng từ DB
-//         const cart = await Cart.findOne({ user: user._id })
-//             .populate({
-//                 path: 'items.device',
-//                 model: 'Device'
-//             })
-//             .populate({
-//                 path: 'items.accessory',
-//                 model: 'Accessory'
-//             })
-//             .lean();
+const postAddProductToCart = async (req: Request, res: Response) => {
+    try {
+        let message = '';
+        const user = req.user as any;
+        if (!user) {
+            return res.redirect('/login');
+        }
+        // 1. Tìm giỏ hàng của người dùng, nếu chưa có thì tạo mới
+        let cart = await Cart.findOne({ user: user._id });
+        if (!cart) {
+            cart = new Cart({ user: user._id, items: [] });
+        }
 
-//         const cartItems = cart ? cart.items : [];
-//         const subtotal = cartItems.reduce((sum, item) => sum + (item.priceAtAdd * item.quantity), 0);
+        const { productId, variantId, quantity, productType } = req.body;
 
-//         // 3. Định nghĩa các phí khác (có thể thay đổi dựa trên logic nghiệp vụ)
-//         const shippingFee = subtotal > 0 ? 3.00 : 0;
-//         const total = subtotal + shippingFee;
+        if (!productId || !variantId || !quantity || !productType) {
+            message = "Lỗi nội bộ!"
+            return res.render("status/500.ejs")
+        }
 
-//         return res.render("client/home/cart.ejs", {
-//             cartItems: cartItems,
-//             subtotal: subtotal.toFixed(2), // Làm tròn 2 chữ số
-//             shippingFee: shippingFee.toFixed(2),
-//             total: total.toFixed(2),
-//             // Bạn có thể thêm các biến khác như mã giảm giá, v.v.
-//         });
-//     } catch (error) {
-//         console.error("Error getting cart page:", error);
-//         res.status(500).send("Error loading cart page");
-//     }
-// }
+        // 2. Tìm biến thể và giá sản phẩm
+        let variant;
+        if (productType === 'Device') {
+            variant = await Variant.findById(variantId);
+        } else if (productType === 'Accessory') {
+            variant = await AccessoriesVariant.findById(variantId);
+        }
+
+        if (!variant) {
+            message = "Không tồn tại sản phẩm!"
+            return res.render("status/404.ejs")
+        }
+
+
+
+        // 3. Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+        const existingItem = cart.items.find(item =>
+            item.product.toString() === productId && item.variantId.toString() === variantId
+        );
+
+        if (existingItem) {
+            // Nếu có, cập nhật số lượng
+            existingItem.quantity += Number(quantity);
+        } else {
+            // Nếu chưa, thêm sản phẩm mới vào giỏ
+            cart.items.push({ productType, product: productId, variantId, quantity: Number(quantity), priceAtAdd: variant.price });
+            cart.sum += 1;
+        }
+
+        await cart.save();
+        message = "Thêm vào giỏ hàng thành công!"
+        return res.redirect(`/shop-detail/${productId}`)
+    } catch (error) {
+        console.error("Error adding product to cart:", error);
+        return res.render("status/500.ejs")
+
+    }
+}
+
+
+
+
 
 export {
     getHomePage,
     getShopPage,
     getShopDetailPage,
     postCreateReview,
-    getUserInfoPage, postUpdateUserInfo
+    getUserInfoPage, postUpdateUserInfo,
+    postAddProductToCart
     // getCartPage
 };

@@ -184,15 +184,36 @@
                                                             </h4>
 
                                                             <div class="d-flex flex-lg-wrap">
-                                                                <p class="text-dark fs-5 fw-bold mb-3"
-                                                                    style="font-size: 15px; text-align: center; width: 100%;">
-                                                                    <% if (product.price> 0) { %>
-                                                                        <%= new Intl.NumberFormat('vi-VN', {
-                                                                            style: 'currency' , currency: 'VND'
-                                                                            }).format(product.price) %>
-                                                                            <% } else { %>
-                                                                                Liên hệ <% } %>
-                                                                </p>
+                                                                <div
+                                                                    class="d-flex justify-content-center align-items-baseline">
+                                                                    <% if (product.hasDiscount) { %>
+                                                                        <!-- Giá sau khi giảm -->
+                                                                        <p class="text-danger fs-5 fw-bold mb-0 me-2">
+                                                                            <%= new Intl.NumberFormat('vi-VN', {
+                                                                                style: 'currency' , currency: 'VND'
+                                                                                }).format(product.price) %>
+                                                                        </p>
+                                                                        <!-- Giá gốc (bị gạch) -->
+                                                                        <p
+                                                                            class="text-muted text-decoration-line-through mb-0">
+                                                                            <%= new Intl.NumberFormat('vi-VN', {
+                                                                                style: 'currency' , currency: 'VND'
+                                                                                }).format(product.originalPrice) %>
+                                                                        </p>
+                                                                        <% } else { %>
+                                                                            <!-- Giá bình thường (không giảm) -->
+                                                                            <p class="text-dark fs-5 fw-bold mb-0">
+                                                                                <% if (product.price> 0) { %>
+                                                                                    <%= new Intl.NumberFormat('vi-VN', {
+                                                                                        style: 'currency' ,
+                                                                                        currency: 'VND'
+                                                                                        }).format(product.price) %>
+                                                                                        <% } else { %>
+                                                                                            Liên hệ
+                                                                                            <% } %>
+                                                                            </p>
+                                                                            <% } %>
+                                                                </div>
                                                                 <button
                                                                     class="btn border border-secondary rounded-pill px-3 text-primary mx-auto"><i
                                                                         class="fa fa-shopping-bag me-2 text-primary"></i>
@@ -238,15 +259,40 @@
                                                                 </h4>
 
                                                                 <div class="d-flex flex-lg-wrap">
-                                                                    <p class="text-dark fs-5 fw-bold mb-3"
-                                                                        style="font-size: 15px; text-align: center; width: 100%;">
-                                                                        <% if (accessory.price> 0) { %>
-                                                                            <%= new Intl.NumberFormat('vi-VN', {
-                                                                                style: 'currency' , currency: 'VND'
-                                                                                }).format(accessory.price) %>
-                                                                                <% } else { %>
-                                                                                    Liên hệ <% } %>
-                                                                    </p>
+                                                                    <div
+                                                                        class="d-flex justify-content-center align-items-baseline">
+                                                                        <% if (accessory.hasDiscount) { %>
+                                                                            <!-- Giá sau khi giảm -->
+                                                                            <p
+                                                                                class="text-danger fs-5 fw-bold mb-0 me-2">
+                                                                                <%= new Intl.NumberFormat('vi-VN', {
+                                                                                    style: 'currency' , currency: 'VND'
+                                                                                    }).format(accessory.price) %>
+                                                                            </p>
+                                                                            <!-- Giá gốc (bị gạch) -->
+                                                                            <p
+                                                                                class="text-muted text-decoration-line-through mb-0">
+                                                                                <%= new Intl.NumberFormat('vi-VN', {
+                                                                                    style: 'currency' , currency: 'VND'
+                                                                                    }).format(accessory.originalPrice)
+                                                                                    %>
+                                                                            </p>
+                                                                            <% } else { %>
+                                                                                <!-- Giá bình thường (không giảm) -->
+                                                                                <p class="text-dark fs-5 fw-bold mb-0">
+                                                                                    <% if (accessory.price> 0) { %>
+                                                                                        <%= new
+                                                                                            Intl.NumberFormat('vi-VN', {
+                                                                                            style: 'currency' ,
+                                                                                            currency: 'VND'
+                                                                                            }).format(accessory.price)
+                                                                                            %>
+                                                                                            <% } else { %>
+                                                                                                Liên hệ
+                                                                                                <% } %>
+                                                                                </p>
+                                                                                <% } %>
+                                                                    </div>
                                                                     <button
                                                                         class="btn border border-secondary rounded-pill px-3 text-primary mx-auto"><i
                                                                             class="fa fa-shopping-bag me-2 text-primary"></i>
@@ -294,16 +340,38 @@
                                                                     </p>
                                                                 </h4>
                                                                 <div class="d-flex flex-lg-wrap">
-                                                                    <p class="text-dark fs-5 fw-bold mb-3"
-                                                                        style="font-size: 15px; text-align: center; width: 100%;">
-                                                                        <% if (device.price> 0) { %>
-                                                                            <%= new Intl.NumberFormat('vi-VN', {
-                                                                                style: 'currency' , currency: 'VND'
-                                                                                }).format(device.price) %>
-                                                                                <% } else { %>
-                                                                                    Liên hệ
-                                                                                    <% } %>
-                                                                    </p>
+                                                                    <div
+                                                                        class="d-flex justify-content-center align-items-baseline">
+                                                                        <% if (device.hasDiscount) { %>
+                                                                            <!-- Giá sau khi giảm -->
+                                                                            <p
+                                                                                class="text-danger fs-5 fw-bold mb-0 me-2">
+                                                                                <%= new Intl.NumberFormat('vi-VN', {
+                                                                                    style: 'currency' , currency: 'VND'
+                                                                                    }).format(device.price) %>
+                                                                            </p>
+                                                                            <!-- Giá gốc (bị gạch) -->
+                                                                            <p
+                                                                                class="text-muted text-decoration-line-through mb-0">
+                                                                                <%= new Intl.NumberFormat('vi-VN', {
+                                                                                    style: 'currency' , currency: 'VND'
+                                                                                    }).format(device.originalPrice) %>
+                                                                            </p>
+                                                                            <% } else { %>
+                                                                                <!-- Giá bình thường (không giảm) -->
+                                                                                <p class="text-dark fs-5 fw-bold mb-0">
+                                                                                    <% if (device.price> 0) { %>
+                                                                                        <%= new
+                                                                                            Intl.NumberFormat('vi-VN', {
+                                                                                            style: 'currency' ,
+                                                                                            currency: 'VND'
+                                                                                            }).format(device.price) %>
+                                                                                            <% } else { %>
+                                                                                                Liên hệ
+                                                                                                <% } %>
+                                                                                </p>
+                                                                                <% } %>
+                                                                    </div>
                                                                     <button
                                                                         class="btn border border-secondary rounded-pill px-3 text-primary mx-auto">
                                                                         <i

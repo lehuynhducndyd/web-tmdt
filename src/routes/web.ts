@@ -5,7 +5,7 @@ import { getAdminPage } from 'controllers/admin/admin.dashboard.controller';
 import { getCreateDevicePage, getCreateVariantPage, getDevicePage, getViewDevicePage, getViewVariantPage, postCreateDevice, postCreateVariant, postDeleteDevice, postDeleteVariant, postUpdateDevice, postUpdateVariant } from 'controllers/admin/admin.device.controller';
 import { getUserPage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUserPage, postUpdateUser, } from 'controllers/admin/admin.user.controller';
 import { getLoginPage, getRegisterPage, getSuccessRedirectPage, postLogout, postRegisterPage } from 'controllers/client/auth.controller';
-import { getHomePage, getUserInfoPage, postUpdateUserInfo } from 'controllers/client/user.controller';
+import { getHomePage, getUserInfoPage, postAddProductToCart, postUpdateUserInfo } from 'controllers/client/user.controller';
 import express, { Express } from 'express';
 import passport from 'passport';
 import { isAdmin, isLogin } from 'src/middleware/auth';
@@ -25,10 +25,15 @@ const webRoutes = (app: Express) => {
     router.get('/shop-detail/:id', getShopDetailPage);
     router.post('/shop-detail/:id/reviews', postCreateReview);
     // router.get('/cart', getCartPage);
-    // User info routes
+
     router.get('/user-info', getUserInfoPage);
     router.post('/user-info', postUpdateUserInfo);
 
+    router.post("/add-product-to-cart", postAddProductToCart)
+
+
+
+    //system 
     router.get('/', getHomePage);
     router.get("/success-redirect", getSuccessRedirectPage);
     router.get('/login', isLogin, getLoginPage);
@@ -49,6 +54,7 @@ const webRoutes = (app: Express) => {
             // Successful authentication, redirect home.
             res.redirect('/');
         });
+
 
     // Admin routes
     router.get('/admin', getAdminPage);
