@@ -402,8 +402,6 @@ const getCartPage = async (req: Request, res: Response) => {
     try {
         const cart = await Cart.findOne({ user: currentUser._id })
             .populate({
-                path: 'items.product',
-                model: 'Device' // Mặc định, sẽ được ghi đè bởi refPath
                 path: 'items.product' // Mongoose sẽ tự động sử dụng refPath 'items.productType'
             })
             .lean();
