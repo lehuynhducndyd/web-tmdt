@@ -380,7 +380,7 @@ const postAddProductToCart = async (req: Request, res: Response) => {
             existingItem.quantity += Number(quantity);
         } else {
             // Nếu chưa, thêm sản phẩm mới vào giỏ
-            cart.items.push({ productType, product: productId, variantId, quantity: Number(quantity), priceAtAdd: variant.price });
+            cart.items.push({ productType, product: productId, variantId, quantity: Number(quantity) });
             cart.sum += 1;
         }
 
@@ -399,8 +399,46 @@ const getCartPage = async (req: Request, res: Response) => {
     if (!currentUser) {
         return res.redirect('/login');
     }
-    const cart = await Cart.findOne({ user: currentUser._id }).populate('items.product');
-    res.render('client/home/cart.ejs', { cart });
+    try {
+        const cart = await Cart.findOne({ user: currentUser._id })
+            .populate({
+                path: 'items.product',
+                model: 'Device' // Mặc định, sẽ được ghi đè bởi refPath
+                path: 'items.product' // Mongoose sẽ tự động sử dụng refPath 'items.productType'
+            })
+            .lean();
+
+        if (cart) {
+            // Lấy thông tin chi tiết cho từng variant
+            const variantIds = cart.items.map(item => item.variantId);
+            const deviceVariants = await Variant.find({ _id: { $in: variantIds } }).lean();
+            const accVariants = await AccessoriesVariant.find({ _id: { $in: variantIds } }).lean();
+
+            const allVariants = [...deviceVariants, ...accVariants];
+            const variantsMap = new Map(allVariants.map(v => [v._id.toString(), v]));
+
+            let subTotal = 0;
+
+            // Gán thông tin variant vào từng item trong giỏ hàng
+            cart.items.forEach(item => {
+                const variantDetail = variantsMap.get(item.variantId.toString());
+                if (variantDetail) {
+                    (item as any).variant = variantDetail;
+
+                    // Tính giá cuối cùng cho mỗi sản phẩm và cộng vào tổng tiền
+                    const finalPrice = variantDetail.price * (1 - (variantDetail.discount || 0) / 100);
+                    subTotal += finalPrice * item.quantity;
+                }
+            });
+
+            (cart as any).subTotal = subTotal;
+        }
+
+        res.render('client/home/cart.ejs', { cart });
+    } catch (error) {
+        console.error("Error getting cart page:", error);
+        res.status(500).send("Error loading cart page");
+    }
 }
 
 
