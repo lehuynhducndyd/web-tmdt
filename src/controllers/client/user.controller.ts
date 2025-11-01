@@ -390,12 +390,18 @@ const postAddProductToCart = async (req: Request, res: Response) => {
     } catch (error) {
         console.error("Error adding product to cart:", error);
         return res.render("status/500.ejs")
-
     }
 }
 
 
-
+const getCartPage = async (req: Request, res: Response) => {
+    const currentUser = req.user as any;
+    if (!currentUser) {
+        return res.redirect('/login');
+    }
+    const cart = await Cart.findOne({ user: currentUser._id }).populate('items.product');
+    res.render('client/home/cart.ejs', { cart });
+}
 
 
 export {
@@ -404,6 +410,6 @@ export {
     getShopDetailPage,
     postCreateReview,
     getUserInfoPage, postUpdateUserInfo,
-    postAddProductToCart
-    // getCartPage
+    postAddProductToCart,
+    getCartPage
 };

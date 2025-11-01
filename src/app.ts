@@ -8,6 +8,7 @@ import initDatabase from './config/seed';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import configPassportLocal from './middleware/passport.local';
+import Cart from './models/cart';
 
 
 const app = express();
@@ -45,10 +46,23 @@ app.use(express.urlencoded({ extended: true }));
 //seeding data
 
 initDatabase();
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     res.locals.user = req.user || null; // Pass user object to all views
+    if (req.user) {
+        const user = req.user as any;
+        const cart = await Cart.findOne({ user: user._id });
+        if (cart) {
+            res.locals.sum = cart.sum;
+        } else {
+            res.locals.sum = 0;
+        }
+    } else {
+        res.locals.sum = 0;
+    }
     next();
 });
+
+
 
 webRoutes(app);
 

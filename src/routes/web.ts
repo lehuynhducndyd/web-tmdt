@@ -5,7 +5,7 @@ import { getAdminPage } from 'controllers/admin/admin.dashboard.controller';
 import { getCreateDevicePage, getCreateVariantPage, getDevicePage, getViewDevicePage, getViewVariantPage, postCreateDevice, postCreateVariant, postDeleteDevice, postDeleteVariant, postUpdateDevice, postUpdateVariant } from 'controllers/admin/admin.device.controller';
 import { getUserPage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUserPage, postUpdateUser, } from 'controllers/admin/admin.user.controller';
 import { getLoginPage, getRegisterPage, getSuccessRedirectPage, postLogout, postRegisterPage } from 'controllers/client/auth.controller';
-import { getHomePage, getUserInfoPage, postAddProductToCart, postUpdateUserInfo } from 'controllers/client/user.controller';
+import { getCartPage, getHomePage, getUserInfoPage, postAddProductToCart, postUpdateUserInfo } from 'controllers/client/user.controller';
 import express, { Express } from 'express';
 import passport from 'passport';
 import { isAdmin, isLogin } from 'src/middleware/auth';
@@ -24,7 +24,7 @@ const webRoutes = (app: Express) => {
     router.get('/shop', getShopPage);
     router.get('/shop-detail/:id', getShopDetailPage);
     router.post('/shop-detail/:id/reviews', postCreateReview);
-    // router.get('/cart', getCartPage);
+    router.get('/cart', getCartPage);
 
     router.get('/user-info', getUserInfoPage);
     router.post('/user-info', postUpdateUserInfo);
