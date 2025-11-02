@@ -42,8 +42,8 @@ const getHomePage = async (req: Request, res: Response) => {
     try {
         let latestDevices = await Device.find()
             .sort({ createdAt: -1 }) // Sắp xếp theo thời gian tạo, mới nhất trước
-            .limit(10) // Giới hạn 10 sản phẩm
-            .populate('brand category') // Lấy thêm thông tin brand và category
+            .limit(10)
+            .populate('brand category') 
             .lean();
 
         // Phân loại thiết bị: điện thoại và các thiết bị khác (máy tính bảng,...)
@@ -87,7 +87,7 @@ const getHomePage = async (req: Request, res: Response) => {
             .populate('brand category')
             .lean();
 
-        // Lấy variants và giá thấp nhất cho phụ kiện
+       
         const accessoryIds = latestAccessories.map(a => a._id);
         const allAccessoryVariants = await AccessoriesVariant.find({ accessoryId: { $in: accessoryIds } }).sort({ price: 1 }).lean();
 
@@ -114,9 +114,9 @@ const getHomePage = async (req: Request, res: Response) => {
         });
 
         return res.render("client/home/show.ejs", {
-            products: phones, // Chỉ truyền điện thoại vào biến products
+            products: phones, 
             accessories: latestAccessories,
-            otherDevices: otherDevices // Truyền các thiết bị khác vào biến mới
+            otherDevices: otherDevices 
         });
 
     } catch (error) {
@@ -129,18 +129,18 @@ const getShopPage = async (req: Request, res: Response) => {
     try {
         const { brands, categories: categoryNames, minPrice, maxPrice, ram, storage, battery } = req.query;
 
-        // Xây dựng query để lọc sản phẩm
+       
         const filter: any = {};
         const variantFilter: any = {};
 
-        // 1. Xây dựng bộ lọc cho Variant trước (RAM, Storage, Price)
+        
         if (ram) {
-            // Tìm các giá trị RAM chỉ chứa số (ví dụ: "4 GB" -> "4")
+          
             const ramValues = (ram as string).split(',').map(r => r.trim().split(' ')[0]);
             variantFilter.ram = { $in: ramValues.map(r => new RegExp(`^${r}`)) };
         }
         if (storage) {
-            // Tìm các giá trị Storage chỉ chứa số (ví dụ: "128 GB" -> "128")
+
             const storageValues = (storage as string).split(',').map(s => s.trim().split(' ')[0]);
             variantFilter.storage = { $in: storageValues.map(s => new RegExp(`^${s}`)) };
         }
@@ -156,16 +156,11 @@ const getShopPage = async (req: Request, res: Response) => {
 
         // Lọc theo brand (thương hiệu)
         if (brands && typeof brands === 'string') {
-            // Thêm .map(b => b.trim()) để loại bỏ khoảng trắng thừa từ frontend
             const brandList = (brands as string).split(',').map(b => b.trim()); 
-            
-            // Tìm ID của các Brand khớp tên
             const brandObjects = await Brand.find({ name: { $in: brandList } }).select('_id');
-
             if (brandObjects.length > 0) {
                 filter.brand = { $in: brandObjects.map(b => b._id) };
             } else {
-                // Nếu không tìm thấy ID nào của Brand được yêu cầu, set filter._id rỗng
                 filter._id = { $in: [] }; 
             }
         }
@@ -183,7 +178,6 @@ const getShopPage = async (req: Request, res: Response) => {
 
         // Lọc theo dung lượng pin (battery)
         if (battery && typeof battery === 'string') {
-            // Lấy số từ chuỗi, ví dụ "3000 mAh" -> "3000"
             const batteryList = battery.split(',').map(b => b.trim().split(' ')[0]);
             if (batteryList.length > 0) {
                 const batteryRegex = batteryList.map(b => new RegExp(b));
@@ -194,7 +188,7 @@ const getShopPage = async (req: Request, res: Response) => {
        
         const hasVariantFilters = ram || storage || minPrice || maxPrice;
         if (hasVariantFilters) {
-            // Giao các kết quả: chỉ lấy device ID vừa khớp brand/category, vừa khớp variant
+          
             filter._id = { $in: filter._id ? filter._id.$in.filter(id => matchingDeviceIds.includes(id)) : matchingDeviceIds };
         }
 
@@ -202,7 +196,7 @@ const getShopPage = async (req: Request, res: Response) => {
         // Lấy tất cả sản phẩm khớp với bộ lọc cơ bản
         let products = await Device.find(filter).populate('brand category').lean();
         const categories = await Category.find().lean();
-        const allBrands = await Brand.find({}).lean(); // Lấy tất cả các thương hiệu
+        const allBrands = await Brand.find({}).lean(); 
 
         // Gán giá thấp nhất từ các variant đã khớp cho mỗi sản phẩm để hiển thị
         const variantsByDeviceId = matchingVariants.reduce((acc, v) => {
@@ -214,7 +208,7 @@ const getShopPage = async (req: Request, res: Response) => {
 
         products.forEach(product => {
             const productVariants = variantsByDeviceId[product._id.toString()] || [];
-            productVariants.sort((a, b) => a.price - b.price); // Sắp xếp để lấy giá thấp nhất
+            productVariants.sort((a, b) => a.price - b.price); 
 
             if (productVariants.length > 0) {
                 const lowestPriceVariant = productVariants[0];
