@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import { Device, Variant, AccessoriesVariant, Accessory } from 'models/product';
+import { Device, Variant, AccessoriesVariant, Accessory} from 'models/product';
+import { Brand } from 'models/brand';
 import { Category } from 'models/category';
 import User from 'models/user';
 import Cart from 'models/cart';
 import { getDeviceById } from 'services/admin/product.service';
 import { getUserById } from 'services/admin/user.service';
 import { ReviewDevice, ReviewAcc } from 'models/review';
-import { ca } from 'zod/v4/locales';
 
 // Helper function to process variants and assign prices
 const processProductVariants = async (products: any[], variantModel: any, productIdField: string) => {
@@ -127,30 +127,101 @@ const getHomePage = async (req: Request, res: Response) => {
 
 const getShopPage = async (req: Request, res: Response) => {
     try {
-        let products = await Device.find().populate('brand category').lean();
-        const categories = await Category.find().lean();
+        const { brands, categories: categoryNames, minPrice, maxPrice, ram, storage, battery } = req.query;
 
-        // Lấy variant và giá thấp nhất cho mỗi sản phẩm (tương tự getHomePage)
-        const deviceIds = products.map(p => p._id);
-        const allVariants = await Variant.find({ deviceId: { $in: deviceIds } }).sort({ price: 1 }).lean();
-        const variantsByDeviceId = allVariants.reduce((acc, variant) => {
-            const deviceId = variant.deviceId.toString();
+        // Xây dựng query để lọc sản phẩm
+        const filter: any = {};
+        const variantFilter: any = {};
+
+        // 1. Xây dựng bộ lọc cho Variant trước (RAM, Storage, Price)
+        if (ram) {
+            // Tìm các giá trị RAM chỉ chứa số (ví dụ: "4 GB" -> "4")
+            const ramValues = (ram as string).split(',').map(r => r.trim().split(' ')[0]);
+            variantFilter.ram = { $in: ramValues.map(r => new RegExp(`^${r}`)) };
+        }
+        if (storage) {
+            // Tìm các giá trị Storage chỉ chứa số (ví dụ: "128 GB" -> "128")
+            const storageValues = (storage as string).split(',').map(s => s.trim().split(' ')[0]);
+            variantFilter.storage = { $in: storageValues.map(s => new RegExp(`^${s}`)) };
+        }
+
+        if (minPrice || maxPrice) {
+            variantFilter.price = {};
+            if (minPrice) variantFilter.price.$gte = Number(minPrice);
+            if (maxPrice) variantFilter.price.$lte = Number(maxPrice);
+        }
+
+        const matchingVariants = await Variant.find(variantFilter).select('deviceId price discount').lean();
+        const matchingDeviceIds = [...new Set(matchingVariants.map(v => v.deviceId))];
+
+        // Lọc theo brand (thương hiệu)
+        if (brands && typeof brands === 'string') {
+            // Thêm .map(b => b.trim()) để loại bỏ khoảng trắng thừa từ frontend
+            const brandList = (brands as string).split(',').map(b => b.trim()); 
+            
+            // Tìm ID của các Brand khớp tên
+            const brandObjects = await Brand.find({ name: { $in: brandList } }).select('_id');
+
+            if (brandObjects.length > 0) {
+                filter.brand = { $in: brandObjects.map(b => b._id) };
+            } else {
+                // Nếu không tìm thấy ID nào của Brand được yêu cầu, set filter._id rỗng
+                filter._id = { $in: [] }; 
+            }
+        }
+
+        // Lọc theo category (danh mục)
+        if (categoryNames && typeof categoryNames === 'string') {
+            const categoryList = categoryNames.split(',');
+            const categoryObjects = await Category.find({ name: { $in: categoryList } }).select('_id');
+            if (categoryObjects.length > 0) {
+                filter.category = { $in: categoryObjects.map(c => c._id) };
+            } else {
+                filter._id = { $in: [] };
+            }
+        }
+
+        // Lọc theo dung lượng pin (battery)
+        if (battery && typeof battery === 'string') {
+            // Lấy số từ chuỗi, ví dụ "3000 mAh" -> "3000"
+            const batteryList = battery.split(',').map(b => b.trim().split(' ')[0]);
+            if (batteryList.length > 0) {
+                const batteryRegex = batteryList.map(b => new RegExp(b));
+                filter['specs.battery'] = { $in: batteryRegex };
+            }
+        }
+
+       
+        const hasVariantFilters = ram || storage || minPrice || maxPrice;
+        if (hasVariantFilters) {
+            // Giao các kết quả: chỉ lấy device ID vừa khớp brand/category, vừa khớp variant
+            filter._id = { $in: filter._id ? filter._id.$in.filter(id => matchingDeviceIds.includes(id)) : matchingDeviceIds };
+        }
+
+
+        // Lấy tất cả sản phẩm khớp với bộ lọc cơ bản
+        let products = await Device.find(filter).populate('brand category').lean();
+        const categories = await Category.find().lean();
+        const allBrands = await Brand.find({}).lean(); // Lấy tất cả các thương hiệu
+
+        // Gán giá thấp nhất từ các variant đã khớp cho mỗi sản phẩm để hiển thị
+        const variantsByDeviceId = matchingVariants.reduce((acc, v) => {
+            const deviceId = v.deviceId.toString();
             if (!acc[deviceId]) acc[deviceId] = [];
-            acc[deviceId].push(variant);
+            acc[deviceId].push(v);
             return acc;
-        }, {} as Record<string, any[]>);
+        }, {});
 
         products.forEach(product => {
-            const variants = variantsByDeviceId[product._id.toString()] || [];
-            (product as any).variants = variants; // Gán variants để có thể dùng ở nơi khác nếu cần
-            if (variants.length > 0) {
-                const lowestPriceVariant = variants[0];
+            const productVariants = variantsByDeviceId[product._id.toString()] || [];
+            productVariants.sort((a, b) => a.price - b.price); // Sắp xếp để lấy giá thấp nhất
+
+            if (productVariants.length > 0) {
+                const lowestPriceVariant = productVariants[0];
                 const discount = lowestPriceVariant.discount || 0;
                 (product as any).originalPrice = lowestPriceVariant.price;
                 (product as any).price = lowestPriceVariant.price * (1 - discount / 100);
                 (product as any).hasDiscount = discount > 0;
-            } else {
-                (product as any).price = 0;
             }
         });
 
@@ -164,7 +235,8 @@ const getShopPage = async (req: Request, res: Response) => {
         return res.render("client/home/shop.ejs", {
             products,
             categories,
-            pagination
+            pagination,
+            allBrands // Truyền danh sách thương hiệu ra view
         });
     } catch (err) {
         console.error(err);

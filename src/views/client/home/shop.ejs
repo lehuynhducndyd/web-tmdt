@@ -22,6 +22,9 @@
 
     <link href="/client/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- noUiSlider CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" />
+
     <link href="/client/css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
@@ -82,25 +85,23 @@
                 </div>
             </section>
 
+            <!-- thanh lọc bat dau-->
             <section class="categories-section main-container">
                 <h2 class="section-title">SẢN PHẨM CỦA CHÚNG TÔI</h2>
 
                 <div class="filter-bar">
-                    <button class="filter-btn active"><i class="fas fa-filter"></i> Lọc</button>
-                    <button class="filter-btn brand-filter">Samsung</button>
-                    <button class="filter-btn brand-filter">iPhone</button>
-                    <button class="filter-btn brand-filter">Oppo</button>
-                    <button class="filter-btn brand-filter">Xiaomi</button>
-                    <button class="filter-btn brand-filter">Vivo</button>
-                    <button class="filter-btn brand-filter">Realme</button>
-                    <button class="filter-btn brand-filter">Nokia</button>
-                    <button class="filter-btn brand-filter">Honor</button>
+                    <button class="filter-btn active" id="openFilterModalBtn"><i class="fas fa-filter"></i> Lọc</button>
+                    <% if (allBrands && allBrands.length > 0) { %>
+                        <% allBrands.forEach(function(brand) { %>
+                            <button class="filter-btn brand-filter"><%= brand.name %></button>
+                        <% }); %>
+                    <% } %>
                 </div>
 
                 <div class="filter-modal" id="filterModal">
                     <div class="filter-modal-content">
                         <div class="filter-modal-header">
-                            <h3><i class="fas fa-filter"></i> Đặc điểm tại Tripple D Shop</h3>
+                            <h3><i class="fas fa-filter"></i>Tripple D Shop</h3>
                             <button class="close-btn"
                                 onclick="document.getElementById('filterModal').style.display='none'">&times;
                                 Đóng</button>
@@ -109,34 +110,11 @@
                             <div class="filter-group-item">
                                 <h4>Hãng</h4>
                                 <div class="option-grid">
-                                    <button class="option-btn"><img src="/client/img/logo/apple_small.png" alt="Apple">
-                                        Apple</button>
-                                    <button class="option-btn"><img src="/client/img/logo/samsung_small.png"
-                                            alt="Samsung"> Samsung</button>
-                                    <button class="option-btn"><img src="/client/img/logo/oppo_small.png" alt="Oppo">
-                                        Oppo</button>
-                                    <button class="option-btn"><img src="/client/img/logo/xiaomi_small.png"
-                                            alt="Xiaomi"> Xiaomi</button>
-                                    <button class="option-btn"><img src="/client/img/logo/motorola_small.png"
-                                            alt="Motorola"> Motorola</button>
-                                    <button class="option-btn"><img src="/client/img/logo/vivo_small.png" alt="Vivo">
-                                        Vivo</button>
-                                    <button class="option-btn"><img src="/client/img/logo/realme_small.png"
-                                            alt="Realme"> Realme</button>
-                                    <button class="option-btn"><img src="/client/img/logo/honor_small.png" alt="Honor">
-                                        Honor</button>
-                                    <button class="option-btn"><img src="/client/img/logo/tecno_small.png" alt="Tecno">
-                                        Tecno</button>
-                                    <button class="option-btn"><img src="/client/img/logo/nokia_small.png" alt="Nokia">
-                                        Nokia</button>
-                                    <button class="option-btn"><img src="/client/img/logo/masstel_small.png"
-                                            alt="Masstel"> Masstel</button>
-                                    <button class="option-btn"><img src="/client/img/logo/mobell_small.png"
-                                            alt="Mobell"> Mobell</button>
-                                    <button class="option-btn"><img src="/client/img/logo/viettel_small.png"
-                                            alt="Viettel"> Viettel</button>
-                                    <button class="option-btn"><img src="/client/img/logo/benco_small.png" alt="Benco">
-                                        Benco</button>
+                                    <% if (allBrands && allBrands.length > 0) { %>
+                                        <% allBrands.forEach(function(brand) { %>
+                                            <button class="option-btn"><%= brand.name %></button>
+                                        <% }); %>
+                                    <% } %>
                                 </div>
                             </div>
 
@@ -153,76 +131,67 @@
                                 <div class="price-range">
                                     <p><i class="fas fa-sliders-h"></i> Hoặc chọn mức giá phù hợp với bạn</p>
                                     <div class="price-inputs">
-                                        <input type="text" value="0.000đ">
+                                        <input type="text" inputmode="numeric" value="0">
                                         <span>-</span>
-                                        <input type="text" value="64.000.000đ">
+                                        <input type="text" inputmode="numeric" value="64.000.000">
                                     </div>
                                     <div class="slider-range"></div>
                                 </div>
                             </div>
 
                             <div class="filter-group-item">
-                                <h4>Loại điện thoại</h4>
+                                <h4>Danh mục</h4>
                                 <div class="option-grid">
-                                    <button class="option-btn img-option"><img
-                                            src="https://cdn.tgdd.vn/mwg-images/icon/android-32.png" alt="Android">
-                                        Android</button>
-                                    <button class="option-btn img-option"><img
-                                            src="https://cdn.tgdd.vn/mwg-images/icon/ios-32.png" alt="iPhone (iOS)">
-                                        iPhone (iOS)</button>
-                                    <button class="option-btn img-option"><img
-                                            src="https://cdn.tgdd.vn/mwg-images/icon/dien-thoai-phu-hop-32.png"
-                                            alt="Điện thoại phổ thông"> Điện thoại phổ thông</button>
+                                    <% if (categories && categories.length > 0) { %>
+                                        <% categories.forEach(function(category) { %>
+                                            <button class="option-btn">
+                                                <%= category.name %>
+                                            </button>
+                                        <% }); %>
+                                    <% } %>
                                 </div>
                             </div>
 
-                            <div class="filter-group-item">
-                                <h4>Nhu cầu</h4>
-                                <div class="option-grid">
-                                    <button class="option-btn">Chơi game / Cấu hình cao</button>
-                                    <button class="option-btn">Pin khủng trên 5000 mAh</button>
-                                    <button class="option-btn">Chụp ảnh, quay phim</button>
-                                    <button class="option-btn">Livestream</button>
-                                    <button class="option-btn">Mỏng nhẹ</button>
-                                </div>
-                                <p class="more-options"><i class="fas fa-info-circle"></i> Tìm hiểu về Nhu cầu</p>
-                            </div>
+                            
 
                             <div class="filter-group-item">
                                 <h4>RAM</h4>
                                 <div class="option-grid">
-                                    <button class="option-btn">3 GB</button>
+                                   
                                     <button class="option-btn">4 GB</button>
-                                    <button class="option-btn">6 GB</button>
                                     <button class="option-btn">8 GB</button>
                                     <button class="option-btn">12 GB</button>
                                     <button class="option-btn">16 GB</button>
+                                    <button class="option-btn">32 GB</button>
+                                    <button class="option-btn">64 GB</button>
                                 </div>
-                                <p class="more-options"><i class="fas fa-info-circle"></i> Tìm hiểu về RAM</p>
+                                
+                            </div>
+                      
+
+                            <div class="filter-group-item">
+                                <h4>Dung lượng</h4>
+                                <div class="option-grid">
+                                    <button class="option-btn">64 GB</button>
+                                    <button class="option-btn">128 GB</button>
+                                    <button class="option-btn">256 GB</button>
+                                    <button class="option-btn">512 GB</button>
+                                    <button class="option-btn">1 TB</button>
+                                    <button class="option-btn">2 TB</button>
+                                </div>
                             </div>
 
                             <div class="filter-group-item">
-                                <h4>Độ phân giải</h4>
+                                <h4>Dung lượng pin</h4>
                                 <div class="option-grid">
-                                    <button class="option-btn">QQVGA</button>
-                                    <button class="option-btn">QXGA+</button>
-                                    <button class="option-btn">QVGA</button>
-                                    <button class="option-btn">HD+</button>
-                                    <button class="option-btn">Full HD+</button>
-                                    <button class="option-btn">1.5K</button>
-                                    <button class="option-btn">1.5K+</button>
-                                    <button class="option-btn">2K+</button>
-                                    <button class="option-btn">Retina (iPhone)</button>
-                                </div>
-                            </div>
-
-                            <div class="filter-group-item">
-                                <h4>Tần số quét</h4>
-                                <div class="option-grid">
-                                    <button class="option-btn">60 Hz</button>
-                                    <button class="option-btn">144 Hz</button>
-                                    <button class="option-btn">90 Hz</button>
-                                    <button class="option-btn">120 Hz</button>
+                                    <button class="option-btn">3000 mAh</button>
+                                    <button class="option-btn">4000 mAh</button>
+                                    <button class="option-btn">5000 mAh</button>
+                                    <button class="option-btn">6000 mAh</button>
+                                    <button class="option-btn">7000 mAh</button>
+                                    <button class="option-btn">8000 mAh</button>
+                                    <button class="option-btn">9000 mAh</button>
+                                    <button class="option-btn">10000 mAh</button>
                                 </div>
                             </div>
 
@@ -300,6 +269,7 @@
                     </div>
                 </div>
             </section>
+            <!-- thanh lọc ket thuc -->
         </main>
         <%- include('../layout/footer'); -%>
 
@@ -316,11 +286,14 @@
             <script src="client/lib/lightbox/js/lightbox.min.js"></script>
             <script src="client/lib/owlcarousel/owl.carousel.min.js"></script>
 
+            <!-- noUiSlider JS -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+
             <script src="/client/js/main.js"></script>
             <script>
                 // JavaScript để mở/đóng modal
                 document.addEventListener('DOMContentLoaded', function () {
-                    const filterBtn = document.querySelector('.filter-btn.active');
+                    const filterBtn = document.getElementById('openFilterModalBtn');
                     const filterModal = document.getElementById('filterModal');
                     const closeBtn = filterModal.querySelector('.close-btn');
 
@@ -351,6 +324,206 @@
                             this.classList.toggle('selected');
                         });
                     });
+
+                    // Price Range Slider
+                    const priceSlider = document.querySelector('.slider-range');
+                    const minPriceInput = document.querySelector('.price-inputs input[type="text"]:first-of-type');
+                    const maxPriceInput = document.querySelector('.price-inputs input[type="text"]:last-of-type');
+
+                    if (priceSlider && minPriceInput && maxPriceInput) {
+                        noUiSlider.create(priceSlider, {
+                            start: [0, 64000000],
+                            connect: true,
+                            step: 500000,
+                            range: {
+                                'min': 0,
+                                'max': 64000000
+                            },
+                            format: {
+                                to: function (value) {
+                                    return Math.round(value);
+                                },
+                                from: function (value) {
+                                    return Number(value.replace(/\./g, ''));
+                                }
+                            }
+                        });
+
+                        priceSlider.noUiSlider.on('update', function (values, handle) {
+                            const value = values[handle];
+                            if (handle === 0) {
+                                minPriceInput.value = value.toLocaleString('vi-VN');
+                            } else {
+                                maxPriceInput.value = value.toLocaleString('vi-VN');
+                            }
+                        });
+
+                        minPriceInput.addEventListener('change', function () {
+                            priceSlider.noUiSlider.set([this.value.replace(/\./g, ''), null]);
+                        });
+
+                        maxPriceInput.addEventListener('change', function () {
+                            priceSlider.noUiSlider.set([null, this.value.replace(/\./g, '')]);
+                        });
+                    }
+                });
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    const applyFilterBtn = document.querySelector('.apply-filter-btn');
+                    const clearFilterBtn = document.querySelector('.clear-filter-btn');
+                    const filterModal = document.getElementById('filterModal');
+
+                    function getSelectedFilters() {
+                        const filters = {};
+
+                        // Get selected brands
+                        const selectedBrands = Array.from(filterModal.querySelectorAll('.filter-group-item:nth-child(1) .option-btn.selected'))
+                            .map(btn => btn.textContent.trim());
+                        if (selectedBrands.length > 0) filters.brands = selectedBrands.join(',');
+
+                        // Get price range from selected buttons first
+                        const selectedPriceBtn = filterModal.querySelector('.price-grid .option-btn.selected');
+                        if (selectedPriceBtn) {
+                            const priceText = selectedPriceBtn.textContent.trim();
+                            if (priceText.startsWith('Dưới')) {
+                                filters.maxPrice = 2000000;
+                            } else if (priceText.startsWith('Trên')) {
+                                filters.minPrice = 20000000;
+                            } else if (priceText.includes('Từ')) {
+                                const parts = priceText.replace(/Từ|triệu/g, '').trim().split('-');
+                                if (parts.length === 2) {
+                                    filters.minPrice = parseInt(parts[0].trim()) * 1000000;
+                                    filters.maxPrice = parseInt(parts[1].trim()) * 1000000;
+                                }
+                            }
+                        } else {
+                            // If no button is selected, get price from slider
+                            const priceSlider = document.querySelector('.slider-range');
+                            if (priceSlider.noUiSlider) {
+                                const prices = priceSlider.noUiSlider.get();
+                                const minPrice = prices[0];
+                                const maxPrice = prices[1];
+
+                                // Only add to filter if they are not the default full range
+                                if (minPrice > 0) {
+                                    filters.minPrice = minPrice;
+                                }
+                                if (maxPrice < 64000000) {
+                                    filters.maxPrice = maxPrice;
+                                }
+                            }
+                        }
+
+                        // Get selected categories
+                        const selectedCategories = Array.from(filterModal.querySelectorAll('.filter-group-item:nth-child(3) .option-btn.selected'))
+                            .map(btn => btn.textContent.trim());
+                        if (selectedCategories.length > 0) filters.categories = selectedCategories.join(',');
+
+                        // Get selected RAM
+                        const selectedRam = Array.from(filterModal.querySelectorAll('.filter-group-item:nth-child(4) .option-btn.selected'))
+                            .map(btn => btn.textContent.trim());
+                        if (selectedRam.length > 0) filters.ram = selectedRam.join(',');
+
+                        // Get selected Storage
+                        const selectedStorage = Array.from(filterModal.querySelectorAll('.filter-group-item:nth-child(5) .option-btn.selected'))
+                            .map(btn => btn.textContent.trim());
+                        if (selectedStorage.length > 0) filters.storage = selectedStorage.join(',');
+
+                        // Get selected Battery
+                        const selectedBattery = Array.from(filterModal.querySelectorAll('.filter-group-item:nth-child(6) .option-btn.selected'))
+                            .map(btn => btn.textContent.trim());
+                        if (selectedBattery.length > 0) filters.battery = selectedBattery.join(',');
+
+                        return filters;
+                    }
+
+                    if (applyFilterBtn) {
+                        applyFilterBtn.addEventListener('click', function () {
+                            const filters = getSelectedFilters();
+                            const queryParams = new URLSearchParams(filters);
+                            const queryString = queryParams.toString();
+
+                            // Redirect to the shop page with filter query parameters
+                            window.location.href = `/shop?${queryString}`;
+                        });
+                    }
+
+                    if (clearFilterBtn) {
+                        clearFilterBtn.addEventListener('click', function () {
+                            // Redirect to the shop page without any filters
+                            window.location.href = '/shop';
+                        });
+                    }
+
+                    // Handle brand filter buttons outside the modal
+                    const brandFilterButtons = document.querySelectorAll('.filter-btn.brand-filter');
+                    brandFilterButtons.forEach(button => {
+                        button.addEventListener('click', function () {
+                            const brandName = this.textContent.trim();
+                            const currentParams = new URLSearchParams(window.location.search);
+                            currentParams.set('brands', brandName);
+                            // Clear other filters when a specific brand is clicked from the top bar
+                            ['categories', 'minPrice', 'maxPrice', 'ram', 'storage', 'battery'].forEach(key => currentParams.delete(key));
+
+                            window.location.href = `/shop?${currentParams.toString()}`;
+                        });
+                    });
+
+                    // *** NEW: Function to update UI based on URL parameters ***
+                    function updateFiltersFromURL() {
+                        const currentParams = new URLSearchParams(window.location.search);
+
+                        // Update brand filters
+                        const brands = currentParams.get('brands');
+                        if (brands) {
+                            const brandList = brands.split(',');
+                            // Update modal buttons
+                            filterModal.querySelectorAll('.filter-group-item:nth-child(1) .option-btn').forEach(btn => {
+                                if (brandList.includes(btn.textContent.trim())) {
+                                    btn.classList.add('selected');
+                                }
+                            });
+                            // Update top bar buttons
+                            document.querySelectorAll('.filter-btn.brand-filter').forEach(btn => {
+                                if (brandList.includes(btn.textContent.trim())) {
+                                    btn.classList.add('active');
+                                } else {
+                                    btn.classList.remove('active');
+                                }
+                            });
+                        }
+
+                        // Update price slider
+                        const minPrice = currentParams.get('minPrice');
+                        const maxPrice = currentParams.get('maxPrice');
+                        const priceSlider = document.querySelector('.slider-range');
+                        if (priceSlider && priceSlider.noUiSlider && (minPrice || maxPrice)) {
+                            priceSlider.noUiSlider.set([minPrice || 0, maxPrice || 64000000]);
+                        }
+
+                        // Update other filters (Category, RAM, Storage, Battery)
+                        const filterMappings = {
+                            categories: 3,
+                            ram: 4,
+                            storage: 5,
+                            battery: 6
+                        };
+
+                        for (const [param, childIndex] of Object.entries(filterMappings)) {
+                            const value = currentParams.get(param);
+                            if (value) {
+                                const valueList = value.split(',');
+                                filterModal.querySelectorAll(`.filter-group-item:nth-child(${childIndex}) .option-btn`).forEach(btn => {
+                                    if (valueList.some(val => btn.textContent.trim().includes(val))) {
+                                        btn.classList.add('selected');
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    // Call the function to set the initial state of filters on page load
+                    updateFiltersFromURL();
                 });
             </script>
 </body>
