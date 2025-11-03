@@ -522,7 +522,7 @@ const postDeleteCartItem = async (req: Request, res: Response) => {
             cart.items.pull({ variantId: variantId });
 
             // Cập nhật lại số lượng sản phẩm trong giỏ hàng
-            cart.sum = cart.items.length;
+            cart.sum = cart.sum - 1;
             await cart.save();
 
             // Cập nhật lại res.locals.sum để hiển thị đúng ở navbar sau khi redirect
