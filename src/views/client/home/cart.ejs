@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Fruitables - Vegetable Website Template</title>
+    <title>Giỏ hàng</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -109,10 +109,24 @@
                                             </small>
                                         </td>
                                         <td>
-                                            <p class="mb-0">
-                                                <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
-                                                    }).format(item.price) %>
-                                            </p>
+                                            <% const finalPrice=item.variant.price * (1 - (item.variant.discount || 0) /
+                                                100); %>
+                                                <% if (item.variant.discount && item.variant.discount> 0) { %>
+                                                    <p class="mb-0 text-danger fw-bold">
+                                                        <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
+                                                            currency: 'VND' }).format(finalPrice) %>
+                                                    </p>
+                                                    <p class="mb-0 text-muted text-decoration-line-through"
+                                                        style="font-size: 0.9em;">
+                                                        <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
+                                                            currency: 'VND' }).format(item.variant.price) %>
+                                                    </p>
+                                                    <% } else { %>
+                                                        <p class="mb-0">
+                                                            <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
+                                                                currency: 'VND' }).format(item.variant.price) %>
+                                                        </p>
+                                                        <% } %>
                                         </td>
                                         <td>
                                             <div class="input-group quantity" style="width: 100px;">
@@ -130,9 +144,9 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <p class="mb-0">
+                                            <p class="mb-0 fw-bold">
                                                 <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
-                                                    }).format(item.price * item.quantity) %>
+                                                    }).format(finalPrice * item.quantity) %>
                                             </p>
                                         </td>
                                         <td>
@@ -155,26 +169,37 @@
                     <div class="col-12 col-md-8">
                         <div class="bg-light rounded">
                             <div class="p-4">
-                                <h1 class="display-6 mb-4">Tổng <span class="fw-normal">giỏ hàng</span></h1>
-                                <div class="d-flex justify-content-between mb-4">
+                                <h1 class="display-6 mb-4">Tổng giỏ hàng</span></h1>
+                                <!-- <div class="d-flex justify-content-between mb-4">
                                     <h5 class="mb-0 me-4">Tạm tính:</h5>
-                                    <p class="mb-0">$96.00</p>
-                                </div>
-                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">
+                                        <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
+                                            }).format(cart.subTotal || 0) %>
+                                    </p>
+                                </div> -->
+                                <!-- <div class="d-flex justify-content-between">
                                     <h5 class="mb-0 me-4">Phí vận chuyển</h5>
                                     <div class="">
-                                        <p class="mb-0">Mặc định: 30.000 VNĐ</p>
+                                        <% const shippingFee=(cart.subTotal || 0)> 10000000 ? 0 : 30000; %>
+                                            <p class="mb-0">
+                                                <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
+                                                    }).format(shippingFee) %>
+                                                    <% if ((cart.subTotal || 0)> 10000000) { %>
+                                                        <br><small class="text-success">(Miễn phí)</small>
+                                                        <% } %>
+                                            </p>
                                     </div>
-                                </div>
-                                <p class="mb-0 text-end">Vận chuyển tới Việt Nam.</p>
+                                </div> -->
                             </div>
                             <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                                 <h5 class="mb-0 ps-4 me-4">Tổng cộng</h5>
-                                <p class="mb-0 pe-4">$99.00</p>
+                                <p class="mb-0 pe-4 fw-bold">
+                                    <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
+                                        }).format((cart.subTotal || 0) + shippingFee) %>
+                                </p>
                             </div>
-                            <button
-                                class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
-                                type="button">Tiến hành thanh toán</button>
+                            <button class="btn btn-warning  rounded-pill px-4 py-3 mb-4 ms-4" type="button">Tiến hành
+                                thanh toán</button>
                         </div>
                     </div>
                 </div>
