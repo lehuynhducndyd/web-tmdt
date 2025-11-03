@@ -535,34 +535,6 @@ const postDeleteCartItem = async (req: Request, res: Response) => {
     }
 }
 
-const postUpdateCartQuantity = async (req: Request, res: Response) => {
-    const currentUser = req.user as any;
-    if (!currentUser) {
-        return res.status(401).json({ success: false, message: "Vui lòng đăng nhập." });
-    }
-    try {
-        const { variantId, quantity } = req.body;
-
-        if (!variantId || quantity === undefined) {
-            return res.status(400).json({ success: false, message: "Dữ liệu không hợp lệ." });
-        }
-
-        const cart = await Cart.findOne({ user: currentUser._id });
-
-        if (cart) {
-            const itemIndex = cart.items.findIndex(item => item.variantId.toString() === variantId);
-            if (itemIndex > -1) {
-                cart.items[itemIndex].quantity = Number(quantity);
-                await cart.save();
-                return res.json({ success: true, message: "Cập nhật giỏ hàng thành công." });
-            }
-        }
-        return res.status(404).json({ success: false, message: "Sản phẩm không tồn tại trong giỏ hàng." });
-    } catch (error) {
-        console.error("Error updating cart quantity:", error);
-        res.status(500).json({ success: false, message: "Lỗi khi cập nhật giỏ hàng." });
-    }
-};
 
 export {
     getHomePage,
@@ -573,5 +545,4 @@ export {
     postAddProductToCart,
     getCartPage,
     postDeleteCartItem,
-    postUpdateCartQuantity
 };

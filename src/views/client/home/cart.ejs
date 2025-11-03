@@ -67,130 +67,137 @@
                         </ol>
                     </nav>
                 </div>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col" style="width: 150px;"></th>
-                                <th scope="col">Tên</th>
-                                <th scope="col">Giá</th>
-                                <th scope="col">Số lượng</th>
-                                <th scope="col">Tổng</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% if (cart && cart.items && cart.items.length> 0) { %>
-                                <% cart.items.forEach(function(item) { %>
-                                    <tr class="align-items-center">
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <% if (item.product.thumbnail && item.product.thumbnail.data) { %>
-                                                    <img src="data:<%= item.product.thumbnail.contentType %>;base64,<%= item.product.thumbnail.data.toString('base64') %>"
-                                                        class="img-fluid me-3"
-                                                        style="width: 80px; height: 80px; object-fit: contain;"
-                                                        alt="<%= item.product.name %>">
-                                                    <% } else { %>
-                                                        <img src="/admin/img/default-image.png" class="img-fluid me-3"
+                <form action="/update-and-checkout" method="post">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="width: 150px;"></th>
+                                    <th scope="col">Tên</th>
+                                    <th scope="col">Giá</th>
+                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Tổng</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (cart && cart.items && cart.items.length> 0) { %>
+                                    <% cart.items.forEach(function(item) { %>
+                                        <tr class="align-items-center">
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <% if (item.product.thumbnail && item.product.thumbnail.data) { %>
+                                                        <img src="data:<%= item.product.thumbnail.contentType %>;base64,<%= item.product.thumbnail.data.toString('base64') %>"
+                                                            class="img-fluid me-3"
                                                             style="width: 80px; height: 80px; object-fit: contain;"
-                                                            alt="No Image">
-                                                        <% } %>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <p class="mb-0">
-                                                <%= item.product.name %>
-                                            </p>
-                                            <small class="text-muted">
-                                                <%= item.variant.color %>
-                                                    <% if (item.variant.ram && item.variant.storage) { %>
-                                                        | <%= item.variant.ram %> / <%= item.variant.storage %>
-                                                                <% } %>
-                                            </small>
-                                        </td>
-                                        <td>
-                                            <% const finalPrice=item.variant.price * (1 - (item.variant.discount || 0) /
-                                                100); %>
-                                                <% if (item.variant.discount && item.variant.discount> 0) { %>
-                                                    <p class="mb-0 text-danger fw-bold">
-                                                        <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
-                                                            currency: 'VND' }).format(finalPrice) %>
-                                                    </p>
-                                                    <p class="mb-0 text-muted text-decoration-line-through"
-                                                        style="font-size: 0.9em;">
-                                                        <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
-                                                            currency: 'VND' }).format(item.variant.price) %>
-                                                    </p>
-                                                    <% } else { %>
-                                                        <p class="mb-0">
+                                                            alt="<%= item.product.name %>">
+                                                        <% } else { %>
+                                                            <img src="/admin/img/default-image.png"
+                                                                class="img-fluid me-3"
+                                                                style="width: 80px; height: 80px; object-fit: contain;"
+                                                                alt="No Image">
+                                                            <% } %>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <p class="mb-0">
+                                                    <%= item.product.name %>
+                                                </p>
+                                                <small class="text-muted">
+                                                    <%= item.variant.color %>
+                                                        <% if (item.variant.ram && item.variant.storage) { %>
+                                                            | <%= item.variant.ram %> / <%= item.variant.storage %>
+                                                                    <% } %>
+                                                </small>
+                                            </td>
+                                            <td>
+                                                <% const finalPrice=item.variant.price * (1 - (item.variant.discount ||
+                                                    0) / 100); %>
+                                                    <% if (item.variant.discount && item.variant.discount> 0) { %>
+                                                        <p class="mb-0 text-danger fw-bold">
+                                                            <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
+                                                                currency: 'VND' }).format(finalPrice) %>
+                                                        </p>
+                                                        <p class="mb-0 text-muted text-decoration-line-through"
+                                                            style="font-size: 0.9em;">
                                                             <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
                                                                 currency: 'VND' }).format(item.variant.price) %>
                                                         </p>
-                                                        <% } %>
-                                        </td>
-                                        <td>
-                                            <div class="input-group quantity me-4" style="width: 120px;">
-                                                <div class="input-group-btn">
-                                                    <button class="btn-sm btn-minus rounded-circle bg-light border"
-                                                        type="button">
-                                                        <i class="fa fa-minus"></i>
-                                                    </button>
+                                                        <% } else { %>
+                                                            <p class="mb-0">
+                                                                <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
+                                                                    currency: 'VND' }).format(item.variant.price) %>
+                                                            </p>
+                                                            <% } %>
+                                            </td>
+                                            <td>
+                                                <div class="input-group quantity me-4" style="width: 120px;">
+                                                    <div class="input-group-btn">
+                                                        <button class="btn-sm btn-minus rounded-circle bg-light border"
+                                                            type="button">
+                                                            <i class="fa fa-minus"></i>
+                                                        </button>
+                                                    </div>
+                                                    <input type="number"
+                                                        class="form-control form-control-sm text-center border-0"
+                                                        value="<%= item.quantity %>" min="1"
+                                                        max="<%= item.variant.stock %>"
+                                                        data-variant-id="<%= item.variantId %>"
+                                                        name="quantities[<%= item.variantId %>]">
+                                                    <div class="input-group-btn">
+                                                        <button class="btn-sm btn-plus rounded-circle bg-light border"
+                                                            type="button">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                                <input type="number"
-                                                    class="form-control form-control-sm text-center border-0"
-                                                    value="<%= item.quantity %>" min="1" max="<%= item.variant.stock %>"
-                                                    data-variant-id="<%= item.variantId %>" name="quantity" readonly>
-                                                <div class="input-group-btn">
-                                                    <button class="btn-sm btn-plus rounded-circle bg-light border"
-                                                        type="button">
-                                                        <i class="fa fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
 
-                                        </td>
-                                        <td class="item-total" data-price="<%= finalPrice %>">
-                                            <p class="mb-0 fw-bold">
-                                                <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
-                                                    }).format(finalPrice * item.quantity) %>
-                                            </p>
-                                        </td>
-                                        <td>
-                                            <form action="/delete-cart-item/<%= item.variantId %>" method="post">
-                                                <button class="btn btn-md rounded-circle bg-light border">
+                                            </td>
+                                            <td class="item-total" data-price="<%= finalPrice %>">
+                                                <p class="mb-0 fw-bold">
+                                                    <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
+                                                        currency: 'VND' }).format(finalPrice * item.quantity) %>
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <!-- Nút xóa này sẽ không hoạt động bên trong form chính, cần xử lý bằng JS hoặc form riêng -->
+                                                <a href="/delete-cart-item/<%= item.variantId %>"
+                                                    class="btn btn-md rounded-circle bg-light border delete-item-btn">
                                                     <i class="fa fa-times text-danger"></i>
-                                                </button>
-                                            </form>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="6" class="text-center">Giỏ hàng của bạn đang trống.
+                                                    </td>
+                                                </tr>
+                                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
 
-                                        </td>
-                                    </tr>
-                                    <% }); %>
-                                        <% } else { %>
-                                            <tr>
-                                                <td colspan="6" class="text-center">Giỏ hàng của bạn đang trống.</td>
-                                            </tr>
-                                            <% } %>
-                        </tbody>
-                    </table>
-                </div>
+                    <div class="mt-5 row g-4 justify-content-start">
+                        <div class="col-12 col-md-8">
+                            <div class="bg-light rounded">
+                                <div class="p-4">
+                                    <h1 class="display-6 mb-4">Tổng cộng
+                                        <span class="text-danger">
+                                            <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
+                                                }).format(cart ? cart.subTotal : 0) %>
+                                        </span>
 
-                <div class="mt-5 row g-4 justify-content-start">
-                    <div class="col-12 col-md-8">
-                        <div class="bg-light rounded">
-                            <div class="p-4">
-                                <h1 class="display-6 mb-4">Tổng cộng</h1>
+                                    </h1>
+                                </div>
+
+                                <button class=" btn btn-warning rounded-pill px-4 py-3 mb-4 ms-4" type="submit">
+                                    Tiến hành thanh toán
+                                </button>
                             </div>
-                            <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-end">
-                                <p class="mb-0 pe-4 fw-bold" id="cart-total">
-                                    <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
-                                        }).format(cart ? cart.subTotal : 0) %>
-                                </p>
-                            </div>
-                            <button class="btn btn-warning  rounded-pill px-4 py-3 mb-4 ms-4" type="button">Tiến hành
-                                thanh toán</button>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
         <!-- Cart Page End -->
