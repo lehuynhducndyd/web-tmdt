@@ -35,67 +35,19 @@
     <%- include('../layout/navbar'); -%>
 
         <main class="main-content">
-
-            <section class="main-container">
-                <div class="khung-quang-cao">
-                    <h3>FLASH SALE CUỐI TUẦN - GIẢM ĐẾN 50%</h3>
-                    <p>Hàng ngàn sản phẩm công nghệ đang chờ đón bạn. Cơ hội vàng để nâng cấp thiết bị với giá tốt nhất!
-                    </p>
-                    <a href="/shop" class="btn btn-quang-cao">XEM NGAY ƯU ĐÃI</a>
-                </div>
-            </section>
-
-
-
-            <section class="khung-uu-dai-dich-vu main-container">
-                <div class="row">
-
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="uu-dai-item">
-                            <div class="uu-dai-item-icon"><i class="fas fa-shipping-fast"></i></div>
-                            <h4>Free Shipping</h4>
-                            <p>Miễn phí với hóa đơn từ 10.000.000 VNĐ</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="uu-dai-item">
-                            <div class="uu-dai-item-icon"><i class="fas fa-shield-alt"></i></div>
-                            <h4>Bảo mật thanh toán</h4>
-                            <p>100% bảo mật thanh toán tuyệt đối</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="uu-dai-item">
-                            <div class="uu-dai-item-icon"><i class="fas fa-sync-alt"></i></div>
-                            <h4>Miễn phí đổi trả 30 ngày</h4>
-                            <p>30 ngày hoàn tiền nếu sản phẩm lỗi</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="uu-dai-item">
-                            <div class="uu-dai-item-icon"><i class="fas fa-headset"></i></div>
-                            <h4>Hỗ trợ 24/7</h4>
-                            <p>Hỗ trợ mọi lúc mọi nơi từ đội ngũ chuyên gia</p>
-                        </div>
-                    </div>
-
-                </div>
-            </section>
-
             <!-- thanh lọc bat dau-->
             <section class="categories-section main-container">
                 <h2 class="section-title">SẢN PHẨM CỦA CHÚNG TÔI</h2>
 
                 <div class="filter-bar">
                     <button class="filter-btn active" id="openFilterModalBtn"><i class="fas fa-filter"></i> Lọc</button>
-                    <% if (allBrands && allBrands.length > 0) { %>
+                    <% if (allBrands && allBrands.length> 0) { %>
                         <% allBrands.forEach(function(brand) { %>
-                            <button class="filter-btn brand-filter"><%= brand.name %></button>
-                        <% }); %>
-                    <% } %>
+                            <button class="filter-btn brand-filter">
+                                <%= brand.name %>
+                            </button>
+                            <% }); %>
+                                <% } %>
                 </div>
 
                 <div class="filter-modal" id="filterModal">
@@ -110,11 +62,13 @@
                             <div class="filter-group-item">
                                 <h4>Hãng</h4>
                                 <div class="option-grid">
-                                    <% if (allBrands && allBrands.length > 0) { %>
+                                    <% if (allBrands && allBrands.length> 0) { %>
                                         <% allBrands.forEach(function(brand) { %>
-                                            <button class="option-btn"><%= brand.name %></button>
-                                        <% }); %>
-                                    <% } %>
+                                            <button class="option-btn">
+                                                <%= brand.name %>
+                                            </button>
+                                            <% }); %>
+                                                <% } %>
                                 </div>
                             </div>
 
@@ -142,22 +96,22 @@
                             <div class="filter-group-item">
                                 <h4>Danh mục</h4>
                                 <div class="option-grid">
-                                    <% if (categories && categories.length > 0) { %>
+                                    <% if (categories && categories.length> 0) { %>
                                         <% categories.forEach(function(category) { %>
                                             <button class="option-btn">
                                                 <%= category.name %>
                                             </button>
-                                        <% }); %>
-                                    <% } %>
+                                            <% }); %>
+                                                <% } %>
                                 </div>
                             </div>
 
-                            
+
 
                             <div class="filter-group-item">
                                 <h4>RAM</h4>
                                 <div class="option-grid">
-                                   
+
                                     <button class="option-btn">4 GB</button>
                                     <button class="option-btn">8 GB</button>
                                     <button class="option-btn">12 GB</button>
@@ -165,9 +119,9 @@
                                     <button class="option-btn">32 GB</button>
                                     <button class="option-btn">64 GB</button>
                                 </div>
-                                
+
                             </div>
-                      
+
 
                             <div class="filter-group-item">
                                 <h4>Dung lượng</h4>
@@ -270,6 +224,56 @@
                 </div>
             </section>
             <!-- thanh lọc ket thuc -->
+            <section class="main-container">
+                <div class="khung-quang-cao">
+                    <h3>FLASH SALE CUỐI TUẦN - GIẢM ĐẾN 50%</h3>
+                    <p>Hàng ngàn sản phẩm công nghệ đang chờ đón bạn. Cơ hội vàng để nâng cấp thiết bị với giá tốt nhất!
+                    </p>
+                    <a href="/shop" class="btn btn-quang-cao">XEM NGAY ƯU ĐÃI</a>
+                </div>
+            </section>
+
+
+
+            <section class="khung-uu-dai-dich-vu main-container">
+                <div class="row">
+
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="uu-dai-item">
+                            <div class="uu-dai-item-icon"><i class="fas fa-shipping-fast"></i></div>
+                            <h4>Free Shipping</h4>
+                            <p>Miễn phí với hóa đơn từ 10.000.000 VNĐ</p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="uu-dai-item">
+                            <div class="uu-dai-item-icon"><i class="fas fa-shield-alt"></i></div>
+                            <h4>Bảo mật thanh toán</h4>
+                            <p>100% bảo mật thanh toán tuyệt đối</p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="uu-dai-item">
+                            <div class="uu-dai-item-icon"><i class="fas fa-sync-alt"></i></div>
+                            <h4>Miễn phí đổi trả 30 ngày</h4>
+                            <p>30 ngày hoàn tiền nếu sản phẩm lỗi</p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="uu-dai-item">
+                            <div class="uu-dai-item-icon"><i class="fas fa-headset"></i></div>
+                            <h4>Hỗ trợ 24/7</h4>
+                            <p>Hỗ trợ mọi lúc mọi nơi từ đội ngũ chuyên gia</p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+
         </main>
         <%- include('../layout/footer'); -%>
 
