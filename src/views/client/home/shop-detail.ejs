@@ -284,7 +284,8 @@
                                 <button type="button"
                                     class="btn btn-outline-secondary rounded-pill me-2 mb-2 variant-selection"
                                     data-variant-id="<%= variant._id %>" data-color="<%= variant.color %>"
-                                    data-price="<%= variant.price %>" <% if (isDevice) { %>
+                                    data-price="<%= variant.price %>" data-stock="<%= variant.stock %>" <% if (isDevice)
+                                    { %>
                                     data-discount="<%= variant.discount || 0 %>"
                                         data-original-price="<%= variant.price %>"
                                             data-model-url="<%= variant.model3d %>"
@@ -299,32 +300,36 @@
                                                                                     <% } %></button>
                                 <% }); %>
                         </div>
+                        <div class="mb-4">
+                            <p class="mb-0">Số lượng còn lại: <strong id="variant-stock-display">--</strong></p>
+                        </div>
                         <form action="/add-product-to-cart" method="POST">
                             <input type="hidden" name="productId" value="<%= product._id %>">
                             <input type="hidden" name="productType" value="<%= isDevice ? 'Device' : 'Accessory' %>">
                             <input type="hidden" name="variantId" id="selectedVariantId" value="">
-
+                            <input type="number" name="quantity" id="" value="1" hidden>
                             <div class="d-flex align-items-center">
-                                <div class="input-group quantity me-4" style="width: 120px;">
+                                <!-- <div class="input-group quantity me-4" style="width: 120px;">
                                     <div class="input-group-btn">
                                         <button class="btn-sm btn-minus rounded-circle bg-light border" type="button">
                                             <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
                                     <input type="text" class="form-control form-control-sm text-center border-0"
-                                        value="1" id="quantityInput" name="quantity">
+                                        value="1" min="1" max="<%= variants.length > 0 ? variants[0].stock : 1 %>"
+                                        id="quantityInput" name="quantity">
                                     <div class="input-group-btn">
                                         <button class="btn-sm btn-plus rounded-circle bg-light border" type="button">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
-                                </div>
+                                </div> -->
                                 <button type="button" id="view-3d-btn"
                                     class="btn btn-warning rounded-pill px-4 py-2 me-3" data-bs-toggle="modal"
                                     data-bs-target="#model3dModal" style="display: none;">
                                     <i class="fas fa-cube me-2"></i> Xem 3D
                                 </button>
-                                <button type="submit"
+                                <button type="submit" id="addToCartBtn"
                                     class="btn border border-secondary rounded-pill px-4 py-2 text-primary">
                                     <i class="fa fa-shopping-bag me-2 text-primary"></i> Thêm vào giỏ
                                 </button>
@@ -584,6 +589,9 @@
                     const specRam = document.getElementById('spec-ram');
                     const specStorage = document.getElementById('spec-storage');
                     const selectedVariantIdInput = document.getElementById('selectedVariantId');
+                    const stockDisplay = document.getElementById('variant-stock-display');
+                    const quantityInput = document.getElementById('quantityInput');
+                    const addToCartBtn = document.getElementById('addToCartBtn');
 
                     const formatCurrency = (value) => {
                         return new Intl.NumberFormat('vi-VN', {
@@ -636,6 +644,26 @@
                         }
                     }
 
+                    const updateStockAndAvailability = (button) => {
+                        const stock = parseInt(button.getAttribute('data-stock') || '0');
+
+                        if (stockDisplay) {
+                            stockDisplay.textContent = stock > 0 ? stock : 'Hết hàng';
+                        }
+
+                        if (quantityInput) {
+                            quantityInput.setAttribute('max', stock);
+                            if (quantityInput.value > stock) {
+                                quantityInput.value = stock > 0 ? stock : 1;
+                            }
+                        }
+
+                        if (addToCartBtn) {
+                            addToCartBtn.disabled = stock <= 0;
+                            addToCartBtn.style.cursor = stock <= 0 ? 'not-allowed' : 'pointer';
+                        }
+                    };
+
                     // Mặc định chọn biến thể đầu tiên (nếu có)
                     if (variantButtons.length > 0) {
                         let isInitiallySelected = Array.from(variantButtons).some(btn => btn.classList.contains('btn-primary'));
@@ -652,6 +680,7 @@
                             updatePriceDisplay(firstButton);
                             update3dButton(firstButton);
                             updateSpecs(firstButton);
+                            updateStockAndAvailability(firstButton);
                         }
                     }
 
@@ -675,6 +704,7 @@
                             updatePriceDisplay(this);
                             update3dButton(this);
                             updateSpecs(this);
+                            updateStockAndAvailability(this);
                         });
                     });
 

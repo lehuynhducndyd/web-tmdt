@@ -129,30 +129,39 @@
                                                         <% } %>
                                         </td>
                                         <td>
-                                            <div class="input-group quantity" style="width: 100px;">
+                                            <div class="input-group quantity me-4" style="width: 120px;">
                                                 <div class="input-group-btn">
-                                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border"
-                                                        type="button"><i class="fa fa-minus"></i></button>
+                                                    <button class="btn-sm btn-minus rounded-circle bg-light border"
+                                                        type="button">
+                                                        <i class="fa fa-minus"></i>
+                                                    </button>
                                                 </div>
-                                                <input type="text"
+                                                <input type="number"
                                                     class="form-control form-control-sm text-center border-0"
-                                                    value="<%= item.quantity %>">
+                                                    value="<%= item.quantity %>" min="1" max="<%= item.variant.stock %>"
+                                                    data-variant-id="<%= item.variantId %>" name="quantity" readonly>
                                                 <div class="input-group-btn">
-                                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border"
-                                                        type="button"><i class="fa fa-plus"></i></button>
+                                                    <button class="btn-sm btn-plus rounded-circle bg-light border"
+                                                        type="button">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
                                                 </div>
                                             </div>
+
                                         </td>
-                                        <td>
+                                        <td class="item-total" data-price="<%= finalPrice %>">
                                             <p class="mb-0 fw-bold">
                                                 <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
                                                     }).format(finalPrice * item.quantity) %>
                                             </p>
                                         </td>
                                         <td>
-                                            <button class="btn btn-md rounded-circle bg-light border">
-                                                <i class="fa fa-times text-danger"></i>
-                                            </button>
+                                            <form action="/delete-cart-item/<%= item.variantId %>" method="post">
+                                                <button class="btn btn-md rounded-circle bg-light border">
+                                                    <i class="fa fa-times text-danger"></i>
+                                                </button>
+                                            </form>
+
                                         </td>
                                     </tr>
                                     <% }); %>
@@ -169,33 +178,12 @@
                     <div class="col-12 col-md-8">
                         <div class="bg-light rounded">
                             <div class="p-4">
-                                <h1 class="display-6 mb-4">Tổng giỏ hàng</span></h1>
-                                <!-- <div class="d-flex justify-content-between mb-4">
-                                    <h5 class="mb-0 me-4">Tạm tính:</h5>
-                                    <p class="mb-0">
-                                        <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
-                                            }).format(cart.subTotal || 0) %>
-                                    </p>
-                                </div> -->
-                                <!-- <div class="d-flex justify-content-between">
-                                    <h5 class="mb-0 me-4">Phí vận chuyển</h5>
-                                    <div class="">
-                                        <% const shippingFee=(cart.subTotal || 0)> 10000000 ? 0 : 30000; %>
-                                            <p class="mb-0">
-                                                <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
-                                                    }).format(shippingFee) %>
-                                                    <% if ((cart.subTotal || 0)> 10000000) { %>
-                                                        <br><small class="text-success">(Miễn phí)</small>
-                                                        <% } %>
-                                            </p>
-                                    </div>
-                                </div> -->
+                                <h1 class="display-6 mb-4">Tổng cộng</h1>
                             </div>
-                            <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                                <h5 class="mb-0 ps-4 me-4">Tổng cộng</h5>
-                                <p class="mb-0 pe-4 fw-bold">
+                            <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-end">
+                                <p class="mb-0 pe-4 fw-bold" id="cart-total">
                                     <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
-                                        }).format((cart.subTotal || 0) + shippingFee) %>
+                                        }).format(cart ? cart.subTotal : 0) %>
                                 </p>
                             </div>
                             <button class="btn btn-warning  rounded-pill px-4 py-3 mb-4 ms-4" type="button">Tiến hành
@@ -229,6 +217,85 @@
 
             <!-- Template Javascript -->
             <script src="js/main.js"></script>
+            <script>
+                $(document).ready(function () {
+                    const formatCurrency = (value) => {
+                        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+                    };
+
+                    function updateCartTotals() {
+                        let subTotal = 0;
+                        $('tbody tr').each(function () {
+                            const row = $(this);
+                            const quantityInput = row.find('.quantity input');
+                            if (quantityInput.length > 0) {
+                                const price = parseFloat(row.find('.item-total').data('price'));
+                                const quantity = parseInt(quantityInput.val());
+                                const itemTotal = price * quantity;
+                                subTotal += itemTotal;
+
+                                // Cập nhật tổng tiền của từng sản phẩm
+                                row.find('.item-total p').text(formatCurrency(itemTotal));
+                            }
+                        });
+
+                        // Cập nhật Tổng cộng
+                        // Giờ đây chỉ cần hiển thị tổng phụ (subTotal) là tổng cuối cùng
+                        $('#cart-total').text(formatCurrency(subTotal));
+                    }
+
+                    function updateCartOnServer(variantId, quantity) {
+                        fetch('/update-cart-quantity', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                variantId: variantId,
+                                quantity: quantity
+                            })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (!data.success) {
+                                    console.error('Failed to update cart:', data.message);
+                                    // Optional: show an error message to the user
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
+                    }
+
+                    // Xử lý sự kiện click nút cộng
+                    $('.btn-plus').on('click', function () {
+                        const input = $(this).closest('.quantity').find('input');
+                        let currentValue = parseInt(input.val());
+                        const max = parseInt(input.attr('max'));
+
+                        if (currentValue < max) {
+                            input.val(currentValue + 1).trigger('change');
+                        }
+                    });
+
+                    // Xử lý sự kiện click nút trừ
+                    $('.btn-minus').on('click', function () {
+                        const input = $(this).closest('.quantity').find('input');
+                        let currentValue = parseInt(input.val());
+                        const min = parseInt(input.attr('min'));
+
+                        if (currentValue > min) {
+                            input.val(currentValue - 1).trigger('change');
+                        }
+                    });
+
+                    // Bắt sự kiện 'change' trên input số lượng để cập nhật tổng tiền
+                    $('.quantity input').on('change', function () {
+                        updateCartTotals();
+                        const variantId = $(this).data('variant-id');
+                        const newQuantity = parseInt($(this).val());
+                        updateCartOnServer(variantId, newQuantity);
+                    });
+                });
+            </script>
 </body>
 
 </html>

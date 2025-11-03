@@ -2,10 +2,10 @@ import { getAccessoryPage, getCreateAccessoryPage, getCreateVariantAccPage, getV
 import { getBrandPage, getCreateBrandPage, getViewBrandPage, postCreateBrand, postDeleteBrand, postUpdateBrand } from 'controllers/admin/admin.brand.controller';
 import { getCategoryPage, getCreateCategoryPage, getViewCategoryPage, postCreateCategory, postDeleteCategory, postUpdateCategory } from 'controllers/admin/admin.category.controller';
 import { getAdminPage } from 'controllers/admin/admin.dashboard.controller';
-import { getCreateDevicePage, getCreateVariantPage, getDevicePage, getViewDevicePage, getViewVariantPage, postCreateDevice, postCreateVariant, postDeleteDevice, postDeleteVariant, postUpdateDevice, postUpdateVariant } from 'controllers/admin/admin.device.controller';
+import { getCreateDevicePage, getCreateVariantPage, getDevicePage, getViewDevicePage, getViewVariantPage, postCreateDevice, postCreateVariant, postDeleteDevice, postDeleteVariant, postUpdateDevice, postUpdateVariant, } from 'controllers/admin/admin.device.controller';
 import { getUserPage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUserPage, postUpdateUser, } from 'controllers/admin/admin.user.controller';
 import { getLoginPage, getRegisterPage, getSuccessRedirectPage, postLogout, postRegisterPage } from 'controllers/client/auth.controller';
-import { getCartPage, getHomePage, getUserInfoPage, postAddProductToCart, postUpdateUserInfo } from 'controllers/client/user.controller';
+import { getCartPage, getHomePage, getUserInfoPage, postAddProductToCart, postDeleteCartItem, postUpdateUserInfo } from 'controllers/client/user.controller';
 import express, { Express } from 'express';
 import passport from 'passport';
 import { isAdmin, isLogin } from 'src/middleware/auth';
@@ -29,7 +29,8 @@ const webRoutes = (app: Express) => {
     router.get('/user-info', getUserInfoPage);
     router.post('/user-info', postUpdateUserInfo);
 
-    router.post("/add-product-to-cart", postAddProductToCart)
+    router.post("/add-product-to-cart", postAddProductToCart);
+    router.post("/delete-cart-item/:variantId", postDeleteCartItem);
 
 
 

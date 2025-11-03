@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Device, Variant, AccessoriesVariant, Accessory} from 'models/product';
+import { Device, Variant, AccessoriesVariant, Accessory } from 'models/product';
 import { Brand } from 'models/brand';
 import { Category } from 'models/category';
 import User from 'models/user';
@@ -43,7 +43,7 @@ const getHomePage = async (req: Request, res: Response) => {
         let latestDevices = await Device.find()
             .sort({ createdAt: -1 }) // Sắp xếp theo thời gian tạo, mới nhất trước
             .limit(10)
-            .populate('brand category') 
+            .populate('brand category')
             .lean();
 
         // Phân loại thiết bị: điện thoại và các thiết bị khác (máy tính bảng,...)
@@ -87,7 +87,7 @@ const getHomePage = async (req: Request, res: Response) => {
             .populate('brand category')
             .lean();
 
-       
+
         const accessoryIds = latestAccessories.map(a => a._id);
         const allAccessoryVariants = await AccessoriesVariant.find({ accessoryId: { $in: accessoryIds } }).sort({ price: 1 }).lean();
 
@@ -114,9 +114,9 @@ const getHomePage = async (req: Request, res: Response) => {
         });
 
         return res.render("client/home/show.ejs", {
-            products: phones, 
+            products: phones,
             accessories: latestAccessories,
-            otherDevices: otherDevices 
+            otherDevices: otherDevices
         });
 
     } catch (error) {
@@ -129,13 +129,13 @@ const getShopPage = async (req: Request, res: Response) => {
     try {
         const { brands, categories: categoryNames, minPrice, maxPrice, ram, storage, battery } = req.query;
 
-       
+
         const filter: any = {};
         const variantFilter: any = {};
 
-        
+
         if (ram) {
-          
+
             const ramValues = (ram as string).split(',').map(r => r.trim().split(' ')[0]);
             variantFilter.ram = { $in: ramValues.map(r => new RegExp(`^${r}`)) };
         }
@@ -156,12 +156,12 @@ const getShopPage = async (req: Request, res: Response) => {
 
         // Lọc theo brand (thương hiệu)
         if (brands && typeof brands === 'string') {
-            const brandList = (brands as string).split(',').map(b => b.trim()); 
+            const brandList = (brands as string).split(',').map(b => b.trim());
             const brandObjects = await Brand.find({ name: { $in: brandList } }).select('_id');
             if (brandObjects.length > 0) {
                 filter.brand = { $in: brandObjects.map(b => b._id) };
             } else {
-                filter._id = { $in: [] }; 
+                filter._id = { $in: [] };
             }
         }
 
@@ -185,10 +185,10 @@ const getShopPage = async (req: Request, res: Response) => {
             }
         }
 
-       
+
         const hasVariantFilters = ram || storage || minPrice || maxPrice;
         if (hasVariantFilters) {
-          
+
             filter._id = { $in: filter._id ? filter._id.$in.filter(id => matchingDeviceIds.includes(id)) : matchingDeviceIds };
         }
 
@@ -196,7 +196,7 @@ const getShopPage = async (req: Request, res: Response) => {
         // Lấy tất cả sản phẩm khớp với bộ lọc cơ bản
         let products = await Device.find(filter).populate('brand category').lean();
         const categories = await Category.find().lean();
-        const allBrands = await Brand.find({}).lean(); 
+        const allBrands = await Brand.find({}).lean();
 
         // Gán giá thấp nhất từ các variant đã khớp cho mỗi sản phẩm để hiển thị
         const variantsByDeviceId = matchingVariants.reduce((acc, v) => {
@@ -208,7 +208,7 @@ const getShopPage = async (req: Request, res: Response) => {
 
         products.forEach(product => {
             const productVariants = variantsByDeviceId[product._id.toString()] || [];
-            productVariants.sort((a, b) => a.price - b.price); 
+            productVariants.sort((a, b) => a.price - b.price);
 
             if (productVariants.length > 0) {
                 const lowestPriceVariant = productVariants[0];
@@ -466,7 +466,7 @@ const getCartPage = async (req: Request, res: Response) => {
         return res.redirect('/login');
     }
     try {
-        const cart = await Cart.findOne({ user: currentUser._id })
+        let cart = await Cart.findOne({ user: currentUser._id })
             .populate({
                 path: 'items.product' // Mongoose sẽ tự động sử dụng refPath 'items.productType'
             })
@@ -496,6 +496,8 @@ const getCartPage = async (req: Request, res: Response) => {
             });
 
             (cart as any).subTotal = subTotal;
+        } else {
+            cart = { items: [], subTotal: 0 } as any; // Khởi tạo cart rỗng nếu không tìm thấy
         }
 
         res.render('client/home/cart.ejs', { cart });
@@ -505,6 +507,62 @@ const getCartPage = async (req: Request, res: Response) => {
     }
 }
 
+const postDeleteCartItem = async (req: Request, res: Response) => {
+    const currentUser = req.user as any;
+    if (!currentUser) {
+        return res.redirect('/login');
+    }
+    try {
+        const { variantId } = req.params;
+
+        const cart = await Cart.findOne({ user: currentUser._id });
+
+        if (cart) {
+            // Sử dụng .pull() để xóa item khỏi DocumentArray của Mongoose
+            cart.items.pull({ variantId: variantId });
+
+            // Cập nhật lại số lượng sản phẩm trong giỏ hàng
+            cart.sum = cart.items.length;
+            await cart.save();
+
+            // Cập nhật lại res.locals.sum để hiển thị đúng ở navbar sau khi redirect
+            res.locals.sum = cart.sum;
+        }
+        res.redirect('/cart');
+    } catch (error) {
+        console.error("Error deleting cart item:", error);
+        res.status(500).send("Error deleting item from cart");
+    }
+}
+
+const postUpdateCartQuantity = async (req: Request, res: Response) => {
+    const currentUser = req.user as any;
+    if (!currentUser) {
+        return res.status(401).json({ success: false, message: "Vui lòng đăng nhập." });
+    }
+    try {
+        const { variantId, quantity } = req.body;
+
+        if (!variantId || quantity === undefined) {
+            return res.status(400).json({ success: false, message: "Dữ liệu không hợp lệ." });
+        }
+
+        const cart = await Cart.findOne({ user: currentUser._id });
+
+        if (cart) {
+            const itemIndex = cart.items.findIndex(item => item.variantId.toString() === variantId);
+            if (itemIndex > -1) {
+                cart.items[itemIndex].quantity = Number(quantity);
+                await cart.save();
+                return res.json({ success: true, message: "Cập nhật giỏ hàng thành công." });
+            }
+        }
+        return res.status(404).json({ success: false, message: "Sản phẩm không tồn tại trong giỏ hàng." });
+    } catch (error) {
+        console.error("Error updating cart quantity:", error);
+        res.status(500).json({ success: false, message: "Lỗi khi cập nhật giỏ hàng." });
+    }
+};
 
 export {
     getHomePage,
@@ -513,5 +571,7 @@ export {
     postCreateReview,
     getUserInfoPage, postUpdateUserInfo,
     postAddProductToCart,
-    getCartPage
+    getCartPage,
+    postDeleteCartItem,
+    postUpdateCartQuantity
 };
