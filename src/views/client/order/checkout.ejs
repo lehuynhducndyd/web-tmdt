@@ -190,6 +190,27 @@
                                             Vui lòng cung cấp địa chỉ chi tiết để việc giao hàng được thuận tiện nhất.
                                         </div>
                                     </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label fw-bold">Phương thức thanh toán</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="paymentMethod"
+                                                id="paymentCOD" value="COD" checked>
+                                            <label class="form-check-label" for="paymentCOD">
+                                                Thanh toán khi nhận hàng (COD)
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="paymentMethod"
+                                                id="paymentQRPay" value="E-wallet">
+                                            <label class="form-check-label" for="paymentQRPay">
+                                                <spans style="text-decoration: line-through;">
+                                                    Thanh toán bằng mã QR
+                                                </spans>
+                                            </label>
+                                        </div>
+                                    </div>
+
                                     <div class="d-grid">
                                         <button class="btn btn-warning rounded-pill px-4 py-3" type="submit">
                                             Tiến hành thanh toán

@@ -13,9 +13,9 @@ import { fileUploadMiddleware } from 'src/middleware/multer';
 import { getShopPage } from 'controllers/client/user.controller';
 import { getShopDetailPage, postCreateReview } from 'controllers/client/user.controller';
 import { getProductReviewPage, postDeleteReview } from 'controllers/admin/admin.review.controller';
-import { getOrderPage } from 'controllers/admin/admin.order.controller';
+import { getOrderPage, getOrderDetailPage, postUpdateOrderStatus } from 'controllers/admin/admin.order.controller';
 import { get } from 'http';
-import { getCheckoutPage, postUpdateCartAndCheckout } from 'controllers/client/user.order.controller';
+import { getCheckoutPage, postPlaceOrder, postUpdateCartAndCheckout } from 'controllers/client/user.order.controller';
 // import { getCartPage } from 'controllers/client/user.controller';
 const router = express.Router();
 
@@ -35,6 +35,8 @@ const webRoutes = (app: Express) => {
     router.post("/delete-cart-item/:variantId", postDeleteCartItem);
     router.post("/update-and-checkout", postUpdateCartAndCheckout)
     router.get('/checkout', getCheckoutPage)
+    router.post('/place-order', postPlaceOrder)
+
 
 
 
@@ -127,7 +129,8 @@ const webRoutes = (app: Express) => {
 
 
     router.get('/admin/order', getOrderPage)
-
+    router.get('/admin/view-order/:id', getOrderDetailPage);
+    router.post('/admin/update-order/:id', postUpdateOrderStatus);
 
 
 

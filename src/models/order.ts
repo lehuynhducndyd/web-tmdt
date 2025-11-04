@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 
 const orderItemSchema = new mongoose.Schema({
-  product: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
+  product: { type: mongoose.Schema.Types.ObjectId, ref: "product", required: true },
   variantId: { type: mongoose.Schema.Types.ObjectId, required: true }, // trỏ đến Product.variants._id
   quantity: { type: Number, required: true, min: 1 },
   price: { type: Number, required: true }
 }, { _id: false });
 
 const orderSchema = new mongoose.Schema({
-  customer: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  customer: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
   items: [orderItemSchema],
   totalAmount: { type: Number, required: true },
 

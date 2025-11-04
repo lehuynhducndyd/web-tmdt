@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Cart from 'models/cart';
 import { AccessoriesVariant, Variant } from 'models/product';
+import Order from 'models/order';
 import User from 'models/user';
 
 const postUpdateCartAndCheckout = async (req: Request, res: Response) => {
@@ -83,7 +84,91 @@ const getCheckoutPage = async (req: Request, res: Response) => {
     }
 }
 
+const postPlaceOrder = async (req: Request, res: Response) => {
+    const currentUser = req.user as any;
+    if (!currentUser) {
+        return res.redirect('/login');
+    }
+
+    try {
+        const { name, phone, street, province, commune, paymentMethod } = req.body;
+
+        // 1. Lấy thông tin giỏ hàng
+        const cart = await Cart.findOne({ user: currentUser._id }).populate('items.product').lean();
+
+        if (!cart || cart.items.length === 0) {
+            // Hoặc hiển thị thông báo lỗi
+            return res.redirect('/cart');
+        }
+
+        // 2. Lấy thông tin chi tiết các biến thể và tính tổng tiền
+        const variantIds = cart.items.map(item => item.variantId);
+        const deviceVariants = await Variant.find({ _id: { $in: variantIds } }).lean();
+        const accVariants = await AccessoriesVariant.find({ _id: { $in: variantIds } }).lean();
+        const allVariants = [...deviceVariants, ...accVariants];
+        const variantsMap = new Map(allVariants.map(v => [v._id.toString(), v]));
+
+        let totalAmount = 0;
+        const orderItems = cart.items.map(item => {
+            const variantDetail = variantsMap.get(item.variantId.toString());
+            if (!variantDetail) {
+                throw new Error(`Không tìm thấy biến thể sản phẩm với ID: ${item.variantId}`);
+            }
+            const finalPrice = variantDetail.price * (1 - (variantDetail.discount || 0) / 100);
+            totalAmount += finalPrice * item.quantity;
+            return {
+                product: item.product,
+                variantId: item.variantId,
+                quantity: item.quantity,
+                price: finalPrice,
+            };
+        });
+
+        // 4. Chuẩn bị và thực thi cập nhật số lượng tồn kho
+        const stockUpdateOperations = cart.items.map(item => {
+            const variantDetail = variantsMap.get(item.variantId.toString());
+            if (!variantDetail || variantDetail.stock < item.quantity) {
+                throw new Error(`Sản phẩm không đủ số lượng tồn kho.`);
+            }
+
+            const model = item.productType === 'Device' ? Variant : AccessoriesVariant;
+            return {
+                updateOne: {
+                    filter: { _id: item.variantId },
+                    update: { $inc: { stock: -item.quantity } }
+                }
+            };
+        });
+
+        // Thực thi đồng thời cả hai loại cập nhật
+        await Variant.bulkWrite(stockUpdateOperations.filter(op => op.updateOne.filter._id));
+        await AccessoriesVariant.bulkWrite(stockUpdateOperations.filter(op => op.updateOne.filter._id));
+
+        // 3. Tạo đơn hàng mới
+        const newOrder = new Order({
+            customer: currentUser._id,
+            items: orderItems,
+            totalAmount,
+            paymentMethod,
+            shippingAddress: {
+                fullName: name,
+                phone,
+                street,
+                province,
+                commune,
+            },
+            status: 'pending',
+        });
+
+        await newOrder.save();
+        await Cart.findByIdAndDelete(cart._id);
+        res.render('status/thanks.ejs')
+    } catch (error) {
+        console.error("Error placing order:", error);
+        res.status(500).send("Lỗi khi đặt hàng.");
+    }
+};
+
 export {
-    getCheckoutPage,
-    postUpdateCartAndCheckout
+    getCheckoutPage, postUpdateCartAndCheckout, postPlaceOrder
 }
