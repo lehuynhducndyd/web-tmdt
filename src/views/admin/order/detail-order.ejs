@@ -100,19 +100,46 @@
                                                 <% order.items.forEach(item=> { %>
                                                     <tr>
                                                         <td>
-                                                            <% if (item.product && item.product.thumbnail) { %>
-                                                                <img src="/uploads/products/<%= item.product.thumbnail %>"
+                                                            <% if (item.variant && item.variant.images &&
+                                                                item.variant.images.length> 0) { %>
+                                                                <img src="/uploads/products/<%= item.variant.images[0] %>"
                                                                     alt="<%= item.product.name %>"
                                                                     style="width: 80px; height: auto;">
-                                                                <% } else { %>
-                                                                    <img src="/client/img/default-product.png"
-                                                                        alt="Default Image"
+                                                                <% } else if (item.product && item.product.thumbnail) {
+                                                                    %>
+                                                                    <img src="/uploads/products/<%= item.product.thumbnail %>"
+                                                                        alt="<%= item.product.name %>"
                                                                         style="width: 80px; height: auto;">
-                                                                    <% } %>
+                                                                    <% } else { %>
+                                                                        <img src="/client/img/default-product.png"
+                                                                            alt="Default Image"
+                                                                            style="width: 80px; height: auto;">
+                                                                        <% } %>
                                                         </td>
                                                         <td>
-                                                            <%= item.product ? item.product.name
-                                                                : 'Sản phẩm không tồn tại' %>
+                                                            <% if (item.product) { %>
+                                                                <%= item.product.name %>
+                                                                    <% if (item.variant) { %>
+                                                                        <br>
+                                                                        <small class="text-muted">
+                                                                            <% if (item.variant.ram) { %> RAM: <%=
+                                                                                    item.variant.ram %>
+                                                                                    <% } %>
+                                                                                        <% if (item.variant.storage) {
+                                                                                            %> - <%=
+                                                                                                item.variant.storage %>
+                                                                                                <% } %>
+                                                                                                    <% if
+                                                                                                        (item.variant.color)
+                                                                                                        { %> - Màu: <%=
+                                                                                                            item.variant.color
+                                                                                                            %>
+                                                                                                            <% } %>
+                                                                        </small>
+                                                                        <% } %>
+                                                                            <% } else { %>
+                                                                                Sản phẩm không tồn tại
+                                                                                <% } %>
                                                         </td>
                                                         <td>
                                                             <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,

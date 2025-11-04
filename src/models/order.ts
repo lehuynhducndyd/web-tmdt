@@ -1,7 +1,13 @@
 import mongoose from "mongoose";
 
 const orderItemSchema = new mongoose.Schema({
-  product: { type: mongoose.Schema.Types.ObjectId, ref: "product", required: true },
+  productType: {
+    type: String,
+    required: true,
+    enum: ['Device', 'Accessory']
+  },
+  // Tham chiếu động đến collection 'Device' hoặc 'Accessory' dựa trên productType
+  product: { type: mongoose.Schema.Types.ObjectId, required: true, refPath: 'productType' },
   variantId: { type: mongoose.Schema.Types.ObjectId, required: true }, // trỏ đến Product.variants._id
   quantity: { type: Number, required: true, min: 1 },
   price: { type: Number, required: true }

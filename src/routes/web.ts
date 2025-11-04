@@ -129,8 +129,8 @@ const webRoutes = (app: Express) => {
 
 
     router.get('/admin/order', getOrderPage)
-    router.get('/admin/view-order/:id', getOrderDetailPage);
-    router.post('/admin/update-order/:id', postUpdateOrderStatus);
+    router.get('/admin/order/:id', getOrderDetailPage);
+    router.post('/admin/order/:id/update-status', postUpdateOrderStatus);
 
 
 

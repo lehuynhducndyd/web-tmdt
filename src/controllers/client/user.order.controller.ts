@@ -112,7 +112,7 @@ const postPlaceOrder = async (req: Request, res: Response) => {
         const orderItems = cart.items.map(item => {
             const variantDetail = variantsMap.get(item.variantId.toString());
             if (!variantDetail) {
-                throw new Error(`Không tìm thấy biến thể sản phẩm với ID: ${item.variantId}`);
+                throw new Error(`Kh\u00f4ng t\u00ecm th\u1ea5y bi\u1ebfn th\u1ec3 s\u1ea3n ph\u1ea9m v\u1edbi ID: ${item.variantId}`);
             }
             const finalPrice = variantDetail.price * (1 - (variantDetail.discount || 0) / 100);
             totalAmount += finalPrice * item.quantity;
@@ -121,6 +121,7 @@ const postPlaceOrder = async (req: Request, res: Response) => {
                 variantId: item.variantId,
                 quantity: item.quantity,
                 price: finalPrice,
+                productType: item.productType,
             };
         });
 
