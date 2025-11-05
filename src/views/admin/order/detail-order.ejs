@@ -100,21 +100,30 @@
                                                 <% order.items.forEach(item=> { %>
                                                     <tr>
                                                         <td>
-                                                            <% if (item.variant && item.variant.images &&
-                                                                item.variant.images.length> 0) { %>
-                                                                <img src="/uploads/products/<%= item.variant.images[0] %>"
+                                                            <% if (item.product && item.product.thumbnail &&
+                                                                item.product.thumbnail.data) { %>
+                                                                <img src="data:<%= item.product.thumbnail.contentType %>;base64,<%= item.product.thumbnail.data.toString('base64') %>"
                                                                     alt="<%= item.product.name %>"
                                                                     style="width: 80px; height: auto;">
-                                                                <% } else if (item.product && item.product.thumbnail) {
-                                                                    %>
-                                                                    <img src="/uploads/products/<%= item.product.thumbnail %>"
+                                                                <% } else if (item.variant && item.variant.images &&
+                                                                    item.variant.images.length> 0) { %>
+                                                                    <!-- Trường hợp này cần xem lại vì không có buffer -->
+                                                                    <!-- Có thể cần chỉnh sửa để lấy ảnh từ variant nếu cần thiết -->
+
+
+                                                                    <img src="/uploads/products/<%= item.variant.images[0] %>"
                                                                         alt="<%= item.product.name %>"
                                                                         style="width: 80px; height: auto;">
-                                                                    <% } else { %>
-                                                                        <img src="/client/img/default-product.png"
-                                                                            alt="Default Image"
+                                                                    <% } else if (item.product &&
+                                                                        item.product.thumbnail) { %>
+                                                                        <img src="/uploads/products/<%= item.product.thumbnail %>"
+                                                                            alt="<%= item.product.name %>"
                                                                             style="width: 80px; height: auto;">
-                                                                        <% } %>
+                                                                        <% } else { %>
+                                                                            <img src="/client/img/default-product.png"
+                                                                                alt="Default Image"
+                                                                                style="width: 80px; height: auto;">
+                                                                            <% } %>
                                                         </td>
                                                         <td>
                                                             <% if (item.product) { %>
@@ -169,6 +178,9 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
             crossorigin="anonymous"></script>
         <script src="/admin/js/scripts.js"></script>
+
+
+
 </body>
 
 </html>

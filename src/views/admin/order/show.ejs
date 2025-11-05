@@ -25,43 +25,60 @@
                                 <li class="breadcrumb-item active">Orders</li>
                             </ol>
                             <div>
-                                <table class="table table-hover table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Tên khách hàng</th>
-                                            <th>Trạng thái</th>
-                                            <th>Ngày/giờ đặt</th>
-                                            <th>Tổng tiền</th>
-                                            <th>Thao tác</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% if (typeof orders !=='undefined' && orders.length> 0) { %>
-                                            <% orders.forEach(order=> { %>
-                                                <tr>
-                                                    <td>
-                                                        <%= order.customer ? order.customer.name
-                                                            : 'Khách hàng đã bị xóa' %>
-                                                    </td>
-                                                    <td>
-                                                        <span class="badge bg-warning text-dark">
-                                                            <%= order.status %>
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <%= new Date(order.createdAt).toLocaleString('vi-VN') %>
-                                                    </td>
-                                                    <td>
-                                                        <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
-                                                            currency: 'VND' }).format(order.totalAmount) %>
-                                                    </td>
-                                                    <td><a class="btn btn-primary btn-sm"
-                                                            href="/admin/order/<%= order._id %>">Chi tiết</a></td>
-                                                </tr>
-                                                <% }) %>
-                                                    <% } %>
-                                    </tbody>
-                                </table>
+                                <ul class="nav nav-tabs" id="orderStatusTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="all-tab" data-bs-toggle="tab"
+                                            data-bs-target="#all-tab-pane" type="button" role="tab"
+                                            aria-controls="all-tab-pane" aria-selected="true">Tất cả</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="pending-tab" data-bs-toggle="tab"
+                                            data-bs-target="#pending-tab-pane" type="button" role="tab"
+                                            aria-controls="pending-tab-pane" aria-selected="false">Chờ xác nhận</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="processing-tab" data-bs-toggle="tab"
+                                            data-bs-target="#processing-tab-pane" type="button" role="tab"
+                                            aria-controls="processing-tab-pane" aria-selected="false">Đang xử
+                                            lý</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="shipped-tab" data-bs-toggle="tab"
+                                            data-bs-target="#shipped-tab-pane" type="button" role="tab"
+                                            aria-controls="shipped-tab-pane" aria-selected="false">Đang giao</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="delivered-tab" data-bs-toggle="tab"
+                                            data-bs-target="#delivered-tab-pane" type="button" role="tab"
+                                            aria-controls="delivered-tab-pane" aria-selected="false">Đã giao</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="canceled-tab" data-bs-toggle="tab"
+                                            data-bs-target="#canceled-tab-pane" type="button" role="tab"
+                                            aria-controls="canceled-tab-pane" aria-selected="false">Đã hủy</button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="orderStatusTabsContent">
+                                    <div class="tab-pane fade show active" id="all-tab-pane" role="tabpanel"
+                                        aria-labelledby="all-tab" tabindex="0"><%- include('../layout/orderTable', {
+                                            orders: ordersByStatus.all }); -%></div>
+                                    <div class="tab-pane fade" id="pending-tab-pane" role="tabpanel"
+                                        aria-labelledby="pending-tab" tabindex="0"><%- include('../layout/orderTable', {
+                                            orders: ordersByStatus.pending }); -%></div>
+                                    <div class="tab-pane fade" id="processing-tab-pane" role="tabpanel"
+                                        aria-labelledby="processing-tab" tabindex="0"><%-
+                                            include('../layout/orderTable', { orders: ordersByStatus.processing }); -%>
+                                    </div>
+                                    <div class="tab-pane fade" id="shipped-tab-pane" role="tabpanel"
+                                        aria-labelledby="shipped-tab" tabindex="0"><%- include('../layout/orderTable', {
+                                            orders: ordersByStatus.shipped }); -%></div>
+                                    <div class="tab-pane fade" id="delivered-tab-pane" role="tabpanel"
+                                        aria-labelledby="delivered-tab" tabindex="0"><%- include('../layout/orderTable',
+                                            { orders: ordersByStatus.delivered }); -%></div>
+                                    <div class="tab-pane fade" id="canceled-tab-pane" role="tabpanel"
+                                        aria-labelledby="canceled-tab" tabindex="0"><%- include('../layout/orderTable',
+                                            { orders: ordersByStatus.cancelled }); -%></div>
+                                </div>
                             </div>
 
                         </div>

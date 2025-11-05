@@ -4,11 +4,27 @@ import { Variant, AccessoriesVariant } from "models/product";
 
 const getOrderPage = async (req: Request, res: Response) => {
     try {
-        const orders = await Order.find({})
+        const allOrders = await Order.find({})
             .populate("customer", "name")
             .sort({ createdAt: -1 })
             .lean();
-        res.render("admin/order/show.ejs", { orders });
+
+        const ordersByStatus = {
+            all: allOrders,
+            pending: [] as any[],
+            processing: [] as any[],
+            shipped: [] as any[],
+            delivered: [] as any[],
+            cancelled: [] as any[],
+        };
+
+        for (const order of allOrders) {
+            if (ordersByStatus[order.status]) {
+                ordersByStatus[order.status].push(order);
+            }
+        }
+
+        res.render("admin/order/show.ejs", { ordersByStatus });
     } catch (error) {
         console.error("Error fetching orders:", error);
         res.status(500).send("Lỗi khi tải trang quản lý đơn hàng.");
@@ -31,8 +47,8 @@ const getOrderDetailPage = async (req: Request, res: Response) => {
 
         // Lấy thông tin chi tiết cho từng variant trong đơn hàng
         const variantIds = order.items.map(item => item.variantId);
-        const deviceVariants = await Variant.find({ _id: { $in: variantIds } }).lean();
-        const accVariants = await AccessoriesVariant.find({ _id: { $in: variantIds } }).lean();
+        const deviceVariants = await Variant.find({ _id: { $in: variantIds } }).populate('deviceId').lean();
+        const accVariants = await AccessoriesVariant.find({ _id: { $in: variantIds } }).populate('accessoryId').lean();
 
         const allVariants = [...deviceVariants, ...accVariants];
         const variantsMap = new Map(allVariants.map(v => [v._id.toString(), v]));
@@ -40,9 +56,12 @@ const getOrderDetailPage = async (req: Request, res: Response) => {
         // Gán thông tin variant vào từng item trong đơn hàng
         order.items.forEach(item => {
             const variantDetail = variantsMap.get(item.variantId.toString());
-            (item as any).variant = variantDetail;
+            if (variantDetail) {
+                (item as any).variant = variantDetail;
+                // Gán thông tin product từ variant đã populate
+                (item as any).product = (variantDetail as any).deviceId || (variantDetail as any).accessoryId;
+            }
         });
-        console.log(order);
 
         res.render("admin/order/detail-order.ejs", { order });
     } catch (error) {
