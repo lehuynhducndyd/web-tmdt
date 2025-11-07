@@ -35,6 +35,7 @@ app.use(session({
 //passport
 import passport from 'passport';
 import configPassportGoogle from './middleware/passport.google';
+import router from 'routes/momo';
 app.use(passport.session());
 
 //config passport local
@@ -65,6 +66,8 @@ app.use(async (req, res, next) => {
 
 
 webRoutes(app);
+app.use("/momo", router);
+
 
 
 //test database connection and start server

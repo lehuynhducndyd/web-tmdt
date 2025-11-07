@@ -162,8 +162,13 @@ const postPlaceOrder = async (req: Request, res: Response) => {
         });
 
         await newOrder.save();
-        await Cart.findByIdAndDelete(cart._id);
-        res.render('status/thanks.ejs')
+
+        if (paymentMethod === 'MOMO') {
+            res.redirect(`/momo/pay/${newOrder._id}`);
+        } else {
+            await Cart.findByIdAndDelete(cart._id);
+            res.render('status/thanks.ejs');
+        }
     } catch (error) {
         console.error("Error placing order:", error);
         res.status(500).send("Lỗi khi đặt hàng.");

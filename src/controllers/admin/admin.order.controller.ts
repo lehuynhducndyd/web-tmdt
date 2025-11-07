@@ -72,8 +72,8 @@ const getOrderDetailPage = async (req: Request, res: Response) => {
 
 const postUpdateOrderStatus = async (req: Request, res: Response) => {
     try {
-        const { status } = req.body;
-        await Order.updateOne({ _id: req.params.id }, { status: status });
+        const { status, paymentStatus } = req.body;
+        await Order.updateOne({ _id: req.params.id }, { status: status, paymentStatus: paymentStatus });
         res.redirect(`/admin/order/${req.params.id}`);
     } catch (error) {
         console.error("Error updating order status:", error);
