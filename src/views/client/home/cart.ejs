@@ -138,7 +138,7 @@
                                                             <i class="fa fa-minus"></i>
                                                         </button>
                                                     </div>
-                                                    <input type="number"
+                                                    <input type="number" style="margin: 2px;"
                                                         class="form-control form-control-sm text-center border-0"
                                                         value="<%= item.quantity %>" min="1"
                                                         max="<%= item.variant.stock %>"
@@ -160,11 +160,10 @@
                                                 </p>
                                             </td>
                                             <td>
-                                                <!-- Nút xóa này sẽ không hoạt động bên trong form chính, cần xử lý bằng JS hoặc form riêng -->
-                                                <a href="/delete-cart-item/<%= item.variantId %>"
-                                                    class="btn btn-md rounded-circle bg-light border delete-item-btn">
-                                                    <i class="fa fa-times text-danger"></i>
-                                                </a>
+                                                <button type="submit"
+                                                    formaction="/delete-cart-item/<%= item.variantId %>"
+                                                    class="btn btn-md rounded-circle bg-light border"><i
+                                                        class="fa fa-times text-danger"></i></button>
                                             </td>
                                         </tr>
                                         <% }); %>
@@ -183,7 +182,7 @@
                             <div class="bg-light rounded">
                                 <div class="p-4">
                                     <h1 class="display-6 mb-4">Tổng cộng
-                                        <span class="text-danger">
+                                        <span id="cart-total" class="text-danger">
                                             <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
                                                 }).format(cart ? cart.subTotal : 0) %>
                                         </span>
@@ -301,6 +300,7 @@
                         const newQuantity = parseInt($(this).val());
                         updateCartOnServer(variantId, newQuantity);
                     });
+
                 });
             </script>
 </body>
