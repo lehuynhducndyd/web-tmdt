@@ -6,6 +6,7 @@ import User from 'models/user';
 import Cart from 'models/cart';
 import { getDeviceById } from 'services/admin/product.service';
 import { getUserById } from 'services/admin/user.service';
+import Order from 'models/order';
 import { ReviewDevice, ReviewAcc } from 'models/review';
 
 // Helper function to process variants and assign prices
@@ -267,6 +268,21 @@ const getShopDetailPage = async (req: Request, res: Response) => {
                 .sort({ createdAt: -1 })
                 .lean();
 
+            // Lấy danh sách user đã mua sản phẩm này
+            if (reviews.length > 0) {
+                const userIds = reviews.map(r => r.user._id);
+                const purchasedOrders = await Order.find({
+                    customer: { $in: userIds },
+                    'items.product': id,
+                    status: 'delivered'
+                }).select('customer').lean();
+                const purchasingUserIds = new Set(purchasedOrders.map(o => o.customer.toString()));
+
+                reviews.forEach(review => {
+                    (review as any).hasPurchased = purchasingUserIds.has((review.user as any)._id.toString());
+                });
+            }
+
             relatedProducts = await Device.find({
                 brand: product.brand,
                 _id: { $ne: id }
@@ -280,6 +296,21 @@ const getShopDetailPage = async (req: Request, res: Response) => {
                 .populate('user', 'name')
                 .sort({ createdAt: -1 })
                 .lean();
+
+            // Lấy danh sách user đã mua sản phẩm này
+            if (reviews.length > 0) {
+                const userIds = reviews.map(r => r.user._id);
+                const purchasedOrders = await Order.find({
+                    customer: { $in: userIds },
+                    'items.product': id,
+                    status: 'delivered'
+                }).select('customer').lean();
+                const purchasingUserIds = new Set(purchasedOrders.map(o => o.customer.toString()));
+
+                reviews.forEach(review => {
+                    (review as any).hasPurchased = purchasingUserIds.has((review.user as any)._id.toString());
+                });
+            }
 
             relatedProducts = await Accessory.find({
                 brand: product.brand,

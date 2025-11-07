@@ -194,6 +194,12 @@
         .review-stars {
             color: #ffc107;
         }
+
+        .purchased-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.2em 0.6em;
+        }
     </style>
 </head>
 
@@ -485,12 +491,18 @@
                                                                 <h6 class="mb-0 fw-bold">
                                                                     <%= review.user.name %>
                                                                 </h6>
+                                                                <% if (review.hasPurchased) { %>
+                                                                    <span
+                                                                        class="badge bg-success rounded-pill purchased-badge ms-2">
+                                                                        <i class="fas fa-check-circle me-1"></i>Đã mua
+                                                                    </span>
+                                                                    <% } %>
 
-                                                                <small class="text-muted">
-                                                                    <%= new
-                                                                        Date(review.createdAt).toLocaleDateString('vi-VN')
-                                                                        %>
-                                                                </small>
+                                                                        <small class="text-muted">
+                                                                            <%= new
+                                                                                Date(review.createdAt).toLocaleDateString('vi-VN')
+                                                                                %>
+                                                                        </small>
                                                             </div>
                                                         </div>
                                                         <div class="review-body">
