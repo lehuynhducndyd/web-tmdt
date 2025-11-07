@@ -15,7 +15,7 @@ import { getShopDetailPage, postCreateReview } from 'controllers/client/user.con
 import { getProductReviewPage, postDeleteReview } from 'controllers/admin/admin.review.controller';
 import { getOrderPage, getOrderDetailPage, postUpdateOrderStatus } from 'controllers/admin/admin.order.controller';
 import { get } from 'http';
-import { getCheckoutPage, postPlaceOrder, postUpdateCartAndCheckout } from 'controllers/client/user.order.controller';
+import { getCheckoutPage, getDetailHistoryPage, getHistoryPage, postPlaceOrder, postUpdateCartAndCheckout } from 'controllers/client/user.order.controller';
 // import { getCartPage } from 'controllers/client/user.controller';
 const router = express.Router();
 
@@ -36,6 +36,9 @@ const webRoutes = (app: Express) => {
     router.post("/update-and-checkout", postUpdateCartAndCheckout)
     router.get('/checkout', getCheckoutPage)
     router.post('/place-order', postPlaceOrder)
+    router.get('/history', getHistoryPage);
+    router.get('/history-detail/:id', getDetailHistoryPage);
+
 
 
 

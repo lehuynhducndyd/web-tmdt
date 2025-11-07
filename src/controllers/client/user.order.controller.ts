@@ -170,6 +170,83 @@ const postPlaceOrder = async (req: Request, res: Response) => {
     }
 };
 
+const getHistoryPage = async (req: Request, res: Response) => {
+    const currentUser = req.user as any;
+    if (!currentUser) {
+        return res.redirect('/login');
+    }
+
+    try {
+        const allOrders = await Order.find({ customer: currentUser._id })
+            .populate("customer", "name")
+            .sort({ createdAt: -1 })
+            .lean();
+
+        const ordersByStatus = {
+            all: allOrders,
+            pending: [] as any[],
+            processing: [] as any[],
+            shipped: [] as any[],
+            delivered: [] as any[],
+            cancelled: [] as any[],
+        };
+
+        for (const order of allOrders) {
+            if (ordersByStatus[order.status]) {
+                ordersByStatus[order.status].push(order);
+            }
+        }
+
+        res.render("client/order/history.ejs", { ordersByStatus });
+    } catch (error) {
+        console.error("Error fetching orders:", error);
+        res.status(500).send("Lỗi khi tải trang quản lý đơn hàng.");
+    }
+}
+
+const getDetailHistoryPage = async (req: Request, res: Response) => {
+    const currentUser = req.user as any;
+    if (!currentUser) {
+        return res.redirect('/login');
+    }
+    try {
+        const order = await Order.findById(req.params.id)
+            .populate('customer')
+            .populate({
+                path: 'items.product'
+
+            }) // Mongoose sẽ tự động tham chiếu đến 'Device' hoặc 'Accessory'
+            .lean();
+
+        if (!order) {
+            return res.status(404).send("Đơn hàng không tồn tại");
+        }
+
+        // Lấy thông tin chi tiết cho từng variant trong đơn hàng
+        const variantIds = order.items.map(item => item.variantId);
+        const deviceVariants = await Variant.find({ _id: { $in: variantIds } }).populate('deviceId').lean();
+        const accVariants = await AccessoriesVariant.find({ _id: { $in: variantIds } }).populate('accessoryId').lean();
+
+        const allVariants = [...deviceVariants, ...accVariants];
+        const variantsMap = new Map(allVariants.map(v => [v._id.toString(), v]));
+
+        // Gán thông tin variant vào từng item trong đơn hàng
+        order.items.forEach(item => {
+            const variantDetail = variantsMap.get(item.variantId.toString());
+            if (variantDetail) {
+                (item as any).variant = variantDetail;
+                // Gán thông tin product từ variant đã populate
+                (item as any).product = (variantDetail as any).deviceId || (variantDetail as any).accessoryId;
+            }
+        });
+
+        res.render("client/order/history-detail.ejs", { order });
+    } catch (error) {
+        console.error("Error fetching order details:", error);
+        res.status(500).send("Lỗi khi tải trang chi tiết đơn hàng.");
+    }
+}
+
 export {
-    getCheckoutPage, postUpdateCartAndCheckout, postPlaceOrder
+    getCheckoutPage, postUpdateCartAndCheckout, postPlaceOrder, getHistoryPage, getDetailHistoryPage
 }

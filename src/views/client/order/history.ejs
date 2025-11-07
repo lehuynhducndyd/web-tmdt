@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Giỏ hàng</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+
+    <link href="/client/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/client/css/style.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+    <%- include('../layout/navbar'); -%>
+
+
+
+        <!-- Modal Search Start -->
+        <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content rounded-0">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex align-items-center">
+                        <div class="input-group w-75 mx-auto d-flex">
+                            <input type="search" class="form-control p-3" placeholder="keywords"
+                                aria-describedby="search-icon-1">
+                            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Search End -->
+
+
+
+
+        <!-- Start -->
+        <div class="container my-5">
+            <ul class="nav nav-tabs" id="orderStatusTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all-tab-pane"
+                        type="button" role="tab" aria-controls="all-tab-pane" aria-selected="true">Tất cả</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending-tab-pane"
+                        type="button" role="tab" aria-controls="pending-tab-pane" aria-selected="false">Chờ xác
+                        nhận</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="processing-tab" data-bs-toggle="tab"
+                        data-bs-target="#processing-tab-pane" type="button" role="tab"
+                        aria-controls="processing-tab-pane" aria-selected="false">Đang xử
+                        lý</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="shipped-tab" data-bs-toggle="tab" data-bs-target="#shipped-tab-pane"
+                        type="button" role="tab" aria-controls="shipped-tab-pane" aria-selected="false">Đang
+                        giao</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="delivered-tab" data-bs-toggle="tab"
+                        data-bs-target="#delivered-tab-pane" type="button" role="tab" aria-controls="delivered-tab-pane"
+                        aria-selected="false">Đã giao</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="canceled-tab" data-bs-toggle="tab" data-bs-target="#canceled-tab-pane"
+                        type="button" role="tab" aria-controls="canceled-tab-pane" aria-selected="false">Đã hủy</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="orderStatusTabsContent">
+                <div class="tab-pane fade show active" id="all-tab-pane" role="tabpanel" aria-labelledby="all-tab"
+                    tabindex="0"><%- include('./orderTable', { orders: ordersByStatus.all }); -%></div>
+                <div class="tab-pane fade" id="pending-tab-pane" role="tabpanel" aria-labelledby="pending-tab"
+                    tabindex="0"><%- include('./orderTable', { orders: ordersByStatus.pending }); -%></div>
+                <div class="tab-pane fade" id="processing-tab-pane" role="tabpanel" aria-labelledby="processing-tab"
+                    tabindex="0"><%- include('./orderTable', { orders: ordersByStatus.processing }); -%>
+                </div>
+                <div class="tab-pane fade" id="shipped-tab-pane" role="tabpanel" aria-labelledby="shipped-tab"
+                    tabindex="0"><%- include('./orderTable', { orders: ordersByStatus.shipped }); -%></div>
+                <div class="tab-pane fade" id="delivered-tab-pane" role="tabpanel" aria-labelledby="delivered-tab"
+                    tabindex="0"><%- include('./orderTable', { orders: ordersByStatus.delivered }); -%></div>
+                <div class="tab-pane fade" id="canceled-tab-pane" role="tabpanel" aria-labelledby="canceled-tab"
+                    tabindex="0"><%- include('./orderTable', { orders: ordersByStatus.cancelled }); -%></div>
+            </div>
+        </div>
+        <!-- End -->
+
+
+        <%- include('../layout/footer'); -%>
+
+            <!-- Copyright Start -->
+
+
+
+            <!-- Back to Top -->
+            <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
+                    class="fa fa-arrow-up"></i></a>
+
+
+            <!-- JavaScript Libraries -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="lib/easing/easing.min.js"></script>
+            <script src="lib/waypoints/waypoints.min.js"></script>
+            <script src="lib/lightbox/js/lightbox.min.js"></script>
+            <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+            <!-- Template Javascript -->
+            <script src="js/main.js"></script>
+</body>
+
+</html>
