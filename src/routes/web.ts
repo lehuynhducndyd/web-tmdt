@@ -13,7 +13,7 @@ import { fileUploadMiddleware } from 'src/middleware/multer';
 import { getShopPage } from 'controllers/client/user.controller';
 import { getShopDetailPage, postCreateReview } from 'controllers/client/user.controller';
 import { getProductReviewPage, postDeleteReview } from 'controllers/admin/admin.review.controller';
-import { getOrderPage, getOrderDetailPage, postUpdateOrderStatus } from 'controllers/admin/admin.order.controller';
+import { getOrderPage, getOrderDetailPage, postUpdateOrderStatus, getPrintPreviewPage } from 'controllers/admin/admin.order.controller';
 import { get } from 'http';
 import { getCheckoutPage, getDetailHistoryPage, getHistoryPage, postPlaceOrder, postUpdateCartAndCheckout } from 'controllers/client/user.order.controller';
 // import { getCartPage } from 'controllers/client/user.controller';
@@ -132,8 +132,9 @@ const webRoutes = (app: Express) => {
 
 
     router.get('/admin/order', getOrderPage)
-    router.get('/admin/order/:id', getOrderDetailPage);
+    router.get('/admin/order/:id', getOrdedrDetailPage);
     router.post('/admin/order/:id/update-status', postUpdateOrderStatus);
+    router.get("/admin/order/:id/print", getPrintPreviewPage);
 
 
 

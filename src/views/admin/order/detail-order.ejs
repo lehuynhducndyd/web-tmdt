@@ -29,6 +29,7 @@
                                     <div class="card-header">
                                         <h5>Chi tiết đơn hàng #<%= order._id %>
                                         </h5>
+
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
@@ -103,16 +104,16 @@
                                                             </select>
                                                         </div>
 
-                                                        <div class="col-md-6 py-2">
+                                                        <div class="col-md-3 py-2">
                                                             <button type="submit" class="btn btn-primary ms-2">Cập
                                                                 nhật</button>
                                                         </div>
-
-
-
-
-
-
+                                                        <div class="col-md-3 py-2">
+                                                            <a href="/admin/order/<%= order._id %>/print"
+                                                                class="btn btn-warning ms-2">
+                                                                In hóa đơn
+                                                            </a>
+                                                        </div>
 
                                                 </form>
                                             </div>
