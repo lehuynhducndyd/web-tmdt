@@ -1,7 +1,7 @@
 import { getAccessoryPage, getCreateAccessoryPage, getCreateVariantAccPage, getViewAccessoryPage, postCreateAccessory, postCreateVariantAcc, postDeleteAccessory, postUpdateAccessory, getViewVariantAccPage, postUpdateVariantAcc, postDeleteVariantAcc } from 'controllers/admin/admin.accessory.controller';
 import { getBrandPage, getCreateBrandPage, getViewBrandPage, postCreateBrand, postDeleteBrand, postUpdateBrand } from 'controllers/admin/admin.brand.controller';
 import { getCategoryPage, getCreateCategoryPage, getViewCategoryPage, postCreateCategory, postDeleteCategory, postUpdateCategory } from 'controllers/admin/admin.category.controller';
-import { getAdminPage } from 'controllers/admin/admin.dashboard.controller';
+import { getAdminPage, getProductStatPage, getTodayCustomersPage, getTodayReviewsPage } from 'controllers/admin/admin.dashboard.controller';
 import { getCreateDevicePage, getCreateVariantPage, getDevicePage, getViewDevicePage, getViewVariantPage, postCreateDevice, postCreateVariant, postDeleteDevice, postDeleteVariant, postUpdateDevice, postUpdateVariant, } from 'controllers/admin/admin.device.controller';
 import { getUserPage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUserPage, postUpdateUser, } from 'controllers/admin/admin.user.controller';
 import { getLoginPage, getRegisterPage, getSuccessRedirectPage, postLogout, postRegisterPage } from 'controllers/client/auth.controller';
@@ -74,6 +74,10 @@ const webRoutes = (app: Express) => {
 
     // Admin routes
     router.get('/admin', getAdminPage);
+    router.get('/admin/today-review', getTodayReviewsPage);
+    router.get('/admin/today-customer', getTodayCustomersPage);
+    router.get('/admin/product-stat', getProductStatPage);
+
 
     router.get('/admin/user', getUserPage);
     router.get('/admin/create-user', getCreateUserPage);

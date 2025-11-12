@@ -39,13 +39,13 @@
                         <%= user.isActive ? 'Có' : 'Không' %>
                     <td>
                         <div class="d-flex gap-2">
-                            <form action="/admin/delete-user/<%= user.id %>" method="post">
+                            <form action="/admin/delete-user/<%= user._id %>" method="post">
                                 <button class="btn btn-danger btn-sm" type="submit"
                                     onclick="return confirm('Bạn có chắc chắn muốn xóa user <%= user.name %> không?')">
                                     Xóa
                                 </button>
                             </form>
-                            <form action="/admin/view-user/<%= user.id %>" method="get">
+                            <form action="/admin/view-user/<%= user._id %>" method="get">
                                 <button class="btn btn-warning btn-sm" type="submit">Xem & Sửa</button>
                             </form>
                         </div>
