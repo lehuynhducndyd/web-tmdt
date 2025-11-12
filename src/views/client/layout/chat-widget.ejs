@@ -1,0 +1,287 @@
+<style>
+    #chat-widget-container {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        z-index: 1000;
+    }
+
+    #chat-toggle-button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        font-size: 28px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: transform 0.2s;
+    }
+
+    #chat-toggle-button:hover {
+        transform: scale(1.1);
+    }
+
+    #chat-window {
+        display: none;
+        position: absolute;
+        bottom: 80px;
+        right: 0;
+        width: 350px;
+        height: 500px;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    #chat-window.open {
+        display: flex;
+    }
+
+    .chat-header {
+        background-color: #007bff;
+        color: white;
+        padding: 15px;
+        font-weight: bold;
+        text-align: center;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+
+    .chat-messages {
+        flex-grow: 1;
+        padding: 15px;
+        overflow-y: auto;
+        background-color: #f9f9f9;
+    }
+
+    .message {
+        margin-bottom: 10px;
+        padding: 8px 12px;
+        border-radius: 18px;
+        max-width: 80%;
+        line-height: 1.4;
+    }
+
+    .message.user {
+        background-color: #007bff;
+        color: white;
+        align-self: flex-end;
+        margin-left: auto;
+    }
+
+    .message.bot {
+        background-color: #e9e9eb;
+        color: #333;
+        align-self: flex-start;
+    }
+
+    .message.bot.typing {
+        font-style: italic;
+    }
+
+    .chat-input-form {
+        display: flex;
+        padding: 10px;
+        border-top: 1px solid #ddd;
+        background-color: #fff;
+    }
+
+    #chat-input {
+        flex-grow: 1;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        padding: 10px 15px;
+        margin-right: 10px;
+        outline: none;
+    }
+
+    #chat-send-btn {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        font-size: 18px;
+    }
+
+    .product-cards-container {
+        display: flex;
+        overflow-x: auto;
+        padding: 10px 0;
+        margin-bottom: 10px;
+    }
+
+    .product-card {
+        width: 130px;
+        height: 150px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-left: 10px;
+        /* Giảm khoảng cách */
+        padding: 8px;
+        /* Giảm padding */
+        text-align: center;
+        text-decoration: none;
+        color: #333;
+        background: #fff;
+        display: block;
+    }
+
+    .product-card:first-child {
+        margin-left: 0;
+    }
+
+    .product-card img {
+        width: 100%;
+        height: 70px;
+        /* Giảm chiều cao ảnh một chút */
+        object-fit: contain;
+        border-radius: 4px;
+    }
+
+    .product-card .product-name {
+        font-size: 13px;
+        /* Giảm cỡ chữ một chút */
+        margin-top: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .product-card .product-price {
+        font-size: 12px;
+        font-weight: bold;
+        color: #d63384;
+        /* Thêm màu cho giá */
+        margin-top: 4px;
+    }
+</style>
+
+<div id="chat-widget-container">
+    <div id="chat-window">
+        <div class="chat-header">Trợ lý AI</div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot">Xin chào! Tôi có thể giúp gì cho bạn?</div>
+        </div>
+        <form class="chat-input-form" id="chat-form">
+            <input type="text" id="chat-input" placeholder="Nhập tin nhắn..." autocomplete="off">
+            <button type="submit" id="chat-send-btn">➤</button>
+        </form>
+    </div>
+    <button id="chat-toggle-button">💬</button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const chatWindow = document.getElementById('chat-window');
+        const toggleButton = document.getElementById('chat-toggle-button');
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const messagesContainer = document.getElementById('chat-messages');
+
+        // Mở/đóng cửa sổ chat
+        toggleButton.addEventListener('click', () => {
+            chatWindow.classList.toggle('open');
+        });
+
+        // Gửi tin nhắn
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, 'user');
+            chatInput.value = '';
+            showTypingIndicator();
+
+            try {
+                // Giả sử endpoint của bạn là /chat
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message }),
+                });
+
+                removeTypingIndicator();
+
+                if (!response.ok) {
+                    throw new Error('Lỗi từ server');
+                }
+
+                const data = await response.json();
+                addMessage(data.reply, 'bot', data.products);
+
+
+
+            } catch (error) {
+                console.error('Lỗi khi gửi tin nhắn:', error);
+                addMessage('Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại.', 'bot');
+            }
+        });
+
+        function addMessage(text, sender) {
+            // Hiển thị tin nhắn văn bản
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', sender);
+            messageElement.textContent = text;
+            messagesContainer.appendChild(messageElement);
+
+            // Nếu có sản phẩm, hiển thị chúng
+            if (sender === 'bot' && arguments.length > 2 && arguments[2] && arguments[2].length > 0) {
+                addProductCards(arguments[2]);
+            }
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight; // Tự động cuộn xuống
+        }
+
+        function addProductCards(products) {
+            const container = document.createElement('div');
+            container.className = 'product-cards-container';
+
+            products.forEach(product => {
+                const cardLink = document.createElement('a');
+                cardLink.href = `/shop-detail/${product.id}`;
+                cardLink.className = 'product-card';
+                cardLink.target = '_blank'; // Mở trong tab mới
+
+                const priceFormatted = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price);
+
+                cardLink.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-price">${priceFormatted}</div>
+                `;
+                container.appendChild(cardLink);
+            });
+            messagesContainer.appendChild(container);
+        }
+
+        function showTypingIndicator() {
+            const typingElement = document.createElement('div');
+            typingElement.id = 'typing-indicator';
+            typingElement.classList.add('message', 'bot', 'typing');
+            typingElement.textContent = 'Trợ lý đang soạn tin...';
+            messagesContainer.appendChild(typingElement);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typingElement = document.getElementById('typing-indicator');
+            if (typingElement) {
+                typingElement.remove();
+            }
+        }
+    });
+</script>

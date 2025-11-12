@@ -16,6 +16,7 @@ import { getProductReviewPage, postDeleteReview } from 'controllers/admin/admin.
 import { getOrderPage, getOrderDetailPage, postUpdateOrderStatus, getPrintPreviewPage } from 'controllers/admin/admin.order.controller';
 import { get } from 'http';
 import { getCheckoutPage, getDetailHistoryPage, getHistoryPage, postPlaceOrder, postUpdateCartAndCheckout } from 'controllers/client/user.order.controller';
+import { postChatMessage } from 'controllers/client/chat.controller';
 // import { getCartPage } from 'controllers/client/user.controller';
 const router = express.Router();
 
@@ -64,6 +65,11 @@ const webRoutes = (app: Express) => {
             // Successful authentication, redirect home.
             res.redirect('/');
         });
+
+
+    router.post("/api/chat", postChatMessage);
+
+
 
 
     // Admin routes
@@ -132,7 +138,7 @@ const webRoutes = (app: Express) => {
 
 
     router.get('/admin/order', getOrderPage)
-    router.get('/admin/order/:id', getOrdedrDetailPage);
+    router.get('/admin/order/:id', getOrderDetailPage);
     router.post('/admin/order/:id/update-status', postUpdateOrderStatus);
     router.get("/admin/order/:id/print", getPrintPreviewPage);
 
