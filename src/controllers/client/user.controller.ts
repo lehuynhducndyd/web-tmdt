@@ -400,7 +400,7 @@ const getUserInfoPage = async (req: Request, res: Response) => {
 const postUpdateUserInfo = async (req: Request, res: Response) => {
     try {
         let { id, name, email, password, phone, province, commune, street } = req.body;
-        console.log(req.body);
+
 
         const user = await User.findById(id);
 

@@ -11,7 +11,7 @@ const configPassportLocal = () => {
             if (session?.messages?.length) {
                 session.messages = [];
             }
-            console.log("check ", username, password);
+
             return handleLogin(username, password, callback);
         }));
     passport.serializeUser(function (user: any, callback) {

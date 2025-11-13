@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Order from 'models/order';
-import { getBestSellingProducts, getOutOfStockProducts, getTodayCustomers, getTodayOrders, getTodayReviews } from 'services/admin/dashboard.service';
+import { getBestSellingProducts, getOutOfStockProducts, getRevenueByDate, getRevenueForMonth, getThisMonthRevenue, getTodayCustomers, getTodayOrders, getTodayRevenue, getTodayReviews, } from 'services/admin/dashboard.service';
 
 const getAdminPage = async (req: Request, res: Response) => {
     try {
@@ -41,7 +41,6 @@ const getProductStatPage = async (req: Request, res: Response) => {
         const bestSellingProducts = await getBestSellingProducts();
         const outOfStockProducts = await getOutOfStockProducts();
 
-        console.log(outOfStockProducts);
         res.render("admin/dashboard/product-stat.ejs", { bestSellingProducts, outOfStockProducts });
     } catch (error) {
         console.error("Error loading product statistics page:", error);
@@ -49,4 +48,30 @@ const getProductStatPage = async (req: Request, res: Response) => {
     }
 }
 
-export { getAdminPage, getTodayReviewsPage, getTodayCustomersPage, getProductStatPage };
+const getRevenueStatPage = async (req: Request, res: Response) => {
+    try {
+        const now = new Date();
+        // Lấy tháng và năm từ query params, nếu không có thì dùng tháng/năm hiện tại
+        const selectedMonth = Number(req.query.month) || now.getMonth() + 1;
+        const selectedYear = Number(req.query.year) || now.getFullYear();
+
+        const todayRevenue = await getTodayRevenue();
+        const thisMonthRevenue = await getThisMonthRevenue();
+
+        // Lấy dữ liệu doanh thu cho tháng/năm đã chọn
+        const monthlyData = await getRevenueForMonth(selectedYear, selectedMonth);
+
+        res.render("admin/dashboard/revenue-stat.ejs", {
+            todayRevenue,
+            thisMonthRevenue,
+            monthlyData, // Dữ liệu doanh thu chi tiết của tháng được chọn
+            selectedMonth, // Tháng đã chọn để giữ lại trên select
+            selectedYear, // Năm đã chọn để giữ lại trên select
+        });
+    } catch (error) {
+        console.error("Error loading revenue statistics page:", error);
+        res.status(500).send("Lỗi khi tải trang thống kê doanh thu.");
+    }
+}
+
+export { getAdminPage, getTodayReviewsPage, getTodayCustomersPage, getProductStatPage, getRevenueStatPage };

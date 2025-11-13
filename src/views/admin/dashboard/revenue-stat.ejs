@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" />
+    <title>Thống kê doanh thu</title>
+    <link href="/admin/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+    <%- include('../layout/header'); -%>
+        <div id="layoutSidenav">
+            <%- include('../layout/sidenav'); -%>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+                            <h1 class="mt-4">Thống kê doanh thu</h1>
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
+                                <li class="breadcrumb-item active">Thống kê doanh thu</li>
+                            </ol>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="card bg-info text-white mb-4">
+                                        <div class="card-body">
+                                            <h5>Doanh thu hôm nay</h5>
+                                            <h3 class="fw-bold">
+                                                <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
+                                                    }).format(todayRevenue) %>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <div class="card bg-primary text-white mb-4">
+                                        <div class="card-body">
+                                            <h5>Doanh thu tháng này</h5>
+                                            <h3 class="fw-bold">
+                                                <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
+                                                    }).format(thisMonthRevenue) %>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-filter me-1"></i>
+                                    Lọc doanh thu theo tháng
+                                </div>
+                                <div class="card-body">
+                                    <form action="/admin/revenue-stat" method="get" class="row mb-3 align-items-end">
+                                        <div class="col-md-3">
+                                            <label for="month-filter" class="form-label">Chọn tháng</label>
+                                            <select id="month-filter" name="month" class="form-select">
+                                                <% for(let m=1; m <=12; m++) { %>
+                                                    <option value="<%= m %>" <%=m===selectedMonth ? 'selected' : '' %>>
+                                                        Tháng <%= m %>
+                                                    </option>
+                                                    <% } %>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="year-filter" class="form-label">Chọn năm</label>
+                                            <select id="year-filter" name="year" class="form-select">
+                                                <% const currentYear=new Date().getFullYear(); for (let y=currentYear;
+                                                    y>= 2022; y--) {
+                                                    %>
+                                                    <option value="<%= y %>" <%=y===selectedYear ? 'selected' : '' %>>
+                                                        <%= y %>
+                                                    </option>
+                                                    <% } %>
+                                            </select>
+
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="submit" class="btn btn-primary w-100">Xem</button>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="">
+                                                <h5 class="">Tổng doanh thu: <span class="text-success fw-bold">
+                                                        <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
+                                                            currency: 'VND' }).format(monthlyData.totalRevenue) %>
+                                                    </span></h5>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-table me-1"></i>
+                                    Chi tiết doanh thu theo ngày
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Ngày</th>
+                                                    <th>Doanh thu</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="revenueTableBody">
+                                                <% if (monthlyData.dailyData.length> 0) { %>
+                                                    <% monthlyData.dailyData.forEach(item=> { %>
+                                                        <tr>
+                                                            <td>
+                                                                <%= item.day %>/<%= item.month %>/<%= item.year %>
+                                                            </td>
+                                                            <td>
+                                                                <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
+                                                                    currency: 'VND' }).format(item.revenue) %>
+                                                            </td>
+                                                        </tr>
+                                                        <% }) %>
+                                                            <% } else { %>
+                                                                <tr>
+                                                                    <td colspan="2" class="text-center">Không có dữ liệu
+                                                                    </td>
+                                                                </tr>
+                                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </main>
+                </div>
+        </div>
+        <%- include('../layout/footer'); -%>
+            </div>
+            </div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
+                crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                crossorigin="anonymous"></script>
+            <script src="/admin/js/scripts.js"></script>
+
+
+
+</body>
+
+</html>

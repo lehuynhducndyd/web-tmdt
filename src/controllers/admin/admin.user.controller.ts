@@ -53,7 +53,7 @@ const postUpdateUser = async (req: Request, res: Response) => {
         res.redirect('/admin/user');
     } catch (error) {
         res.status(500).send("Error updating user");
-        console.log(error);
+
     }
 }
 export { getUserPage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUserPage, postUpdateUser };

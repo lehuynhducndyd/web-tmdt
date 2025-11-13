@@ -55,7 +55,7 @@ router.get("/result", async (req, res) => { // Đã đổi thành async
 
 // IPN (notify URL)
 router.post("/ipn", (req, res) => {
-    console.log("IPN MoMo:", req.body);
+
     res.status(204).send();
 });
 
