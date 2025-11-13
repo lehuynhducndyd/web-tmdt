@@ -9,41 +9,43 @@
                     Trang chủ
                 </a>
 
-                <a class="nav-link" href="/admin/user">
+                <% if (user && user.role==='admin' ) { %>
+                    <a class="nav-link" href="/admin/user">
 
-                    Người dùng
-                </a>
-                <a class="nav-link" href="/admin/category">
-
-                    Danh mục sản phẩm
-                </a>
-                <a class="nav-link" href="/admin/brand">
-
-                    Thương hiệu
-                </a>
-                <p style="padding: 12px 16px; margin: 0;">
-
-                    Sản phẩm
-                </p>
-
-                <div class="ps-5">
-                    <a class="nav-link p-0" href="/admin/device">
-                        <div class="sb-nav-link-icon"><i class="fa-solid fa-arrow-right"></i></i></div>
-                        Thiết bị di động
+                        Người dùng
                     </a>
-                    <a class="nav-link p-0" href="/admin/accessory">
-                        <div class="sb-nav-link-icon"><i class="fa-solid fa-arrow-right"></i></i></div>
-                        Phụ kiện
-                    </a>
+                    <% } %>
+                        <a class="nav-link" href="/admin/category">
+
+                            Danh mục sản phẩm
+                        </a>
+                        <a class="nav-link" href="/admin/brand">
+
+                            Thương hiệu
+                        </a>
+                        <p style="padding: 12px 16px; margin: 0;">
+
+                            Sản phẩm
+                        </p>
+
+                        <div class="ps-5">
+                            <a class="nav-link p-0" href="/admin/device">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-arrow-right"></i></i></div>
+                                Thiết bị di động
+                            </a>
+                            <a class="nav-link p-0" href="/admin/accessory">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-arrow-right"></i></i></div>
+                                Phụ kiện
+                            </a>
 
 
-                </div>
+                        </div>
 
 
 
-                <a class="nav-link" href="/admin/order">
-                    Đơn đặt hàng
-                </a>
+                        <a class="nav-link" href="/admin/order">
+                            Đơn đặt hàng
+                        </a>
 
             </div>
         </div>

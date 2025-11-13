@@ -8,7 +8,7 @@ import { getLoginPage, getRegisterPage, getSuccessRedirectPage, postLogout, post
 import { getCartPage, getHomePage, getUserInfoPage, postAddProductToCart, postDeleteCartItem, postUpdateUserInfo } from 'controllers/client/user.controller';
 import express, { Express } from 'express';
 import passport from 'passport';
-import { isAdmin, isLogin } from 'src/middleware/auth';
+import { isAdmin, isAdminStaff, isLogin } from 'src/middleware/auth';
 import { fileUploadMiddleware } from 'src/middleware/multer';
 import { getShopPage } from 'controllers/client/user.controller';
 import { getShopDetailPage, postCreateReview } from 'controllers/client/user.controller';
@@ -77,15 +77,15 @@ const webRoutes = (app: Express) => {
     router.get('/admin/today-review', getTodayReviewsPage);
     router.get('/admin/today-customer', getTodayCustomersPage);
     router.get('/admin/product-stat', getProductStatPage);
-    router.get('/admin/revenue-stat', getRevenueStatPage);
+    router.get('/admin/revenue-stat', isAdmin, getRevenueStatPage);
 
 
-    router.get('/admin/user', getUserPage);
-    router.get('/admin/create-user', getCreateUserPage);
-    router.post('/admin/create-user', postCreateUser);
-    router.post('/admin/delete-user/:id', postDeleteUser);
-    router.get('/admin/view-user/:id', getViewUserPage);
-    router.post('/admin/update-user', postUpdateUser);
+    router.get('/admin/user', isAdmin, getUserPage);
+    router.get('/admin/create-user', isAdmin, getCreateUserPage);
+    router.post('/admin/create-user', isAdmin, postCreateUser);
+    router.post('/admin/delete-user/:id', isAdmin, postDeleteUser);
+    router.get('/admin/view-user/:id', isAdmin, getViewUserPage);
+    router.post('/admin/update-user', isAdmin, postUpdateUser);
 
     router.get('/admin/category', getCategoryPage);
     router.get('/admin/create-category', getCreateCategoryPage);
@@ -149,7 +149,7 @@ const webRoutes = (app: Express) => {
 
 
 
-    app.use('/', isAdmin, router);
+    app.use('/', isAdminStaff, router);
 }
 
 export default webRoutes;

@@ -10,11 +10,11 @@ const isLogin = (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
-const isAdmin = (req: Request, res: Response, next: NextFunction) => {
+const isAdminStaff = (req: Request, res: Response, next: NextFunction) => {
 
     if (req.path.startsWith('/admin')) {
         const user = req.user as any;
-        if (user?.role === "admin") {
+        if (user?.role === "admin" || user?.role === "staff") {
             next();
         } else {
             res.render("status/403.ejs");
@@ -25,6 +25,16 @@ const isAdmin = (req: Request, res: Response, next: NextFunction) => {
     next();
 }
 
+const isAdmin = (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user as any;
+    if (user?.role === "admin") {
+        next();
+    } else {
+        res.render("status/403.ejs");
+    }
+    return;
+}
+
 export {
-    isLogin, isAdmin
+    isLogin, isAdminStaff, isAdmin
 }

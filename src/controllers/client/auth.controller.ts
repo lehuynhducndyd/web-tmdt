@@ -48,7 +48,7 @@ const postRegisterPage = async (req: Request, res: Response) => {
 
 const getSuccessRedirectPage = (req: Request, res: Response) => {
     const user = req.user as any;
-    if (user?.role === "admin") {
+    if (user?.role === "admin" || user?.role === "staff") {
         return res.redirect("/admin");
     } else return res.redirect("/");
 }
