@@ -14,8 +14,8 @@ import { getShopPage } from 'controllers/client/user.controller';
 import { getShopDetailPage, postCreateReview } from 'controllers/client/user.controller';
 import { getProductReviewPage, postDeleteReview } from 'controllers/admin/admin.review.controller';
 import { getOrderPage, getOrderDetailPage, postUpdateOrderStatus, getPrintPreviewPage } from 'controllers/admin/admin.order.controller';
-import { get } from 'http';
 import { getCheckoutPage, getDetailHistoryPage, getHistoryPage, postPlaceOrder, postUpdateCartAndCheckout } from 'controllers/client/user.order.controller';
+import { getSearchProducts } from 'controllers/client/search.controller';
 import { postChatMessage } from 'controllers/client/chat.controller';
 // import { getCartPage } from 'controllers/client/user.controller';
 const router = express.Router();
@@ -68,6 +68,7 @@ const webRoutes = (app: Express) => {
 
 
     router.post("/api/chat", postChatMessage);
+    router.get('/search', getSearchProducts);
 
 
 
@@ -149,6 +150,7 @@ const webRoutes = (app: Express) => {
 
 
 
+    app.get('/search', getSearchProducts);
     app.use('/', isAdminStaff, router);
 }
 
