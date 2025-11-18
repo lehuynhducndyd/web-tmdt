@@ -96,7 +96,7 @@
                                 class="d-flex align-items-center">
                                 <label for="status" class="me-2"><strong>Trạng
                                         thái:</strong></label>
-                                <select name="status" id="status" class="form-select" style="width: 150px;">
+                                <select name="status" id="status" class="form-select" style="width: 150px;" disabled>
                                     <option value="pending" <%=order.status==='pending' ? 'selected' : '' %>>Pending
                                     </option>
                                     <option value="processing" <%=order.status==='processing' ? 'selected' : '' %>
@@ -108,7 +108,7 @@
                                     <option value="cancelled" <%=order.status==='cancelled' ? 'selected' : '' %>
                                         >Cancelled</option>
                                 </select>
-                                <button type="submit" class="btn btn-primary ms-2">Cập nhật</button>
+                                <!-- <button type="submit" class="btn btn-primary ms-2">Cập nhật</button> -->
                             </form>
                         </div>
                     </div>

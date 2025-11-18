@@ -566,6 +566,11 @@ const postDeleteCartItem = async (req: Request, res: Response) => {
     }
 }
 
+const getContactPage = async (req: Request, res: Response) => {
+    res.render('client/home/contact.ejs');
+}
+
+
 
 export {
     getHomePage,
@@ -576,4 +581,5 @@ export {
     postAddProductToCart,
     getCartPage,
     postDeleteCartItem,
+    getContactPage
 };
