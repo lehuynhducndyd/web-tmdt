@@ -59,29 +59,44 @@ async function getGeminiReply(prompt: string): Promise<string> {
  */
 async function analyzeUserIntent(message: string): Promise<{ intent: string; entities: any }> {
     const prompt = `
-Phân tích câu hỏi của người dùng và trả về một đối tượng JSON.
+Phân tích câu hỏi của người dùng về sản phẩm điện thoại và phụ kiện, sau đó trả về một đối tượng JSON.
 Câu hỏi: "${message}"
 
 Các loại ý định (intent) có thể có:
-- "SEARCH": Người dùng đang tìm kiếm sản phẩm.
+- "SEARCH_PRODUCT": Người dùng đang tìm kiếm sản phẩm chung.
 - "COMPARE": Người dùng muốn so sánh hai hoặc nhiều sản phẩm.
+- "SEARCH_BY_SPECS": Người dùng tìm sản phẩm theo thông số kỹ thuật cụ thể (pin, RAM, camera...).
+- "CHECK_PRICE": Người dùng hỏi về giá sản phẩm.
+- "CHECK_STOCK": Người dùng hỏi về tình trạng còn hàng.
 - "QUESTION": Người dùng hỏi một câu hỏi chung (ví dụ: "chính sách bảo hành?").
 - "GREETING": Người dùng chào hỏi.
 
 Các thực thể (entities) cần trích xuất:
 - "products": (Mảng chuỗi) Tên các sản phẩm được đề cập.
 - "brand": (Chuỗi) Tên thương hiệu.
-- "attributes": (Mảng chuỗi) Các thuộc tính như màu sắc, dung lượng.
+- "attributes": (Mảng chuỗi) Các thuộc tính chung như màu sắc.
+- "specs": (Object) Các thông số kỹ thuật như "ram", "storage", "battery", "camera".
+- "price_range": (Object) Khoảng giá người dùng quan tâm, gồm "min" và "max".
 
 Chỉ trả về đối tượng JSON, không thêm bất kỳ giải thích nào.
 
 Ví dụ:
 1. Câu hỏi: "tìm điện thoại samsung màu xanh"
-   JSON: {"intent": "SEARCH", "entities": {"products": ["điện thoại"], "brand": "Samsung", "attributes": ["màu xanh"]}}
+   JSON: {"intent": "SEARCH_PRODUCT", "entities": {"products": ["điện thoại"], "brand": "Samsung", "attributes": ["màu xanh"]}}
 2. Câu hỏi: "so sánh iphone 15 pro và samsung s24 ultra"
    JSON: {"intent": "COMPARE", "entities": {"products": ["iphone 15 pro", "samsung s24 ultra"], "brand": null, "attributes": []}}
 3. Câu hỏi: "chào shop"
    JSON: {"intent": "GREETING", "entities": {}}
+4. Câu hỏi: "Điện thoại nào có pin trên 5000mAh và RAM 8GB?"
+   JSON: {"intent": "SEARCH_BY_SPECS", "entities": {"products": ["Điện thoại"], "specs": {"battery": "5000mAh", "ram": "8GB"}}}
+5. Câu hỏi: "iPhone 15 Pro Max giá bao nhiêu?"
+   JSON: {"intent": "CHECK_PRICE", "entities": {"products": ["iPhone 15 Pro Max"]}}
+6. Câu hỏi: "Shop còn tai nghe không dây màu trắng không?"
+   JSON: {"intent": "CHECK_STOCK", "entities": {"products": ["tai nghe không dây"], "attributes": ["màu trắng"]}}
+7. Câu hỏi: "Shop có bán Samsung không?"
+   JSON: {"intent": "SEARCH_PRODUCT", "entities": {"brand": "Samsung"}}
+8. Câu hỏi: "Shop có những iPhone nào?"
+   JSON: {"intent": "SEARCH_PRODUCT", "entities": {"products": ["iPhone"]}}
 `;
     try {
         const text = await generateContentWithRetry(prompt);
@@ -110,7 +125,7 @@ const postChatMessage = async (req: Request, res: Response) => {
 
         let prompt = "";
 
-        if (intent === 'SEARCH') {
+        if (intent === 'SEARCH_PRODUCT' || intent === 'SEARCH_BY_SPECS') {
             const searchConditions: any = { $and: [] };
             if (entities.products && entities.products.length > 0) {
                 const regexQueries = entities.products.map((p: string) => ({ name: { $regex: p, $options: "i" } }));

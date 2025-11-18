@@ -43,8 +43,18 @@
             <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                 <div class="navbar-nav mx-auto">
                     <a href="/" class="nav-item nav-link active">Trang chủ</a>
-                    <a href="/shop" class="nav-item nav-link">Cửa hàng</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Cửa hàng</a>
+                        <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                            <form method="get" action="/shop">
+                                <button class="dropdown-item">Điện thoại, máy tính bảng...</button>
+                            </form>
+                            <form method="get" action="/shop-acc">
+                                <button class="dropdown-item">Phụ kiện</button>
+                            </form>
 
+                        </div>
+                    </div>
                     <a href="contact.html" class="nav-item nav-link">Liên hệ</a>
                     <% if (user && user.role==='admin' || user && user.role==='staff' ) { %>
                         <a class="btn btn-warning nav-item nav-link" href="/admin">
@@ -110,7 +120,11 @@
 
                                 <ul class="dropdown-menu dropdown-menu-end p-4" aria-labelledby="dropdownMenuLink">
 
-                                    <li><a class="dropdown-item" href="/login">Đăng nhập</a></li>
+                                    <li>
+                                        <form method="post" action="/login">
+                                            <button class="dropdown-item">Đăng nhập</button>
+                                        </form>
+                                    </li>
 
                                 </ul>
                             </div>
