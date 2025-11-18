@@ -15,7 +15,7 @@
                         class="text-white">Can Tho</a></small>
                 <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">
                         <% if(user){ %>
-                            <%= user.name %>
+                            Xin chào <%= user.name %>
                                 <% } else{ %>
                                     Hãy đăng nhập để có thể mua hàng
                                     <% } %>
@@ -25,9 +25,8 @@
 
             </div>
             <div class="top-link pe-2">
-                <a href="#" class="text-white"><small class="text-white mx-2">Privacy Policy</small>/</a>
-                <a href="#" class="text-white"><small class="text-white mx-2">Terms of Use</small>/</a>
-                <a href="#" class="text-white"><small class="text-white ms-2">Sales and Refunds</small></a>
+                <small class="text-white mx-2">123 Đường ABC, Phường Ninh Kiều, TP. Cần
+                    Thơ</small>
             </div>
         </div>
     </div>
@@ -43,18 +42,10 @@
             <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                 <div class="navbar-nav mx-auto">
                     <a href="/" class="nav-item nav-link active">Trang chủ</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Cửa hàng</a>
-                        <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                            <form method="get" action="/shop">
-                                <button class="dropdown-item">Điện thoại, máy tính bảng...</button>
-                            </form>
-                            <form method="get" action="/shop-acc">
-                                <button class="dropdown-item">Phụ kiện</button>
-                            </form>
 
-                        </div>
-                    </div>
+                    <a href="/shop" class="nav-item nav-link active">Cửa hàng</a>
+
+
                     <a href="/contact" class="nav-item nav-link">Liên hệ</a>
                     <% if (user && user.role==='admin' || user && user.role==='staff' ) { %>
                         <a class="btn btn-warning nav-item nav-link" href="/admin">
