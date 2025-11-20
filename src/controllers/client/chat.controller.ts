@@ -4,7 +4,7 @@ import { Brand } from 'models/brand';
 import { Accessory, AccessoriesVariant, Device, Variant } from 'models/product';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
 
 // Helper function to introduce a delay
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -97,6 +97,12 @@ Ví dụ:
    JSON: {"intent": "SEARCH_PRODUCT", "entities": {"brand": "Samsung"}}
 8. Câu hỏi: "Shop có những iPhone nào?"
    JSON: {"intent": "SEARCH_PRODUCT", "entities": {"products": ["iPhone"]}}
+9. Câu hỏi: "shop có s10 không"
+   JSON: {"intent": "SEARCH_PRODUCT", "entities": {"products": ["s10"]}}
+10. Câu hỏi: "shop có samsung s21 không"
+    JSON: {"intent": "SEARCH_PRODUCT", "entities": {"products": ["samsung s21"]}}
+11. Câu hỏi: "shop có samsung nào"
+    JSON: {"intent": "SEARCH_PRODUCT", "entities": {"brand": "Samsung"}}
 `;
     try {
         const text = await generateContentWithRetry(prompt);

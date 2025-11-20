@@ -33,502 +33,505 @@
 
 
     <%- include('../layout/navbar'); -%>
+        <%- include('../layout/chat-widget') %>
 
-        <main class="main-content">
-            <!-- thanh lọc bat dau-->
-            <section class="categories-section main-container">
-                <h2 class="section-title">SẢN PHẨM CỦA CHÚNG TÔI</h2>
+            <main class="main-content">
+                <!-- thanh lọc bat dau-->
+                <section class="categories-section main-container">
+                    <h2 class="section-title">SẢN PHẨM CỦA CHÚNG TÔI</h2>
 
-                <div class="filter-bar">
-                    <button class="filter-btn active" id="openFilterModalBtn"><i class="fas fa-filter"></i> Lọc</button>
-                    <% if (allBrands && allBrands.length> 0) { %>
-                        <% allBrands.forEach(function(brand) { %>
-                            <button class="filter-btn brand-filter">
-                                <%= brand.name %>
-                            </button>
-                            <% }); %>
-                                <% } %>
-                </div>
+                    <div class="filter-bar">
+                        <button class="filter-btn active" id="openFilterModalBtn"><i class="fas fa-filter"></i>
+                            Lọc</button>
+                        <% if (allBrands && allBrands.length> 0) { %>
+                            <% allBrands.forEach(function(brand) { %>
+                                <button class="filter-btn brand-filter">
+                                    <%= brand.name %>
+                                </button>
+                                <% }); %>
+                                    <% } %>
+                    </div>
 
-                <div class="filter-modal" id="filterModal">
-                    <div class="filter-modal-content">
-                        <div class="filter-modal-header">
-                            <h3><i class="fas fa-filter"></i>Tripple D Shop</h3>
-                            <button class="close-btn"
-                                onclick="document.getElementById('filterModal').style.display='none'">&times;
-                                Đóng</button>
-                        </div>
-                        <div class="filter-options-grid">
-                            <div class="filter-group-item">
-                                <h4>Hãng</h4>
-                                <div class="option-grid">
-                                    <% if (allBrands && allBrands.length> 0) { %>
-                                        <% allBrands.forEach(function(brand) { %>
-                                            <button class="option-btn">
-                                                <%= brand.name %>
-                                            </button>
-                                            <% }); %>
-                                                <% } %>
-                                </div>
+                    <div class="filter-modal" id="filterModal">
+                        <div class="filter-modal-content">
+                            <div class="filter-modal-header">
+                                <h3><i class="fas fa-filter"></i>Tripple D Shop</h3>
+                                <button class="close-btn"
+                                    onclick="document.getElementById('filterModal').style.display='none'">&times;
+                                    Đóng</button>
                             </div>
-
-                            <div class="filter-group-item">
-                                <h4>Giá</h4>
-                                <div class="option-grid price-grid">
-                                    <button class="option-btn">Dưới 2 triệu</button>
-                                    <button class="option-btn">Từ 2 - 4 triệu</button>
-                                    <button class="option-btn">Từ 4 - 7 triệu</button>
-                                    <button class="option-btn">Từ 7 - 13 triệu</button>
-                                    <button class="option-btn">Từ 13 - 20 triệu</button>
-                                    <button class="option-btn">Trên 20 triệu</button>
-                                </div>
-                                <div class="price-range">
-                                    <p><i class="fas fa-sliders-h"></i> Hoặc chọn mức giá phù hợp với bạn</p>
-                                    <div class="price-inputs">
-                                        <input type="text" inputmode="numeric" value="0">
-                                        <span>-</span>
-                                        <input type="text" inputmode="numeric" value="64.000.000">
+                            <div class="filter-options-grid">
+                                <div class="filter-group-item">
+                                    <h4>Hãng</h4>
+                                    <div class="option-grid">
+                                        <% if (allBrands && allBrands.length> 0) { %>
+                                            <% allBrands.forEach(function(brand) { %>
+                                                <button class="option-btn">
+                                                    <%= brand.name %>
+                                                </button>
+                                                <% }); %>
+                                                    <% } %>
                                     </div>
-                                    <div class="slider-range"></div>
-                                </div>
-                            </div>
-
-                            <div class="filter-group-item">
-                                <h4>Danh mục</h4>
-                                <div class="option-grid">
-                                    <% if (categories && categories.length> 0) { %>
-                                        <% categories.forEach(function(category) { %>
-                                            <button class="option-btn">
-                                                <%= category.name %>
-                                            </button>
-                                            <% }); %>
-                                                <% } %>
-                                </div>
-                            </div>
-
-
-
-                            <div class="filter-group-item">
-                                <h4>RAM</h4>
-                                <div class="option-grid">
-
-                                    <button class="option-btn">4 GB</button>
-                                    <button class="option-btn">8 GB</button>
-                                    <button class="option-btn">12 GB</button>
-                                    <button class="option-btn">16 GB</button>
-                                    <button class="option-btn">32 GB</button>
-                                    <button class="option-btn">64 GB</button>
                                 </div>
 
-                            </div>
-
-
-                            <div class="filter-group-item">
-                                <h4>Dung lượng</h4>
-                                <div class="option-grid">
-                                    <button class="option-btn">64 GB</button>
-                                    <button class="option-btn">128 GB</button>
-                                    <button class="option-btn">256 GB</button>
-                                    <button class="option-btn">512 GB</button>
-                                    <button class="option-btn">1 TB</button>
-                                    <button class="option-btn">2 TB</button>
+                                <div class="filter-group-item">
+                                    <h4>Giá</h4>
+                                    <div class="option-grid price-grid">
+                                        <button class="option-btn">Dưới 2 triệu</button>
+                                        <button class="option-btn">Từ 2 - 4 triệu</button>
+                                        <button class="option-btn">Từ 4 - 7 triệu</button>
+                                        <button class="option-btn">Từ 7 - 13 triệu</button>
+                                        <button class="option-btn">Từ 13 - 20 triệu</button>
+                                        <button class="option-btn">Trên 20 triệu</button>
+                                    </div>
+                                    <div class="price-range">
+                                        <p><i class="fas fa-sliders-h"></i> Hoặc chọn mức giá phù hợp với bạn</p>
+                                        <div class="price-inputs">
+                                            <input type="text" inputmode="numeric" value="0">
+                                            <span>-</span>
+                                            <input type="text" inputmode="numeric" value="64.000.000">
+                                        </div>
+                                        <div class="slider-range"></div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="filter-group-item">
-                                <h4>Dung lượng pin</h4>
-                                <div class="option-grid">
-                                    <button class="option-btn">3000 mAh</button>
-                                    <button class="option-btn">4000 mAh</button>
-                                    <button class="option-btn">5000 mAh</button>
-                                    <button class="option-btn">6000 mAh</button>
-                                    <button class="option-btn">7000 mAh</button>
-                                    <button class="option-btn">8000 mAh</button>
-                                    <button class="option-btn">9000 mAh</button>
-                                    <button class="option-btn">10000 mAh</button>
+                                <div class="filter-group-item">
+                                    <h4>Danh mục</h4>
+                                    <div class="option-grid">
+                                        <% if (categories && categories.length> 0) { %>
+                                            <% categories.forEach(function(category) { %>
+                                                <button class="option-btn">
+                                                    <%= category.name %>
+                                                </button>
+                                                <% }); %>
+                                                    <% } %>
+                                    </div>
                                 </div>
-                            </div>
 
-                        </div>
-                        <div class="filter-modal-footer">
-                            <button class="btn btn-primary apply-filter-btn">Áp dụng</button>
-                            <button class="btn btn-secondary clear-filter-btn">Xóa bộ lọc</button>
+
+
+                                <div class="filter-group-item">
+                                    <h4>RAM</h4>
+                                    <div class="option-grid">
+
+                                        <button class="option-btn">4 GB</button>
+                                        <button class="option-btn">8 GB</button>
+                                        <button class="option-btn">12 GB</button>
+                                        <button class="option-btn">16 GB</button>
+                                        <button class="option-btn">32 GB</button>
+                                        <button class="option-btn">64 GB</button>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="filter-group-item">
+                                    <h4>Dung lượng</h4>
+                                    <div class="option-grid">
+                                        <button class="option-btn">64 GB</button>
+                                        <button class="option-btn">128 GB</button>
+                                        <button class="option-btn">256 GB</button>
+                                        <button class="option-btn">512 GB</button>
+                                        <button class="option-btn">1 TB</button>
+                                        <button class="option-btn">2 TB</button>
+                                    </div>
+                                </div>
+
+                                <div class="filter-group-item">
+                                    <h4>Dung lượng pin</h4>
+                                    <div class="option-grid">
+                                        <button class="option-btn">3000 mAh</button>
+                                        <button class="option-btn">4000 mAh</button>
+                                        <button class="option-btn">5000 mAh</button>
+                                        <button class="option-btn">6000 mAh</button>
+                                        <button class="option-btn">7000 mAh</button>
+                                        <button class="option-btn">8000 mAh</button>
+                                        <button class="option-btn">9000 mAh</button>
+                                        <button class="option-btn">10000 mAh</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="filter-modal-footer">
+                                <button class="btn btn-primary apply-filter-btn">Áp dụng</button>
+                                <button class="btn btn-secondary clear-filter-btn">Xóa bộ lọc</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="fruite">
-                    <div class="row g-4">
+                    <div class="fruite">
+                        <div class="row g-4">
 
-                        <% products.forEach(function(product){ %>
+                            <% products.forEach(function(product){ %>
 
-                            <div class="col-md-6 col-lg-4 col-xl-3 ">
-                                <a href="/shop-detail/<%= product._id %>" class="product-card-link">
-                                    <div
-                                        class="rounded position-relative fruite-item border border-light-subtle rounded-bottom">
-                                        <div class="product-image-container">
-                                            <% if (product.thumbnail && product.thumbnail.data) { %>
-                                                <img src="data:<%= product.thumbnail.contentType %>;base64,<%= product.thumbnail.data.toString('base64') %>"
-                                                    class="img-fluid" alt="<%= product.name %>"
-                                                    style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                                                <% } else { %>
-                                                    <img src="/admin/img/default-image.png" class="img-fluid"
-                                                        alt="No Image"
+                                <div class="col-md-6 col-lg-4 col-xl-3 ">
+                                    <a href="/shop-detail/<%= product._id %>" class="product-card-link">
+                                        <div
+                                            class="rounded position-relative fruite-item border border-light-subtle rounded-bottom">
+                                            <div class="product-image-container">
+                                                <% if (product.thumbnail && product.thumbnail.data) { %>
+                                                    <img src="data:<%= product.thumbnail.contentType %>;base64,<%= product.thumbnail.data.toString('base64') %>"
+                                                        class="img-fluid" alt="<%= product.name %>"
                                                         style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                                                    <% } %>
-                                        </div>
-                                        <div class="p-4">
-                                            <h4>
-                                                <p style="font-size: 15px;">
-                                                    <%=product.name%>
-                                                </p>
-                                            </h4>
+                                                    <% } else { %>
+                                                        <img src="/admin/img/default-image.png" class="img-fluid"
+                                                            alt="No Image"
+                                                            style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                                        <% } %>
+                                            </div>
+                                            <div class="p-4">
+                                                <h4>
+                                                    <p style="font-size: 15px;">
+                                                        <%=product.name%>
+                                                    </p>
+                                                </h4>
 
-                                            <div class="">
-                                                <div class="d-flex justify-content-center align-items-baseline">
-                                                    <% if (product.hasDiscount) { %>
-                                                        <!-- Giá sau khi giảm -->
-                                                        <p class="text-danger fs-5 fw-bold mb-0 me-2">
-                                                            <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
-                                                                currency: 'VND' }).format(product.price) %>
-                                                        </p>
-                                                        <!-- Giá gốc (bị gạch) -->
-                                                        <p class="text-muted text-decoration-line-through mb-0">
-                                                            <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
-                                                                currency: 'VND' }).format(product.originalPrice) %>
-                                                        </p>
-                                                        <% } else { %>
-                                                            <!-- Giá bình thường (không giảm) -->
-                                                            <p class="text-dark fs-5 fw-bold mb-0">
-                                                                <% if (product.price> 0) { %>
-                                                                    <%= new Intl.NumberFormat('vi-VN', {
-                                                                        style: 'currency' , currency: 'VND'
-                                                                        }).format(product.price) %>
-                                                                        <% } else { %>
-                                                                            Liên hệ
-                                                                            <% } %>
+                                                <div class="">
+                                                    <div class="d-flex justify-content-center align-items-baseline">
+                                                        <% if (product.hasDiscount) { %>
+                                                            <!-- Giá sau khi giảm -->
+                                                            <p class="text-danger fs-5 fw-bold mb-0 me-2">
+                                                                <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
+                                                                    currency: 'VND' }).format(product.price) %>
                                                             </p>
-                                                            <% } %>
+                                                            <!-- Giá gốc (bị gạch) -->
+                                                            <p class="text-muted text-decoration-line-through mb-0">
+                                                                <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
+                                                                    currency: 'VND' }).format(product.originalPrice) %>
+                                                            </p>
+                                                            <% } else { %>
+                                                                <!-- Giá bình thường (không giảm) -->
+                                                                <p class="text-dark fs-5 fw-bold mb-0">
+                                                                    <% if (product.price> 0) { %>
+                                                                        <%= new Intl.NumberFormat('vi-VN', {
+                                                                            style: 'currency' , currency: 'VND'
+                                                                            }).format(product.price) %>
+                                                                            <% } else { %>
+                                                                                Liên hệ
+                                                                                <% } %>
+                                                                </p>
+                                                                <% } %>
+                                                    </div>
+                                                    <button
+                                                        class="btn border border-secondary rounded-pill px-3 text-primary mx-auto"><i
+                                                            class="fa fa-shopping-bag me-2 text-primary"></i>
+                                                        Xem chi tiết</button>
                                                 </div>
-                                                <button
-                                                    class="btn border border-secondary rounded-pill px-3 text-primary mx-auto"><i
-                                                        class="fa fa-shopping-bag me-2 text-primary"></i>
-                                                    Xem chi tiết</button>
                                             </div>
                                         </div>
-                                    </div>
-                                </a>
+                                    </a>
+                                </div>
+                                <% }); %>
+                        </div>
+                    </div>
+                </section>
+                <!-- thanh lọc ket thuc -->
+                <section class="main-container">
+                    <div class="khung-quang-cao">
+                        <h3>FLASH SALE CUỐI TUẦN - GIẢM ĐẾN 50%</h3>
+                        <p>Hàng ngàn sản phẩm công nghệ đang chờ đón bạn. Cơ hội vàng để nâng cấp thiết bị với giá tốt
+                            nhất!
+                        </p>
+                        <a href="/shop" class="btn btn-quang-cao">XEM NGAY ƯU ĐÃI</a>
+                    </div>
+                </section>
+
+
+
+                <section class="khung-uu-dai-dich-vu main-container">
+                    <div class="row">
+
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="uu-dai-item">
+                                <div class="uu-dai-item-icon"><i class="fas fa-shipping-fast"></i></div>
+                                <h4>Free Shipping</h4>
+                                <p>Miễn phí với hóa đơn từ 10.000.000 VNĐ</p>
                             </div>
-                            <% }); %>
-                    </div>
-                </div>
-            </section>
-            <!-- thanh lọc ket thuc -->
-            <section class="main-container">
-                <div class="khung-quang-cao">
-                    <h3>FLASH SALE CUỐI TUẦN - GIẢM ĐẾN 50%</h3>
-                    <p>Hàng ngàn sản phẩm công nghệ đang chờ đón bạn. Cơ hội vàng để nâng cấp thiết bị với giá tốt nhất!
-                    </p>
-                    <a href="/shop" class="btn btn-quang-cao">XEM NGAY ƯU ĐÃI</a>
-                </div>
-            </section>
-
-
-
-            <section class="khung-uu-dai-dich-vu main-container">
-                <div class="row">
-
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="uu-dai-item">
-                            <div class="uu-dai-item-icon"><i class="fas fa-shipping-fast"></i></div>
-                            <h4>Free Shipping</h4>
-                            <p>Miễn phí với hóa đơn từ 10.000.000 VNĐ</p>
                         </div>
-                    </div>
 
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="uu-dai-item">
-                            <div class="uu-dai-item-icon"><i class="fas fa-shield-alt"></i></div>
-                            <h4>Bảo mật thanh toán</h4>
-                            <p>100% bảo mật thanh toán tuyệt đối</p>
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="uu-dai-item">
+                                <div class="uu-dai-item-icon"><i class="fas fa-shield-alt"></i></div>
+                                <h4>Bảo mật thanh toán</h4>
+                                <p>100% bảo mật thanh toán tuyệt đối</p>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="uu-dai-item">
-                            <div class="uu-dai-item-icon"><i class="fas fa-sync-alt"></i></div>
-                            <h4>Miễn phí đổi trả 30 ngày</h4>
-                            <p>30 ngày hoàn tiền nếu sản phẩm lỗi</p>
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="uu-dai-item">
+                                <div class="uu-dai-item-icon"><i class="fas fa-sync-alt"></i></div>
+                                <h4>Miễn phí đổi trả 30 ngày</h4>
+                                <p>30 ngày hoàn tiền nếu sản phẩm lỗi</p>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="uu-dai-item">
-                            <div class="uu-dai-item-icon"><i class="fas fa-headset"></i></div>
-                            <h4>Hỗ trợ 24/7</h4>
-                            <p>Hỗ trợ mọi lúc mọi nơi từ đội ngũ chuyên gia</p>
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="uu-dai-item">
+                                <div class="uu-dai-item-icon"><i class="fas fa-headset"></i></div>
+                                <h4>Hỗ trợ 24/7</h4>
+                                <p>Hỗ trợ mọi lúc mọi nơi từ đội ngũ chuyên gia</p>
+                            </div>
                         </div>
+
                     </div>
-
-                </div>
-            </section>
+                </section>
 
 
-        </main>
-        <%- include('../layout/footer'); -%>
+            </main>
+            <%- include('../layout/footer'); -%>
 
 
 
-            <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
-                    class="fa fa-arrow-up"></i></a>
+                <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
+                        class="fa fa-arrow-up"></i></a>
 
 
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="client/lib/easing/easing.min.js"></script>
-            <script src="client/lib/waypoints/waypoints.min.js"></script>
-            <script src="client/lib/lightbox/js/lightbox.min.js"></script>
-            <script src="client/lib/owlcarousel/owl.carousel.min.js"></script>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+                <script src="client/lib/easing/easing.min.js"></script>
+                <script src="client/lib/waypoints/waypoints.min.js"></script>
+                <script src="client/lib/lightbox/js/lightbox.min.js"></script>
+                <script src="client/lib/owlcarousel/owl.carousel.min.js"></script>
 
-            <!-- noUiSlider JS -->
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+                <!-- noUiSlider JS -->
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 
-            <script src="/client/js/main.js"></script>
-            <script>
-                // JavaScript để mở/đóng modal
-                document.addEventListener('DOMContentLoaded', function () {
-                    const filterBtn = document.getElementById('openFilterModalBtn');
-                    const filterModal = document.getElementById('filterModal');
-                    const closeBtn = filterModal.querySelector('.close-btn');
+                <script src="/client/js/main.js"></script>
+                <script>
+                    // JavaScript để mở/đóng modal
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const filterBtn = document.getElementById('openFilterModalBtn');
+                        const filterModal = document.getElementById('filterModal');
+                        const closeBtn = filterModal.querySelector('.close-btn');
 
-                    if (filterBtn) {
-                        filterBtn.addEventListener('click', function () {
-                            filterModal.style.display = 'block';
-                        });
-                    }
-
-                    if (closeBtn) {
-                        closeBtn.addEventListener('click', function () {
-                            filterModal.style.display = 'none';
-                        });
-                    }
-
-                    // Đóng modal khi click ra ngoài
-                    window.addEventListener('click', function (event) {
-                        if (event.target == filterModal) {
-                            filterModal.style.display = 'none';
-                        }
-                    });
-
-                    // Thêm class 'selected' khi click vào nút option
-                    document.querySelectorAll('.option-btn').forEach(button => {
-                        button.addEventListener('click', function () {
-                            // Nếu bạn muốn chỉ chọn 1 option trong mỗi nhóm, uncomment đoạn dưới
-                            // this.closest('.filter-group-item').querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
-                            this.classList.toggle('selected');
-                        });
-                    });
-
-                    // Price Range Slider
-                    const priceSlider = document.querySelector('.slider-range');
-                    const minPriceInput = document.querySelector('.price-inputs input[type="text"]:first-of-type');
-                    const maxPriceInput = document.querySelector('.price-inputs input[type="text"]:last-of-type');
-
-                    if (priceSlider && minPriceInput && maxPriceInput) {
-                        noUiSlider.create(priceSlider, {
-                            start: [0, 64000000],
-                            connect: true,
-                            step: 500000,
-                            range: {
-                                'min': 0,
-                                'max': 64000000
-                            },
-                            format: {
-                                to: function (value) {
-                                    return Math.round(value);
-                                },
-                                from: function (value) {
-                                    return Number(value.replace(/\./g, ''));
-                                }
-                            }
-                        });
-
-                        priceSlider.noUiSlider.on('update', function (values, handle) {
-                            const value = values[handle];
-                            if (handle === 0) {
-                                minPriceInput.value = value.toLocaleString('vi-VN');
-                            } else {
-                                maxPriceInput.value = value.toLocaleString('vi-VN');
-                            }
-                        });
-
-                        minPriceInput.addEventListener('change', function () {
-                            priceSlider.noUiSlider.set([this.value.replace(/\./g, ''), null]);
-                        });
-
-                        maxPriceInput.addEventListener('change', function () {
-                            priceSlider.noUiSlider.set([null, this.value.replace(/\./g, '')]);
-                        });
-                    }
-                });
-
-                document.addEventListener('DOMContentLoaded', function () {
-                    const applyFilterBtn = document.querySelector('.apply-filter-btn');
-                    const clearFilterBtn = document.querySelector('.clear-filter-btn');
-                    const filterModal = document.getElementById('filterModal');
-
-                    function getSelectedFilters() {
-                        const filters = {};
-
-                        // Get selected brands
-                        const selectedBrands = Array.from(filterModal.querySelectorAll('.filter-group-item:nth-child(1) .option-btn.selected'))
-                            .map(btn => btn.textContent.trim());
-                        if (selectedBrands.length > 0) filters.brands = selectedBrands.join(',');
-
-                        // Get price range from selected buttons first
-                        const selectedPriceBtn = filterModal.querySelector('.price-grid .option-btn.selected');
-                        if (selectedPriceBtn) {
-                            const priceText = selectedPriceBtn.textContent.trim();
-                            if (priceText.startsWith('Dưới')) {
-                                filters.maxPrice = 2000000;
-                            } else if (priceText.startsWith('Trên')) {
-                                filters.minPrice = 20000000;
-                            } else if (priceText.includes('Từ')) {
-                                const parts = priceText.replace(/Từ|triệu/g, '').trim().split('-');
-                                if (parts.length === 2) {
-                                    filters.minPrice = parseInt(parts[0].trim()) * 1000000;
-                                    filters.maxPrice = parseInt(parts[1].trim()) * 1000000;
-                                }
-                            }
-                        } else {
-                            // If no button is selected, get price from slider
-                            const priceSlider = document.querySelector('.slider-range');
-                            if (priceSlider.noUiSlider) {
-                                const prices = priceSlider.noUiSlider.get();
-                                const minPrice = prices[0];
-                                const maxPrice = prices[1];
-
-                                // Only add to filter if they are not the default full range
-                                if (minPrice > 0) {
-                                    filters.minPrice = minPrice;
-                                }
-                                if (maxPrice < 64000000) {
-                                    filters.maxPrice = maxPrice;
-                                }
-                            }
-                        }
-
-                        // Get selected categories
-                        const selectedCategories = Array.from(filterModal.querySelectorAll('.filter-group-item:nth-child(3) .option-btn.selected'))
-                            .map(btn => btn.textContent.trim());
-                        if (selectedCategories.length > 0) filters.categories = selectedCategories.join(',');
-
-                        // Get selected RAM
-                        const selectedRam = Array.from(filterModal.querySelectorAll('.filter-group-item:nth-child(4) .option-btn.selected'))
-                            .map(btn => btn.textContent.trim());
-                        if (selectedRam.length > 0) filters.ram = selectedRam.join(',');
-
-                        // Get selected Storage
-                        const selectedStorage = Array.from(filterModal.querySelectorAll('.filter-group-item:nth-child(5) .option-btn.selected'))
-                            .map(btn => btn.textContent.trim());
-                        if (selectedStorage.length > 0) filters.storage = selectedStorage.join(',');
-
-                        // Get selected Battery
-                        const selectedBattery = Array.from(filterModal.querySelectorAll('.filter-group-item:nth-child(6) .option-btn.selected'))
-                            .map(btn => btn.textContent.trim());
-                        if (selectedBattery.length > 0) filters.battery = selectedBattery.join(',');
-
-                        return filters;
-                    }
-
-                    if (applyFilterBtn) {
-                        applyFilterBtn.addEventListener('click', function () {
-                            const filters = getSelectedFilters();
-                            const queryParams = new URLSearchParams(filters);
-                            const queryString = queryParams.toString();
-
-                            // Redirect to the shop page with filter query parameters
-                            window.location.href = `/shop?${queryString}`;
-                        });
-                    }
-
-                    if (clearFilterBtn) {
-                        clearFilterBtn.addEventListener('click', function () {
-                            // Redirect to the shop page without any filters
-                            window.location.href = '/shop';
-                        });
-                    }
-
-                    // Handle brand filter buttons outside the modal
-                    const brandFilterButtons = document.querySelectorAll('.filter-btn.brand-filter');
-                    brandFilterButtons.forEach(button => {
-                        button.addEventListener('click', function () {
-                            const brandName = this.textContent.trim();
-                            const currentParams = new URLSearchParams(window.location.search);
-                            currentParams.set('brands', brandName);
-                            // Clear other filters when a specific brand is clicked from the top bar
-                            ['categories', 'minPrice', 'maxPrice', 'ram', 'storage', 'battery'].forEach(key => currentParams.delete(key));
-
-                            window.location.href = `/shop?${currentParams.toString()}`;
-                        });
-                    });
-
-                    // *** NEW: Function to update UI based on URL parameters ***
-                    function updateFiltersFromURL() {
-                        const currentParams = new URLSearchParams(window.location.search);
-
-                        // Update brand filters
-                        const brands = currentParams.get('brands');
-                        if (brands) {
-                            const brandList = brands.split(',');
-                            // Update modal buttons
-                            filterModal.querySelectorAll('.filter-group-item:nth-child(1) .option-btn').forEach(btn => {
-                                if (brandList.includes(btn.textContent.trim())) {
-                                    btn.classList.add('selected');
-                                }
-                            });
-                            // Update top bar buttons
-                            document.querySelectorAll('.filter-btn.brand-filter').forEach(btn => {
-                                if (brandList.includes(btn.textContent.trim())) {
-                                    btn.classList.add('active');
-                                } else {
-                                    btn.classList.remove('active');
-                                }
+                        if (filterBtn) {
+                            filterBtn.addEventListener('click', function () {
+                                filterModal.style.display = 'block';
                             });
                         }
 
-                        // Update price slider
-                        const minPrice = currentParams.get('minPrice');
-                        const maxPrice = currentParams.get('maxPrice');
+                        if (closeBtn) {
+                            closeBtn.addEventListener('click', function () {
+                                filterModal.style.display = 'none';
+                            });
+                        }
+
+                        // Đóng modal khi click ra ngoài
+                        window.addEventListener('click', function (event) {
+                            if (event.target == filterModal) {
+                                filterModal.style.display = 'none';
+                            }
+                        });
+
+                        // Thêm class 'selected' khi click vào nút option
+                        document.querySelectorAll('.option-btn').forEach(button => {
+                            button.addEventListener('click', function () {
+                                // Nếu bạn muốn chỉ chọn 1 option trong mỗi nhóm, uncomment đoạn dưới
+                                // this.closest('.filter-group-item').querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+                                this.classList.toggle('selected');
+                            });
+                        });
+
+                        // Price Range Slider
                         const priceSlider = document.querySelector('.slider-range');
-                        if (priceSlider && priceSlider.noUiSlider && (minPrice || maxPrice)) {
-                            priceSlider.noUiSlider.set([minPrice || 0, maxPrice || 64000000]);
+                        const minPriceInput = document.querySelector('.price-inputs input[type="text"]:first-of-type');
+                        const maxPriceInput = document.querySelector('.price-inputs input[type="text"]:last-of-type');
+
+                        if (priceSlider && minPriceInput && maxPriceInput) {
+                            noUiSlider.create(priceSlider, {
+                                start: [0, 64000000],
+                                connect: true,
+                                step: 500000,
+                                range: {
+                                    'min': 0,
+                                    'max': 64000000
+                                },
+                                format: {
+                                    to: function (value) {
+                                        return Math.round(value);
+                                    },
+                                    from: function (value) {
+                                        return Number(value.replace(/\./g, ''));
+                                    }
+                                }
+                            });
+
+                            priceSlider.noUiSlider.on('update', function (values, handle) {
+                                const value = values[handle];
+                                if (handle === 0) {
+                                    minPriceInput.value = value.toLocaleString('vi-VN');
+                                } else {
+                                    maxPriceInput.value = value.toLocaleString('vi-VN');
+                                }
+                            });
+
+                            minPriceInput.addEventListener('change', function () {
+                                priceSlider.noUiSlider.set([this.value.replace(/\./g, ''), null]);
+                            });
+
+                            maxPriceInput.addEventListener('change', function () {
+                                priceSlider.noUiSlider.set([null, this.value.replace(/\./g, '')]);
+                            });
+                        }
+                    });
+
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const applyFilterBtn = document.querySelector('.apply-filter-btn');
+                        const clearFilterBtn = document.querySelector('.clear-filter-btn');
+                        const filterModal = document.getElementById('filterModal');
+
+                        function getSelectedFilters() {
+                            const filters = {};
+
+                            // Get selected brands
+                            const selectedBrands = Array.from(filterModal.querySelectorAll('.filter-group-item:nth-child(1) .option-btn.selected'))
+                                .map(btn => btn.textContent.trim());
+                            if (selectedBrands.length > 0) filters.brands = selectedBrands.join(',');
+
+                            // Get price range from selected buttons first
+                            const selectedPriceBtn = filterModal.querySelector('.price-grid .option-btn.selected');
+                            if (selectedPriceBtn) {
+                                const priceText = selectedPriceBtn.textContent.trim();
+                                if (priceText.startsWith('Dưới')) {
+                                    filters.maxPrice = 2000000;
+                                } else if (priceText.startsWith('Trên')) {
+                                    filters.minPrice = 20000000;
+                                } else if (priceText.includes('Từ')) {
+                                    const parts = priceText.replace(/Từ|triệu/g, '').trim().split('-');
+                                    if (parts.length === 2) {
+                                        filters.minPrice = parseInt(parts[0].trim()) * 1000000;
+                                        filters.maxPrice = parseInt(parts[1].trim()) * 1000000;
+                                    }
+                                }
+                            } else {
+                                // If no button is selected, get price from slider
+                                const priceSlider = document.querySelector('.slider-range');
+                                if (priceSlider.noUiSlider) {
+                                    const prices = priceSlider.noUiSlider.get();
+                                    const minPrice = prices[0];
+                                    const maxPrice = prices[1];
+
+                                    // Only add to filter if they are not the default full range
+                                    if (minPrice > 0) {
+                                        filters.minPrice = minPrice;
+                                    }
+                                    if (maxPrice < 64000000) {
+                                        filters.maxPrice = maxPrice;
+                                    }
+                                }
+                            }
+
+                            // Get selected categories
+                            const selectedCategories = Array.from(filterModal.querySelectorAll('.filter-group-item:nth-child(3) .option-btn.selected'))
+                                .map(btn => btn.textContent.trim());
+                            if (selectedCategories.length > 0) filters.categories = selectedCategories.join(',');
+
+                            // Get selected RAM
+                            const selectedRam = Array.from(filterModal.querySelectorAll('.filter-group-item:nth-child(4) .option-btn.selected'))
+                                .map(btn => btn.textContent.trim());
+                            if (selectedRam.length > 0) filters.ram = selectedRam.join(',');
+
+                            // Get selected Storage
+                            const selectedStorage = Array.from(filterModal.querySelectorAll('.filter-group-item:nth-child(5) .option-btn.selected'))
+                                .map(btn => btn.textContent.trim());
+                            if (selectedStorage.length > 0) filters.storage = selectedStorage.join(',');
+
+                            // Get selected Battery
+                            const selectedBattery = Array.from(filterModal.querySelectorAll('.filter-group-item:nth-child(6) .option-btn.selected'))
+                                .map(btn => btn.textContent.trim());
+                            if (selectedBattery.length > 0) filters.battery = selectedBattery.join(',');
+
+                            return filters;
                         }
 
-                        // Update other filters (Category, RAM, Storage, Battery)
-                        const filterMappings = {
-                            categories: 3,
-                            ram: 4,
-                            storage: 5,
-                            battery: 6
-                        };
+                        if (applyFilterBtn) {
+                            applyFilterBtn.addEventListener('click', function () {
+                                const filters = getSelectedFilters();
+                                const queryParams = new URLSearchParams(filters);
+                                const queryString = queryParams.toString();
 
-                        for (const [param, childIndex] of Object.entries(filterMappings)) {
-                            const value = currentParams.get(param);
-                            if (value) {
-                                const valueList = value.split(',');
-                                filterModal.querySelectorAll(`.filter-group-item:nth-child(${childIndex}) .option-btn`).forEach(btn => {
-                                    if (valueList.some(val => btn.textContent.trim().includes(val))) {
+                                // Redirect to the shop page with filter query parameters
+                                window.location.href = `/shop?${queryString}`;
+                            });
+                        }
+
+                        if (clearFilterBtn) {
+                            clearFilterBtn.addEventListener('click', function () {
+                                // Redirect to the shop page without any filters
+                                window.location.href = '/shop';
+                            });
+                        }
+
+                        // Handle brand filter buttons outside the modal
+                        const brandFilterButtons = document.querySelectorAll('.filter-btn.brand-filter');
+                        brandFilterButtons.forEach(button => {
+                            button.addEventListener('click', function () {
+                                const brandName = this.textContent.trim();
+                                const currentParams = new URLSearchParams(window.location.search);
+                                currentParams.set('brands', brandName);
+                                // Clear other filters when a specific brand is clicked from the top bar
+                                ['categories', 'minPrice', 'maxPrice', 'ram', 'storage', 'battery'].forEach(key => currentParams.delete(key));
+
+                                window.location.href = `/shop?${currentParams.toString()}`;
+                            });
+                        });
+
+                        // *** NEW: Function to update UI based on URL parameters ***
+                        function updateFiltersFromURL() {
+                            const currentParams = new URLSearchParams(window.location.search);
+
+                            // Update brand filters
+                            const brands = currentParams.get('brands');
+                            if (brands) {
+                                const brandList = brands.split(',');
+                                // Update modal buttons
+                                filterModal.querySelectorAll('.filter-group-item:nth-child(1) .option-btn').forEach(btn => {
+                                    if (brandList.includes(btn.textContent.trim())) {
                                         btn.classList.add('selected');
                                     }
                                 });
+                                // Update top bar buttons
+                                document.querySelectorAll('.filter-btn.brand-filter').forEach(btn => {
+                                    if (brandList.includes(btn.textContent.trim())) {
+                                        btn.classList.add('active');
+                                    } else {
+                                        btn.classList.remove('active');
+                                    }
+                                });
+                            }
+
+                            // Update price slider
+                            const minPrice = currentParams.get('minPrice');
+                            const maxPrice = currentParams.get('maxPrice');
+                            const priceSlider = document.querySelector('.slider-range');
+                            if (priceSlider && priceSlider.noUiSlider && (minPrice || maxPrice)) {
+                                priceSlider.noUiSlider.set([minPrice || 0, maxPrice || 64000000]);
+                            }
+
+                            // Update other filters (Category, RAM, Storage, Battery)
+                            const filterMappings = {
+                                categories: 3,
+                                ram: 4,
+                                storage: 5,
+                                battery: 6
+                            };
+
+                            for (const [param, childIndex] of Object.entries(filterMappings)) {
+                                const value = currentParams.get(param);
+                                if (value) {
+                                    const valueList = value.split(',');
+                                    filterModal.querySelectorAll(`.filter-group-item:nth-child(${childIndex}) .option-btn`).forEach(btn => {
+                                        if (valueList.some(val => btn.textContent.trim().includes(val))) {
+                                            btn.classList.add('selected');
+                                        }
+                                    });
+                                }
                             }
                         }
-                    }
 
-                    // Call the function to set the initial state of filters on page load
-                    updateFiltersFromURL();
-                });
-            </script>
+                        // Call the function to set the initial state of filters on page load
+                        updateFiltersFromURL();
+                    });
+                </script>
 </body>
 
 </html>
