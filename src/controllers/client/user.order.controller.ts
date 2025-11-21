@@ -122,6 +122,7 @@ const postPlaceOrder = async (req: Request, res: Response) => {
                 quantity: item.quantity,
                 price: finalPrice,
                 productType: item.productType,
+                name: (item.product as any).name + "-" + variantDetail.color,
             };
         });
 

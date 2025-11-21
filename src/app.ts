@@ -68,6 +68,11 @@ app.use(async (req, res, next) => {
 webRoutes(app);
 app.use("/momo", router);
 
+// Handle 404 Not Found
+app.use((req, res, next) => {
+    res.status(404).render('status/404');
+});
+
 
 
 //test database connection and start server

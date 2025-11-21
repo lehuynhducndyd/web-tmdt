@@ -1,4 +1,6 @@
+import { name } from "ejs";
 import mongoose from "mongoose";
+import { StringDecoder } from "string_decoder";
 
 const orderItemSchema = new mongoose.Schema({
   productType: {
@@ -10,14 +12,14 @@ const orderItemSchema = new mongoose.Schema({
   product: { type: mongoose.Schema.Types.ObjectId, required: true, refPath: 'productType' },
   variantId: { type: mongoose.Schema.Types.ObjectId, required: true }, // trỏ đến Product.variants._id
   quantity: { type: Number, required: true, min: 1 },
-  price: { type: Number, required: true }
+  price: { type: Number, required: true },
+  name: { type: String }
 }, { _id: false });
 
 const orderSchema = new mongoose.Schema({
   customer: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
   items: [orderItemSchema],
   totalAmount: { type: Number, required: true },
-
   status: {
     type: String,
     enum: ["pending", "processing", "shipped", "delivered", "canceled"],

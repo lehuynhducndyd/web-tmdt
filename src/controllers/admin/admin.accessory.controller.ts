@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { get } from 'http';
 import { Brand } from 'models/brand';
+import Cart from 'models/cart';
 import { AccessoriesVariant, Accessory } from 'models/product';
 import { getTypeAccessories } from 'services/admin/category.service';
 import { getAccessoryById, getAllAccessories } from 'services/admin/product.service';
@@ -116,7 +117,15 @@ const postUpdateAccessory = async (req: Request, res: Response) => {
 
 const postDeleteAccessory = async (req: Request, res: Response) => {
     try {
-        await Accessory.deleteOne({ _id: req.params.id });
+        const id = req.params.id;
+        // Xóa các sản phẩm liên quan trong tất cả các giỏ hàng
+        await Cart.updateMany(
+            { 'items.product': id },
+            { $pull: { items: { product: id } } }
+        );
+        // Xóa tất cả các biến thể của phụ kiện này
+        await AccessoriesVariant.deleteMany({ accessoryId: id });
+        await Accessory.deleteOne({ _id: id });
         res.redirect('/admin/accessory');
     } catch (error) {
         res.status(500).send("Error deleting accessory");
@@ -175,6 +184,11 @@ const postUpdateVariantAcc = async (req: Request, res: Response) => {
 
 const postDeleteVariantAcc = async (req: Request, res: Response) => {
     const { id, accId } = req.params;
+    // Xóa các biến thể liên quan trong tất cả các giỏ hàng
+    await Cart.updateMany(
+        { 'items.variantId': id },
+        { $pull: { items: { variantId: id } } }
+    );
     await AccessoriesVariant.deleteOne({ _id: id });
     res.redirect(`/admin/view-accessory/${accId}`);
 };

@@ -120,4 +120,14 @@ const postUpdateOrderStatus = async (req: Request, res: Response) => {
     }
 }
 
-export { getOrderPage, getOrderDetailPage, postUpdateOrderStatus, getPrintPreviewPage };
+const postDeleteOrder = async (req: Request, res: Response) => {
+    try {
+        await Order.deleteOne({ _id: req.params.id });
+        res.redirect('/admin/order');
+    } catch (error) {
+        console.error("Error deleting order:", error);
+        res.status(500).send("Lỗi khi xóa đơn hàng.");
+    }
+}
+
+export { getOrderPage, getOrderDetailPage, postUpdateOrderStatus, getPrintPreviewPage, postDeleteOrder };

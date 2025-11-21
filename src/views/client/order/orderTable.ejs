@@ -1,20 +1,114 @@
-<table class="table table-hover table-bordered">
-    <thead>
+<style>
+    /* --- CSS Nút Chi tiết --- */
+    .btn-detail {
+        background-color: #45595b;
+        color: #ffffff !important;
+        border: 1px solid #45595b;
+        transition: all 0.3s ease;
+    }
+
+    .btn-detail:hover {
+        background-color: #2f3e41 !important;
+        /* Đổi sang màu tối hơn chút để thấy hiệu ứng */
+        border-color: #2f3e41 !important;
+        color: #ffffff !important;
+        transform: translateY(-2px);
+        /* Hiệu ứng nhích nhẹ lên khi hover */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* --- CSS Responsive cho Bảng (Biến Table thành Card) --- */
+    @media (max-width: 768px) {
+
+        /* Ẩn tiêu đề bảng (Thead) vì mỗi thẻ sẽ tự có nhãn riêng */
+        .table-responsive-stack thead {
+            display: none;
+        }
+
+        /* Biến bảng thành dạng khối */
+        .table-responsive-stack,
+        .table-responsive-stack tbody,
+        .table-responsive-stack tr,
+        .table-responsive-stack td {
+            display: block;
+            width: 100%;
+        }
+
+        /* Style cho từng dòng đơn hàng (tr) thành một thẻ (Card) */
+        .table-responsive-stack tr {
+            margin-bottom: 15px;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            /* Bo góc gọn gàng */
+        }
+
+        /* Style cho từng ô dữ liệu (td) */
+        .table-responsive-stack td {
+            text-align: right;
+            /* Nội dung nằm bên phải */
+            padding-left: 50%;
+            /* Chừa chỗ cho nhãn bên trái */
+            position: relative;
+            border-bottom: 1px solid #f0f0f0;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        /* Dòng cuối cùng không cần gạch chân */
+        .table-responsive-stack td:last-child {
+            border-bottom: 0;
+            padding-bottom: 15px;
+        }
+
+        /* Tạo nhãn giả (Label) bên trái dựa trên thuộc tính data-label */
+        .table-responsive-stack td::before {
+            content: attr(data-label);
+            /* Lấy nội dung từ data-label */
+            position: absolute;
+            left: 15px;
+            width: 45%;
+            padding-right: 10px;
+            white-space: nowrap;
+            text-align: left;
+            font-weight: bold;
+            color: #45595b;
+        }
+
+        /* Căn giữa nút thao tác cho đẹp */
+        .table-responsive-stack td:last-child {
+            text-align: center;
+            padding-left: 0;
+        }
+
+        .table-responsive-stack td:last-child::before {
+            display: none;
+            /* Ẩn nhãn của cột thao tác cho gọn */
+        }
+    }
+</style>
+
+<table class="table table-hover table-responsive-stack">
+    <thead class="table-light">
         <tr>
             <th>Mã đơn hàng</th>
             <th>Trạng thái</th>
             <th>Ngày/giờ đặt</th>
             <th>Tổng tiền</th>
-            <th>Thao tác</th>
+            <th class="text-center">Thao tác</th>
         </tr>
     </thead>
     <tbody>
         <% if (typeof orders !=='undefined' && orders.length> 0) { %>
             <% orders.forEach(order=> { %>
                 <tr>
-                    <td>#<%= order._id.toString().slice(-6) %>
+                    <td data-label="Mã đơn hàng">
+                        <span class="fw-bold text-primary">#<%= order._id.toString().slice(-6).toUpperCase() %></span>
                     </td>
-                    <td>
+
+                    <td data-label="Trạng thái">
                         <% let statusText='' ; let badgeClass='' ; switch (order.status) { case 'pending' :
                             statusText='Chờ xác nhận' ; badgeClass='bg-warning text-dark' ; break; case 'processing' :
                             statusText='Đang xử lý' ; badgeClass='bg-info text-dark' ; break; case 'shipped' :
@@ -22,23 +116,35 @@
                             statusText='Đã giao' ; badgeClass='bg-success' ; break; case 'cancelled' :
                             statusText='Đã hủy' ; badgeClass='bg-danger' ; break; default: statusText=order.status;
                             badgeClass='bg-secondary' ; } %>
-                            <span class="badge <%= badgeClass %>">
+                            <span class="badge rounded-pill <%= badgeClass %>">
                                 <%= statusText %>
                             </span>
                     </td>
-                    <td>
+
+                    <td data-label="Ngày đặt">
                         <%= new Date(order.createdAt).toLocaleString('vi-VN') %>
                     </td>
-                    <td>
-                        <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
-                            }).format(order.totalAmount) %>
+
+                    <td data-label="Tổng tiền">
+                        <strong class="text-danger">
+                            <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
+                                }).format(order.totalAmount) %>
+                        </strong>
                     </td>
-                    <td><a class="btn btn-primary btn-sm" href="/history-detail/<%= order._id %>">Chi tiết</a></td>
+
+                    <td data-label="">
+                        <a class="btn btn-sm btn-detail rounded-pill px-4" href="/history-detail/<%= order._id %>">
+                            Chi tiết <i class="fa fa-arrow-right ms-1"></i>
+                        </a>
+                    </td>
                 </tr>
                 <% }) %>
                     <% } else { %>
                         <tr>
-                            <td colspan="5" class="text-center">Không có đơn hàng nào.</td>
+                            <td colspan="5" class="text-center py-5 text-muted">
+                                <i class="bi bi-cart-x display-6 mb-3 d-block"></i>
+                                Chưa có đơn hàng nào trong mục này.
+                            </td>
                         </tr>
                         <% } %>
     </tbody>

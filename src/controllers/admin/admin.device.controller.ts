@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Brand } from 'models/brand';
+import Cart from 'models/cart';
 import { Device, Variant } from 'models/product';
 import { getAllCategories, getTypeDevices } from 'services/admin/category.service';
 import { getAllAccessories, getAllDevices, getDeviceById, getVariantByDeviceId } from 'services/admin/product.service';
@@ -79,6 +80,11 @@ const postCreateDevice = async (req: Request, res: Response) => {
 const postDeleteDevice = async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
+        // Xóa các sản phẩm liên quan trong tất cả các giỏ hàng
+        await Cart.updateMany(
+            { 'items.product': id },
+            { $pull: { items: { product: id } } }
+        );
         await Variant.deleteMany({ deviceId: id });
         await Device.deleteOne({ _id: id });
         res.redirect('/admin/device');
@@ -153,6 +159,11 @@ const getCreateVariantPage = async (req: Request, res: Response) => {
 const postDeleteVariant = async (req: Request, res: Response) => {
     const id = req.params.id;
     const deviceId = req.params.deviceId;
+    // Xóa các biến thể liên quan trong tất cả các giỏ hàng
+    await Cart.updateMany(
+        { 'items.variantId': id },
+        { $pull: { items: { variantId: id } } }
+    );
     await Variant.deleteOne({ _id: id });
     res.redirect(`/admin/view-device/${deviceId}`);
 };
