@@ -129,11 +129,11 @@ const getHomePage = async (req: Request, res: Response) => {
 const getShopPage = async (req: Request, res: Response) => {
     try {
         const { brands, categories: categoryNames, minPrice, maxPrice, ram, storage, battery } = req.query;
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = 12; // Số sản phẩm mỗi trang
 
-
-        const filter: any = {};
+        const deviceFilter: any = {};
         const variantFilter: any = {};
-
 
         if (ram) {
 
@@ -152,83 +152,124 @@ const getShopPage = async (req: Request, res: Response) => {
             if (maxPrice) variantFilter.price.$lte = Number(maxPrice);
         }
 
-        const matchingVariants = await Variant.find(variantFilter).select('deviceId price discount').lean();
-        const matchingDeviceIds = [...new Set(matchingVariants.map(v => v.deviceId))];
+        const hasDeviceVariantFilters = ram || storage;
+        let matchingDeviceIds: any[] = [];
+        if (hasDeviceVariantFilters || minPrice || maxPrice) {
+            const matchingVariants = await Variant.find(variantFilter).select('deviceId').lean();
+            matchingDeviceIds = [...new Set(matchingVariants.map(v => v.deviceId))];
+        }
 
-        // Lọc theo brand (thương hiệu)
+        // --- Accessory Filters ---
+        const accFilter: any = {};
+        const accVariantFilter: any = {};
+        if (minPrice || maxPrice) {
+            accVariantFilter.price = {};
+            if (minPrice) accVariantFilter.price.$gte = Number(minPrice);
+            if (maxPrice) accVariantFilter.price.$lte = Number(maxPrice);
+        }
+
+        let matchingAccessoryIds: any[] = [];
+        if (minPrice || maxPrice) {
+            const matchingAccVariants = await AccessoriesVariant.find(accVariantFilter).select('accessoryId').lean();
+            matchingAccessoryIds = [...new Set(matchingAccVariants.map(v => v.accessoryId))];
+        }
+
+        // --- Common Filters (Brand, Category) ---
         if (brands && typeof brands === 'string') {
             const brandList = (brands as string).split(',').map(b => b.trim());
             const brandObjects = await Brand.find({ name: { $in: brandList } }).select('_id');
             if (brandObjects.length > 0) {
-                filter.brand = { $in: brandObjects.map(b => b._id) };
+                const brandIds = brandObjects.map(b => b._id);
+                deviceFilter.brand = { $in: brandIds };
+                accFilter.brand = { $in: brandIds };
             } else {
-                filter._id = { $in: [] };
+                // Nếu không tìm thấy brand nào, không trả về sản phẩm nào
+                deviceFilter._id = { $in: [] };
+                accFilter._id = { $in: [] };
             }
         }
 
-        // Lọc theo category (danh mục)
         if (categoryNames && typeof categoryNames === 'string') {
             const categoryList = categoryNames.split(',');
             const categoryObjects = await Category.find({ name: { $in: categoryList } }).select('_id');
             if (categoryObjects.length > 0) {
-                filter.category = { $in: categoryObjects.map(c => c._id) };
+                const categoryIds = categoryObjects.map(c => c._id);
+                deviceFilter.category = { $in: categoryIds };
+                accFilter.category = { $in: categoryIds };
             } else {
-                filter._id = { $in: [] };
+                deviceFilter._id = { $in: [] };
+                accFilter._id = { $in: [] };
             }
         }
 
-        // Lọc theo dung lượng pin (battery)
+        // --- Apply device-specific filters ---
         if (battery && typeof battery === 'string') {
             const batteryList = battery.split(',').map(b => b.trim().split(' ')[0]);
             if (batteryList.length > 0) {
                 const batteryRegex = batteryList.map(b => new RegExp(b));
-                filter['specs.battery'] = { $in: batteryRegex };
+                deviceFilter['specs.battery'] = { $in: batteryRegex };
             }
         }
 
-
-        const hasVariantFilters = ram || storage || minPrice || maxPrice;
-        if (hasVariantFilters) {
-
-            filter._id = { $in: filter._id ? filter._id.$in.filter(id => matchingDeviceIds.includes(id)) : matchingDeviceIds };
+        if (hasDeviceVariantFilters || minPrice || maxPrice) {
+            deviceFilter._id = { $in: deviceFilter._id?.$in ? deviceFilter._id.$in.filter((id: any) => matchingDeviceIds.some(mId => mId.equals(id))) : matchingDeviceIds };
         }
 
+        if (minPrice || maxPrice) {
+            accFilter._id = { $in: accFilter._id?.$in ? accFilter._id.$in.filter((id: any) => matchingAccessoryIds.some(mId => mId.equals(id))) : matchingAccessoryIds };
+        }
 
-        // Lấy tất cả sản phẩm khớp với bộ lọc cơ bản
-        let products = await Device.find(filter).populate('brand category').lean();
+        // --- Fetch Products ---
+        const [devices, accessories] = await Promise.all([
+            Device.find(deviceFilter).populate('brand category').lean(),
+            Accessory.find(accFilter).populate('brand category').lean()
+        ]);
+
+        let allProducts = [...devices, ...accessories];
+
+        // --- Process prices for all found products ---
+        const processedDevices = await processProductVariants(devices, Variant, 'deviceId');
+        const processedAccessories = await processProductVariants(accessories, AccessoriesVariant, 'accessoryId');
+
+        allProducts = [...processedDevices, ...processedAccessories].sort((a, b) => b.createdAt - a.createdAt);
+
+        // --- Pagination ---
+        const totalProducts = allProducts.length;
+        const totalPages = Math.ceil(totalProducts / limit);
+        let paginatedProducts = allProducts.slice((page - 1) * limit, page * limit);
+
+        // --- Data for Filters ---
         const categories = await Category.find().lean();
         const allBrands = await Brand.find({}).lean();
 
-        // Gán giá thấp nhất từ các variant đã khớp cho mỗi sản phẩm để hiển thị
-        const variantsByDeviceId = matchingVariants.reduce((acc, v) => {
-            const deviceId = v.deviceId.toString();
-            if (!acc[deviceId]) acc[deviceId] = [];
-            acc[deviceId].push(v);
-            return acc;
-        }, {});
+        // Filter products based on price range if minPrice or maxPrice is present
+        if (minPrice || maxPrice) {
+            paginatedProducts = paginatedProducts.filter(p => {
+                const price = (p as any).price;
+                if (minPrice && maxPrice) {
+                    return price >= Number(minPrice) && price <= Number(maxPrice);
+                }
+                if (minPrice) {
+                    return price >= Number(minPrice);
+                }
+                if (maxPrice) {
+                    return price <= Number(maxPrice);
+                }
+                return true;
+            });
+        }
 
-        products.forEach(product => {
-            const productVariants = variantsByDeviceId[product._id.toString()] || [];
-            productVariants.sort((a, b) => a.price - b.price);
-
-            if (productVariants.length > 0) {
-                const lowestPriceVariant = productVariants[0];
-                const discount = lowestPriceVariant.discount || 0;
-                (product as any).originalPrice = lowestPriceVariant.price;
-                (product as any).price = lowestPriceVariant.price * (1 - discount / 100);
-                (product as any).hasDiscount = discount > 0;
-            }
-        });
-
+        const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
         const pagination = {
-            current: 1,
-            pages: [1, 2, 3],
-            next: 2,
-            prev: null
+            current: page,
+            pages: pages,
+            next: page < totalPages ? page + 1 : null,
+            prev: page > 1 ? page - 1 : null,
+            total: totalPages
         };
 
         return res.render("client/home/shop.ejs", {
-            products,
+            products: paginatedProducts,
             categories,
             pagination,
             allBrands // Truyền danh sách thương hiệu ra view
