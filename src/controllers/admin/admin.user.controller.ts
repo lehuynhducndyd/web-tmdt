@@ -19,7 +19,7 @@ const postCreateUser = async (req: Request, res: Response) => {
         await createUser(name, email, password, role, phone, province, commune, street, isActive === 'on');
         res.redirect('/admin/user');
     } catch (error) {
-        res.status(500).send("Error creating user");
+        res.status(500).send("Email đã tồn tại");
     }
 }
 const postDeleteUser = async (req: Request, res: Response) => {
@@ -52,7 +52,7 @@ const postUpdateUser = async (req: Request, res: Response) => {
         await updateUser(id, name, email, newPassword, role, phone, province, commune, street, isActive === 'on');
         res.redirect('/admin/user');
     } catch (error) {
-        res.status(500).send("Error updating user");
+        res.status(500).send("Email đã tồn tại");
 
     }
 }
