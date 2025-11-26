@@ -17,6 +17,10 @@ const handleLogin = async (email: string, password: string, callback: any) => {
         return callback(null, false, { message: `Email đã tồn tại, hãy thử email khác hoặc đăng nhập bằng google` });
     }
 
+    if (user.isActive === false) {
+        return callback(null, false, { message: `Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ quản trị viên để biết thêm chi tiết.` });
+    }
+
     const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
         return callback(null, false, { message: "Email/password is incorrect" });
