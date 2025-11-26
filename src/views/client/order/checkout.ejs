@@ -99,7 +99,7 @@
         </div>
         <div class="container-fluid">
             <div class="container">
-                <form action="/place-order" method="post">
+                <form action="/place-order" method="post" id="checkout-form">
                     <div class="row g-5">
 
                         <div class="col-md-12 col-lg-7 col-xl-7">
@@ -267,6 +267,27 @@
             <script src="lib/waypoints/waypoints.min.js"></script>
             <script src="lib/lightbox/js/lightbox.min.js"></script>
             <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+            <script>
+                $(document).ready(function () {
+                    $('#checkout-form').on('submit', function (event) {
+                        // Tìm các thẻ select dựa vào thuộc tính 'name'. 
+                        // Giả định tên các trường là 'province', 'district', và 'commune'.
+                        // Nếu file addressUpdate.ejs dùng tên khác, bạn cần cập nhật lại ở đây.
+                        const province = $('select[name="province"]').val();
+
+                        const commune = $('select[name="commune"]').val();
+
+                        // Kiểm tra xem người dùng đã chọn đủ cả 3 cấp chưa
+                        if (!province || !commune) {
+                            event.preventDefault(); // Ngăn chặn việc gửi form
+                            // Hiển thị thông báo lỗi
+                            const errorMessage = 'Vui lòng chọn đầy đủ Tỉnh/Thành phố, Quận/Huyện và Phường/Xã.';
+                            alert(errorMessage);
+                        }
+                    });
+                });
+            </script>
 
             <script src="js/main.js"></script>
 </body>
