@@ -11,11 +11,10 @@
 Dưới đây là một số hình ảnh thực tế của dự án:
 
 ### 1. Trang chủ (Home Page)
-*(Thay thế link ảnh bên dưới bằng đường dẫn ảnh thật của bạn)*
-![Home Page](./screenshots/home-page.png)
+<img width="1916" height="903" alt="Image" src="https://github.com/user-attachments/assets/1369069d-3521-4901-9d42-62ef56c55a62" />
 
 ### 2. Trang Quản trị (Admin Dashboard)
-![Admin Dashboard](./screenshots/admin-dashboard.png)
+<img width="1918" height="912" alt="Image" src="https://github.com/user-attachments/assets/d31246c7-c68d-4d89-b2b5-54629911e891" />
 
 ---
 
