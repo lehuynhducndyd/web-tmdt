@@ -5,8 +5,9 @@
   "main": "dist/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon",
+    "start": "node dist/app.js",
     "dev": "nodemon",
+    "build": "tsc",
     "start:debug": "nodemon --inspect=9229 -e ts,tsx --exec node -r ts-node/register -r tsconfig-paths/register ./src/app.ts"
   },
   "nodemonConfig": {
@@ -57,6 +58,7 @@
     "@types/node": "^22.10.7",
     "@types/passport": "1.0.17",
     "@types/passport-local": "1.0.38",
+    "copyfiles": "^2.4.1",
     "nodemon": "^3.1.9",
     "prisma": "6.3.0",
     "ts-node": "10.9.2",
