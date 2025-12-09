@@ -21,7 +21,8 @@ const reviewDeviceSchema = new Schema({
     type: String,
     required: true,
     trim: true
-  }
+  },
+  isHidden: { type: Boolean, default: false }
 }, { timestamps: true });
 
 const reviewAccSchema = new Schema({
@@ -45,7 +46,8 @@ const reviewAccSchema = new Schema({
     type: String,
     required: true,
     trim: true
-  }
+  },
+  isHidden: { type: Boolean, default: false }
 }, { timestamps: true });
 
 

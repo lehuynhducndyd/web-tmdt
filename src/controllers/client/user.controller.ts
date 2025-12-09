@@ -304,7 +304,7 @@ const getShopDetailPage = async (req: Request, res: Response) => {
 
         if (isDevice) {
             variants = await Variant.find({ deviceId: id }).sort({ price: 1 }).lean();
-            reviews = await ReviewDevice.find({ product: id })
+            reviews = await ReviewDevice.find({ product: id, isHidden: { $ne: true } })
                 .populate('user', 'name')
                 .sort({ createdAt: -1 })
                 .lean();
@@ -333,7 +333,7 @@ const getShopDetailPage = async (req: Request, res: Response) => {
 
         } else { // It's an Accessory
             variants = await AccessoriesVariant.find({ accessoryId: id }).sort({ price: 1 }).lean();
-            reviews = await ReviewAcc.find({ product: id })
+            reviews = await ReviewAcc.find({ product: id, isHidden: { $ne: true } })
                 .populate('user', 'name')
                 .sort({ createdAt: -1 })
                 .lean();

@@ -33,6 +33,7 @@
                                         <th>Star-rating</th>
                                         <th>Ngày/giờ đánh giá</th>
                                         <th>Nội dung đánh giá</th>
+                                        <th>Trạng thái</th>
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
@@ -56,6 +57,13 @@
                                                     <%= review.comment %>
                                                 </td>
                                                 <td>
+                                                    <% if (review.isHidden) { %>
+                                                        <span class="badge bg-danger">Ẩn</span>
+                                                        <% } else { %>
+                                                            <span class="badge bg-success">Hiện</span>
+                                                            <% } %>
+                                                </td>
+                                                <td>
                                                     <div class="d-flex gap-2">
                                                         <form
                                                             action="/admin/delete-review/<%= review.product._id %>/<%= review._id %>"
@@ -65,9 +73,27 @@
                                                                 Xóa
                                                             </button>
                                                         </form>
+                                                        <% if (review.isHidden) { %>
+                                                            <form
+                                                                action="/admin/unhide-review2/<%= review.product._id %>/<%= review._id %>"
+                                                                method="post">
+                                                                <button class="btn btn-danger btn-sm" type="submit">
+                                                                    Hiện
+                                                                </button>
+                                                            </form>
+                                                            <% } else { %>
+                                                                <form
+                                                                    action="/admin/hide-review2/<%= review.product._id %>/<%= review._id %>"
+                                                                    method="post">
+                                                                    <button class="btn btn-danger btn-sm" type="submit">
+                                                                        Ẩn
+                                                                    </button>
+                                                                </form>
+                                                                <% } %>
 
-                                                        <a href="/shop-detail/<%= review.product._id %>"
-                                                            class="btn btn-primary btn-sm" target="_blank">Đi đến</a>
+                                                                    <a href="/shop-detail/<%= review.product._id %>"
+                                                                        class="btn btn-primary btn-sm"
+                                                                        target="_blank">Đi đến</a>
                                                     </div>
                                                 </td>
                                             </tr>

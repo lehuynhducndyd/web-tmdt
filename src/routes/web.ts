@@ -12,7 +12,7 @@ import { isAdmin, isAdminStaff, isLogin } from 'src/middleware/auth';
 import { fileUploadMiddleware } from 'src/middleware/multer';
 import { getShopPage } from 'controllers/client/user.controller';
 import { getShopDetailPage, postCreateReview } from 'controllers/client/user.controller';
-import { getProductReviewPage, postDeleteReview } from 'controllers/admin/admin.review.controller';
+import { getProductReviewPage, postDeleteReview, postHideReview, postHideReview2, postUnhideReview, postUnhideReview2 } from 'controllers/admin/admin.review.controller';
 import { getOrderPage, getOrderDetailPage, postUpdateOrderStatus, getPrintPreviewPage, postDeleteOrder } from 'controllers/admin/admin.order.controller';
 import { getCheckoutPage, getDetailHistoryPage, getHistoryPage, postPlaceOrder, postUpdateCartAndCheckout } from 'controllers/client/user.order.controller';
 import { getSearchProducts } from 'controllers/client/search.controller';
@@ -142,6 +142,10 @@ const webRoutes = (app: Express) => {
 
     router.get("/admin/review/:id", getProductReviewPage);
     router.post("/admin/delete-review/:pid/:id", postDeleteReview);
+    router.post("/admin/hide-review/:pid/:id", postHideReview);
+    router.post("/admin/unhide-review/:pid/:id", postUnhideReview);
+    router.post("/admin/hide-review2/:pid/:id", postHideReview2);
+    router.post("/admin/unhide-review2/:pid/:id", postUnhideReview2);
 
 
     router.get('/admin/order', getOrderPage)

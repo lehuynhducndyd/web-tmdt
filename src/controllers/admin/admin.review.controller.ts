@@ -33,4 +33,52 @@ const postDeleteReview = async (req: Request, res: Response) => {
     res.redirect(`/admin/review/${pid}`);
 }
 
-export { getProductReviewPage, postDeleteReview };
+const postHideReview = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const pid = req.params.pid;
+    let review = await ReviewDevice.findById(id);
+    if (!review) {
+        review = await ReviewAcc.findById(id);
+    }
+    review.isHidden = true;
+    await review.save();
+    res.redirect(`/admin/review/${pid}`);
+}
+
+const postUnhideReview = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const pid = req.params.pid;
+    let review = await ReviewDevice.findById(id);
+    if (!review) {
+        review = await ReviewAcc.findById(id);
+    }
+    review.isHidden = false;
+    await review.save();
+    res.redirect(`/admin/review/${pid}`);
+}
+
+const postHideReview2 = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const pid = req.params.pid;
+    let review = await ReviewDevice.findById(id);
+    if (!review) {
+        review = await ReviewAcc.findById(id);
+    }
+    review.isHidden = true;
+    await review.save();
+    res.redirect(`/admin/today-review`);
+}
+
+const postUnhideReview2 = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const pid = req.params.pid;
+    let review = await ReviewDevice.findById(id);
+    if (!review) {
+        review = await ReviewAcc.findById(id);
+    }
+    review.isHidden = false;
+    await review.save();
+    res.redirect(`/admin/today-review`);
+}
+
+export { getProductReviewPage, postDeleteReview, postHideReview, postUnhideReview, postHideReview2, postUnhideReview2 };
