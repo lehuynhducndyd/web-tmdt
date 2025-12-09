@@ -96,7 +96,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-xl-6">
+                                <div>
                                     <div class="card mb-4">
                                         <div class="card-header"><i class="fas fa-chart-bar me-1"></i>Doanh thu các
                                             tháng trong năm <%= selectedYear %>
@@ -105,7 +105,7 @@
                                                 height="320"></canvas></div>
                                     </div>
                                 </div>
-                                <div class="col-xl-6">
+                                <div>
                                     <div class="card mb-4">
                                         <div class="card-header"><i class="fas fa-chart-bar me-1"></i>Doanh thu các ngày
                                             trong tháng <%= selectedMonth %>/<%= selectedYear %>
@@ -194,12 +194,32 @@
                         const yearlyRevenueList = rawYearly.monthlyRevenues || [];
                         const dailyRevenueList = rawMonthly.dailyData || [];
 
+                        const selectedYear = <%= selectedYear %>;
+                        const selectedMonth = <%= selectedMonth %>;
+
+                        // --- XỬ LÝ DỮ LIỆU CHO BIỂU ĐỒ NGÀY ---
+                        // 1. Lấy số ngày trong tháng
+                        const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+
+                        // 2. Tạo mảng dữ liệu đầy đủ cho các ngày trong tháng, mặc định doanh thu là 0
+                        const fullDailyData = Array.from({ length: daysInMonth }, (_, i) => {
+                            const day = i + 1;
+                            return {
+                                label: `${day}/${selectedMonth}`,
+                                revenue: 0
+                            };
+                        });
+
+                        // 3. Cập nhật doanh thu từ dữ liệu thực tế
+                        dailyRevenueList.forEach(item => {
+                            if (item.day - 1 < fullDailyData.length) {
+                                fullDailyData[item.day - 1].revenue = item.revenue;
+                            }
+                        });
+
                         // Tạo mảng Labels và Data
                         const monthlyLabels = yearlyRevenueList.map(d => `Tháng ${d.month}`);
                         const monthlyRevenues = yearlyRevenueList.map(d => d.revenue);
-
-                        const dailyLabels = dailyRevenueList.map(d => `${d.day}/${d.month}`);
-                        const dailyRevenues = dailyRevenueList.map(d => d.revenue);
 
                         // --- BƯỚC 4: CẤU HÌNH CHART ---
                         const chartOptions = {
@@ -249,11 +269,11 @@
                             new Chart(ctxDaily, {
                                 type: 'bar',
                                 data: {
-                                    labels: dailyLabels,
+                                    labels: fullDailyData.map(d => d.label),
                                     datasets: [{
                                         label: "Doanh thu ngày",
                                         backgroundColor: "rgba(0, 123, 255, 0.7)",
-                                        data: dailyRevenues,
+                                        data: fullDailyData.map(d => d.revenue),
                                     }]
                                 },
                                 options: chartOptions
