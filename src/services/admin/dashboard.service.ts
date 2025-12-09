@@ -299,5 +299,48 @@ const getRevenueForMonth = async (year: number, month: number) => {
     }
 }
 
+const getYearlyRevenue = async (year: number) => {
+    try {
+        const startDate = new Date(year, 0, 1);
+        const endDate = new Date(year, 11, 31, 23, 59, 59, 999);
 
-export { getTodayOrders, getTodayReviews, getTodayCustomers, getBestSellingProducts, getOutOfStockProducts, getRevenueByDate, getTodayRevenue, getThisMonthRevenue, getRevenueForMonth };
+        const yearlyData = await Order.aggregate([
+            {
+                $match: {
+                    status: 'delivered',
+                    createdAt: { $gte: startDate, $lte: endDate }
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        month: { $month: "$createdAt" }
+                    },
+                    revenue: { $sum: "$totalAmount" }
+                }
+            },
+            {
+                $sort: { "_id.month": 1 }
+            }
+        ]);
+
+        // Tạo một mảng 12 tháng với doanh thu mặc định là 0
+        const monthlyRevenues = Array.from({ length: 12 }, (_, i) => ({
+            month: i + 1,
+            revenue: 0
+        }));
+
+        // Cập nhật doanh thu cho những tháng có dữ liệu
+        yearlyData.forEach(item => {
+            monthlyRevenues[item._id.month - 1].revenue = item.revenue;
+        });
+
+        return { monthlyRevenues };
+    } catch (error) {
+        console.error("Error fetching yearly revenue:", error);
+        throw new Error("Lỗi khi lấy dữ liệu doanh thu theo năm.");
+    }
+}
+
+
+export { getTodayOrders, getTodayReviews, getTodayCustomers, getBestSellingProducts, getOutOfStockProducts, getRevenueByDate, getTodayRevenue, getThisMonthRevenue, getRevenueForMonth, getYearlyRevenue };

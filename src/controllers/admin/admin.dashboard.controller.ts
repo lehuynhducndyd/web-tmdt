@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Order from 'models/order';
-import { getBestSellingProducts, getOutOfStockProducts, getRevenueByDate, getRevenueForMonth, getThisMonthRevenue, getTodayCustomers, getTodayOrders, getTodayRevenue, getTodayReviews, } from 'services/admin/dashboard.service';
+import { getBestSellingProducts, getOutOfStockProducts, getRevenueByDate, getRevenueForMonth, getThisMonthRevenue, getTodayCustomers, getTodayOrders, getTodayRevenue, getTodayReviews, getYearlyRevenue, } from 'services/admin/dashboard.service';
 
 const getAdminPage = async (req: Request, res: Response) => {
     try {
@@ -61,12 +61,18 @@ const getRevenueStatPage = async (req: Request, res: Response) => {
         // Lấy dữ liệu doanh thu cho tháng/năm đã chọn
         const monthlyData = await getRevenueForMonth(selectedYear, selectedMonth);
 
+        // Lấy dữ liệu doanh thu cho cả năm đã chọn
+        const yearlyData = await getYearlyRevenue(selectedYear);
+        console.log("Yearly Data:", yearlyData);
+        console.log("Monthly Data:", monthlyData);
+
         res.render("admin/dashboard/revenue-stat.ejs", {
             todayRevenue,
             thisMonthRevenue,
             monthlyData, // Dữ liệu doanh thu chi tiết của tháng được chọn
-            selectedMonth, // Tháng đã chọn để giữ lại trên select
-            selectedYear, // Năm đã chọn để giữ lại trên select
+            yearlyData, // Dữ liệu doanh thu của cả năm
+            selectedMonth,
+            selectedYear,
         });
     } catch (error) {
         console.error("Error loading revenue statistics page:", error);
