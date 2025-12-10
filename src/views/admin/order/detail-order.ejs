@@ -91,16 +91,16 @@
                                                             <select name="status" id="status" class="form-select"
                                                                 style="width: 150px;">
                                                                 <option value="pending" <%=order.status==='pending'
-                                                                    ? 'selected' : '' %>>Pending</option>
+                                                                    ? 'selected' : '' %>>Chờ xác nhận</option>
                                                                 <option value="processing"
                                                                     <%=order.status==='processing' ? 'selected' : '' %>
-                                                                    >Processing</option>
+                                                                    >Đang xử lý</option>
                                                                 <option value="shipped" <%=order.status==='shipped'
-                                                                    ? 'selected' : '' %>>Shipped</option>
+                                                                    ? 'selected' : '' %>>Đang giao</option>
                                                                 <option value="delivered" <%=order.status==='delivered'
-                                                                    ? 'selected' : '' %>>Delivered</option>
+                                                                    ? 'selected' : '' %>>Đã giao</option>
                                                                 <option value="cancelled" <%=order.status==='cancelled'
-                                                                    ? 'selected' : '' %>>Cancelled</option>
+                                                                    ? 'selected' : '' %>>Đã hủy</option>
                                                             </select>
                                                         </div>
 
